@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+# Obejtivo del proyecto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+El objetivo del proyecto consiste en diseñar e implementar una aplicación web para colaborar con la inclusión en la enseñanza virtual, integrando herramientas para la didáctica y canales de comunicación utilizados actualmente para dar clases virtuales, haciendo más sencilla la inclusión y más simple el uso de las TIC para los profesionales/terapeutas pudiendo trabajar de manera personalizada con alumnos que requieran asistencia debido a problemas en el aprendizaje.
 
-## Available Scripts
+## Alcance
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- El sistema permitirá el alta, la baja y la modificación a los usuarios en la aplicación.
+- El sistema almacenará información y rol de los usuarios que utilizarán el aplicativo.
+- El sistema permitirá realizar una sesión virtual entre el profesional y el alumno.
+- El sistema permitirá al profesional establecer un cronograma para un alumno en particular.
+- El sistema contará con herramientas didácticas ya sea: numéricas, alfabéticas y pictogramas que el profesional podrá utilizar en las sesiones con el alumno.
+- El sistema contara con actividades para realizar conteos para la identificación de formas y números
+- El sistema contará con actividades para unir con flechas palabras y objetos.
+- El sistema permitirá generar informes luego de cada sesión, evaluando la evolución del alumno a lo largo del tiempo.
+- El sistema permitirá que el profesional pueda celebrar las acciones de los alumnos mediante personajes (avatares) como incentivación de sus avances
+- El sistema permitirá poder incluir a un profesional terapéutico a una clase de zoom junto con el alumno.
+- El sistema permitirá calificar los resultados del alumno.
+- El sistema permitirá asignar a los alumnos la actividad de reconocer palabras en una sopa de letras.
+- El sistema permitirá al alumno completar el casillero con la letra o palabra que corresponda al dibujo que visualiza.
+- El sistema se encargará de brindar recordatorios / notificaciones, las cuales tendrán como objetivo mostrar las próximas sesiones que tendrá el profesional.
+- El sistema generará estadísticas de las herramientas didácticas que utilizo el alumno, el cual facilitara la tarea del profesional al momento de gestionar el informe.
+- El sistema permitirá a la maestra de grado poder subir contenido escolar a adaptar por la MAI
+- El sistema permitirá a la MAI poder tener una sección para visualizar los contenidos a adaptar
+- El sistema permitirá a la maestra de grado poder asociar un contenido a adaptar a una reunión para un alumno en específico.
+- El sistema debe permitirle al profesional tener control en tiempo real sobre lo que está visualizando el alumno.
+- El sistema permitirá visualizar plantillas prediseñadas con pictogramas.
+- El sistema permitirá buscar una frase y como resultado obtener su traducción a pictogramas
+- El sistema permitirá seleccionar un conjunto de pictogramas para confeccionar una agenda de actividades
+- El sistema permitirá tener un histórico de sesiones que realizó el alumno con los profesionales que lo rodean.
+- El sistema permitirá la exportación de los informes generados por el profesional.
+- El sistema no poseerá funcionalidades que garanticen la mejora en la conducta del alumno.
