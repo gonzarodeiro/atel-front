@@ -1,4 +1,4 @@
-# Obejtivo del proyecto
+# Objetivo del proyecto
 
 El objetivo del proyecto consiste en diseñar e implementar una aplicación web para colaborar con la inclusión en la enseñanza virtual, integrando herramientas para la didáctica y canales de comunicación utilizados actualmente para dar clases virtuales, haciendo más sencilla la inclusión y más simple el uso de las TIC para los profesionales/terapeutas pudiendo trabajar de manera personalizada con alumnos que requieran asistencia debido a problemas en el aprendizaje.
 
@@ -29,3 +29,9 @@ El objetivo del proyecto consiste en diseñar e implementar una aplicación web 
 - El sistema permitirá tener un histórico de sesiones que realizó el alumno con los profesionales que lo rodean.
 - El sistema permitirá la exportación de los informes generados por el profesional.
 - El sistema no poseerá funcionalidades que garanticen la mejora en la conducta del alumno.
+
+## Desarollo
+
+- Desarrollado en React JS, para levantar el proyecto tener instalado Node JS.
+
+Equipo ATEL.
