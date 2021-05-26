@@ -28,13 +28,11 @@
   color: #61dafb;
 }
 
-
-.topcorner{
-  position:absolute;
-  top:0;
-  left:0;
+.topcorner {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
-
 
 @keyframes App-logo-spin {
   from {
