@@ -1,4 +1,5 @@
 import './App.css';
+import Jitsi from './components/Jitsi.js';
 
 function App() {
   return (
@@ -9,6 +10,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <div className='topcorner'>
+        <Jitsi room='CODE-ROOM-TEST' userName='Augusto' />
+      </div>
     </div>
   );
 }
