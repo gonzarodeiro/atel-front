@@ -1,20 +1,30 @@
-import './App.css';
-import Jitsi from './components/Jitsi.js';
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Header from './components/header/index';
+import Jitsi from './components/Jitsi';
+import Home from './pages/home/index';
+import Login from './pages/login/index';
+import NoExist from './pages/noExists';
+import GlobalStyle from './styles/css/globalStyles';
 
-function App() {
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        <p>Pruebita commit</p>
-        <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
-      <div className='topcorner'>
-        <Jitsi room='CODE-ROOM-TEST' userName='Augusto' />
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.idleTimer = null;
+  }
+
+  render() {
+    return (
+      <div className='App' style={{ minHeight: '100vh', background: '#f3f3f3' }}>
+        <Switch>
+          <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
+          <Route exact path='/home' component={Home} />
+          <Route exact component={NoExist} />
+        </Switch>
+        <GlobalStyle />
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
