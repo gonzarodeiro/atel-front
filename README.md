@@ -18,7 +18,6 @@ El objetivo del proyecto consiste en diseñar e implementar una aplicación web 
 - El sistema permitirá asignar a los alumnos la actividad de reconocer palabras en una sopa de letras.
 - El sistema permitirá al alumno completar el casillero con la letra o palabra que corresponda al dibujo que visualiza.
 - El sistema se encargará de brindar recordatorios / notificaciones, las cuales tendrán como objetivo mostrar las próximas sesiones que tendrá el profesional.
-- El sistema generará estadísticas de las herramientas didácticas que utilizo el alumno, el cual facilitara la tarea del profesional al momento de gestionar el informe.
 - El sistema permitirá a la maestra de grado poder subir contenido escolar a adaptar por la MAI
 - El sistema permitirá a la MAI poder tener una sección para visualizar los contenidos a adaptar
 - El sistema permitirá a la maestra de grado poder asociar un contenido a adaptar a una reunión para un alumno en específico.
@@ -26,7 +25,7 @@ El objetivo del proyecto consiste en diseñar e implementar una aplicación web 
 - El sistema permitirá visualizar plantillas prediseñadas con pictogramas.
 - El sistema permitirá buscar una frase y como resultado obtener su traducción a pictogramas
 - El sistema permitirá seleccionar un conjunto de pictogramas para confeccionar una agenda de actividades
-- El sistema permitirá tener un histórico de sesiones que realizó el alumno con los profesionales que lo rodean.
+- El sistema permitirá tener un histórico de calificaciones de actividades que realizo el alumno en las herramientas
 - El sistema permitirá la exportación de los informes generados por el profesional.
 - El sistema no poseerá funcionalidades que garanticen la mejora en la conducta del alumno.
 

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import swal from '@sweetalert/with-react';
-import MainMenu from './sidebar/mainMenu';
+import MainMenu from './sidebar/MainMenu';
+import Sessions from './sidebar/Sessions';
+import Students from './sidebar/Students';
 
 const Header = () => {
   const [values, setValues] = useState({ isOpen: false });
-  const [menu, setMenu] = useState({ home: true });
+  const [menu, setMenu] = useState({ home: true, sessions: false, students: false });
   const [sidebar, setSidebar] = useState(false);
   const [open, setOpen] = useState(true);
   let history = useHistory();
@@ -69,20 +71,25 @@ const Header = () => {
   }
 
   return (
-    <nav data-test='navbar' className={'navbar-light navbar navbar-expand-md w-100 shadow-sm ' + (values.isOpen ? 'null' : 'header-height')} role='navigation' style={{ background: '#dd4b39' }}>
+    <nav data-test='navbar' className={'navbar-light navbar navbar-expand-md w-100 shadow-sm ' + (values.isOpen ? 'null' : 'header-height')} role='navigation' style={{ background: 'rgb(29 37 45 / 91%)' }}>
       <li onClick={() => (open ? openSidebar() : closeSidebar())} className={open ? 'white-text menu' : 'menu-white'}>
         <i className={open ? 'fas fa-bars mr-2 mt-1' : 'fas fa-times mr-2 mt-1'}></i>Menu
       </li>
       {menu.home && <MainMenu sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
+      {menu.sessions && <Sessions sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
+      {menu.students && <Students sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       <div onClick={closeSidebar} className={'black-cast ' + (sidebar ? 'open' : null)}></div>
       <button onClick={toggleCollapse} data-test='navbar-toggler' type='button' className='navbar-toggler'>
         <i className='fas fa-user' style={{ color: 'white', marginBottom: '2px' }}></i>
       </button>
       <div data-test='collapse' className={'collapse navbar-collapse ' + (values.isOpen ? 'show' : 'null')}>
         <ul data-test='navbar-nav' className='navbar-nav mr-auto'>
-          <div onClick={goToHome} style={{ marginTop: '8px', textAlign: 'center', cursor: 'pointer' }}>
-            <span className='divider'></span>
-            <span className='brand'> ATEL</span>
+          <div onClick={goToHome} style={{ marginTop: '3px', textAlign: 'center', cursor: 'pointer', color: 'white', marginLeft: '27px', fontWeight: '600' }}>
+            <span className='brand' style={{ marginRight: '16px' }}>
+              ATEL
+            </span>
+            <span className='divider' style={{ marginRight: '17px' }}></span>
+            Asistente terapéutico en línea
           </div>
         </ul>
         <ul data-test='navbar-nav' className='navbar-nav ml-auto'>
