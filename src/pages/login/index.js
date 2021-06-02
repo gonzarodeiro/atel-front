@@ -3,10 +3,12 @@ import { useHistory } from 'react-router-dom';
 import { MDBInput, MDBBtn, MDBMask, MDBView } from 'mdbreact';
 import './../../styles/css/login.css';
 import Loading from '../../components/Loading';
+import Registration from './registration';
 
 const Index = () => {
   const [values, setValues] = useState({ user: '', password: '' });
   const [errors, setErrors] = useState({ message: '', show: false });
+  const [showModal, setShowModal] = useState({ registration: false });
   const [isLoading, setLoading] = useState(false);
   let history = useHistory();
 
@@ -27,11 +29,15 @@ const Index = () => {
     const name = 'Gonzalo Rodeiro';
     sessionStorage.setItem('name', name);
     setLoading(false);
-    history.push(`/jitsi`);
+    history.push(`/home`);
   }
 
   function registration() {
-    console.log('Lasldad');
+    setShowModal({ registration: true });
+  }
+
+  function handleClose() {
+    setShowModal({ registration: false });
   }
 
   return (
@@ -72,6 +78,7 @@ const Index = () => {
                   </span>
                 </div>
               )}
+              {showModal.registration && <Registration showModal={showModal} handleClose={handleClose} />}
             </div>
           </div>
         </form>
