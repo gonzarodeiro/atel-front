@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../utils/layout/index';
-import Table from '../../components/table';
+import Table from '../../components/Table';
 import Loading from '../../components/Loading';
 import module from '../../utils/enums/modules';
 import Footer from '../../components/html/Footer';
