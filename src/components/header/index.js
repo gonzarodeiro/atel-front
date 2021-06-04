@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import swal from '@sweetalert/with-react';
-import MainMenu from './sidebar/MainMenu';
+import MainMenu from './sidebar/mainMenu';
 import Sessions from './sidebar/Sessions';
 import Students from './sidebar/Students';
 
