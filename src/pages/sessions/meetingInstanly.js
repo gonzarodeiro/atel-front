@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../utils/layout/index';
 import Loading from '../../components/Loading';
-import module from '../../utils/enums/modules';
 import showAlert from '../../utils/commons/showAlert';
 import Cancel from '../../components/html/button/Cancel';
 import Submit from '../../components/html/button/Submit';
@@ -47,7 +46,7 @@ const Index = () => {
   }
 
   return (
-    <Layout title={module.Students}>
+    <Layout>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           <div className='card-body pb-3'>

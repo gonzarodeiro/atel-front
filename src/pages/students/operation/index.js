@@ -3,10 +3,11 @@ import { useHistory } from 'react-router-dom';
 import Layout from '../../../utils/layout/index';
 import Table from '../../../components/Table';
 import Loading from '../../../components/Loading';
-import module from '../../../utils/enums/modules';
 import Dropdownlist from '../../../components/html/Dropdownlist';
 import { dlDifficulty, dlStudents } from '../../../utils/dropdownlists/index';
 import Footer from '../../../components/html/Footer';
+import showAlert from '../../../utils/commons/showAlert';
+import swal from '@sweetalert/with-react';
 
 const Index = () => {
   const [params, setParams] = useState({ studentName: '', age: '', difficulty: '' });
@@ -62,7 +63,34 @@ const Index = () => {
 
   function handleEdit() {}
 
-  function handleDelete() {}
+  function handleDelete(obj) {
+    swal(
+      <div>
+        <p className='h4 mt-4 mb-3'>¿Querés dar de baja al alumno: {obj.name}?</p>
+      </div>,
+      {
+        icon: 'warning',
+        buttons: {
+          cancel: 'No',
+          catch: {
+            text: 'Si',
+            value: 'delete'
+          }
+        }
+      }
+    ).then((value) => {
+      if (value === 'delete') patchStudent(obj);
+    });
+  }
+
+  async function patchStudent(obj) {
+    setLoading(true);
+    // const data = { status: obj.id };
+    // await patchApi("endpoint", data);
+    setLoading(false);
+    await showAlert('Alumno eliminado', `El alumno ${obj.name} ha sido dado de baja`, 'success');
+    history.push(`/home`);
+  }
 
   function fillTable(result) {
     if (result.length > 0) {
@@ -86,7 +114,7 @@ const Index = () => {
   }
 
   return (
-    <Layout title={module.Students}>
+    <Layout>
       <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           {loading && (

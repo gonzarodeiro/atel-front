@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Layout from '../utils/layout/index';
 
 class Jitsi extends Component {
   constructor(props) {
@@ -91,7 +92,11 @@ class Jitsi extends Component {
   }
 
   render() {
-    return <div style={{ height: '250px', width: '300px' }} id='jitsi-iframe'></div>;
+    return (
+      <Layout>
+        <div style={{ height: '250px', width: '300px' }} id='jitsi-iframe'></div>;
+      </Layout>
+    );
   }
 }
 

@@ -17,9 +17,9 @@ const Home = ({ title, module, colorStyle, colorClass, returnModule, description
             <h5 className='mb-4 text-center' style={{ color: [colorStyle], fontSize: '19px' }}>
               {title}
             </h5>
-            <div class='d-flex justify-content-center'>
-              <div class='card-circle d-flex justify-content-center align-items-center' style={{ border: borderCard }}>
-                <i data-test='fa' class={icon} style={{ color: colorStyle, fontSize: '17px' }}></i>
+            <div className='d-flex justify-content-center'>
+              <div className='card-circle d-flex justify-content-center align-items-center' style={{ border: borderCard }}>
+                <i data-test='fa' className={icon} style={{ color: colorStyle, fontSize: '17px' }}></i>
               </div>
             </div>
             <p className='mt-3 text-center dark-grey-text'>{description}</p>

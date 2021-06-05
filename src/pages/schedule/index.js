@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import Layout from '../../utils/layout/index';
 import Table from '../../components/Table';
 import Loading from '../../components/Loading';
-import module from '../../utils/enums/modules';
 import Footer from '../../components/html/Footer';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlStudents, dlStatus } from '../../utils/dropdownlists/index';
@@ -96,7 +95,7 @@ const Index = () => {
   }
 
   return (
-    <Layout title={module.Schedule}>
+    <Layout>
       <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           {loading && (
