@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import logout from '../../utils/commons/logout';
-import MainMenu from './sidebar/MainMenu';
+import Home from './sidebar/Home';
 import Sessions from './sidebar/Sessions';
 import Students from './sidebar/Students';
 
@@ -52,7 +52,7 @@ const Header = () => {
       <li onClick={() => (open ? openSidebar() : closeSidebar())} className={open ? 'white-text menu' : 'menu-white'}>
         <i className={open ? 'fas fa-bars mr-2 mt-1' : 'fas fa-times mr-2 mt-1'}></i>Menu
       </li>
-      {menu.home && <MainMenu sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
+      {menu.home && <Home sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
       {menu.sessions && <Sessions sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       {menu.students && <Students sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       <div onClick={closeSidebar} className={'black-cast ' + (sidebar ? 'open' : null)}></div>

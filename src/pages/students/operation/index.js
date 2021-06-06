@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../../utils/layout/index';
-import Table from '../../../components/Table';
+import Table from '../../../components/html/Table';
 import Loading from '../../../components/Loading';
 import Dropdownlist from '../../../components/html/Dropdownlist';
 import { dlDifficulty, dlStudents } from '../../../utils/dropdownlists/index';
