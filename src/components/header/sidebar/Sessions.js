@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Footer from '../Footer';
 
 const Sessions = ({ sidebar, showItemMenu, redirectPage }) => {
   let history = useHistory();
@@ -16,6 +17,7 @@ const Sessions = ({ sidebar, showItemMenu, redirectPage }) => {
       <div className={'menu-item ' + (history.location.pathname === '/meeting-for-later' ? 'active' : '')} onClick={() => redirectPage('meeting-for-later')}>
         <span className='sidebar-item'>Programar una nueva sesión</span>
       </div>
+      <Footer redirectPage={redirectPage} />
     </div>
   );
 };

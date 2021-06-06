@@ -51,7 +51,7 @@ const Index = () => {
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-3 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              Alta de alumno
+              Alta del alumno
             </div>
             {loading && (
               <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>

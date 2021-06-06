@@ -31,6 +31,7 @@ const Index = () => {
     // await postApi(process.env.REACT_APP_API_LOGIN, params);
     const name = 'Gonzalo Rodeiro';
     sessionStorage.setItem('name', name);
+    sessionStorage.setItem('professionalId', '02');
     setLoading(false);
     history.push(`/home`);
   }
