@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Footer from '../Footer';
 
 const Students = ({ sidebar, showItemMenu, redirectPage }) => {
   let history = useHistory();
@@ -16,6 +17,7 @@ const Students = ({ sidebar, showItemMenu, redirectPage }) => {
       <div className={'menu-item ' + (history.location.pathname === '/students' ? 'active' : '')} onClick={() => redirectPage('students')}>
         <span className='sidebar-item'>Listado de alumnos</span>
       </div>
+      <Footer redirectPage={redirectPage} />
     </div>
   );
 };

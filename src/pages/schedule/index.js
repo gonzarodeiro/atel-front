@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../utils/layout/index';
-import Table from '../../components/Table';
+import Table from '../../components/html/Table';
 import Loading from '../../components/Loading';
-import module from '../../utils/enums/modules';
 import Footer from '../../components/html/Footer';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlStudents, dlStatus } from '../../utils/dropdownlists/index';
@@ -11,10 +10,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../utils/commons/datepicker';
+import showAlert from '../../utils/commons/showAlert';
+import swal from '@sweetalert/with-react';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', status: '' });
+  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', status: '', message: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -40,18 +41,23 @@ const Index = () => {
       {
         name: 'German Perez',
         difficulty: 'TEA',
-        comments: 'Tuvo dificultad en la herramienta alfabetica',
+        comments: 'Tuvo dificultad en la herramienta alfabética',
         status: 'Finalizada',
-        code: 'easesa',
-        date: '01/06/2021'
+        date: '01/06/2021 14:00 hs'
+      },
+      {
+        name: 'Augusto Gomez',
+        difficulty: 'Down',
+        comments: 'Se cancelo la reunión porque el alumno esta enfermo',
+        status: 'Cancelada',
+        date: '05/06/2021 16:00 hs'
       },
       {
         name: 'Lucas Gomez',
         difficulty: 'Down',
         comments: '',
         status: 'Pendiente',
-        code: 'asdasdasd',
-        date: '04/06/2021'
+        date: '12/06/2021 16:00 hs'
       }
     ];
     createActions(result);
@@ -62,15 +68,50 @@ const Index = () => {
     for (let i = 0; i < result.length; i++) {
       result[i].actions = (
         <div>
+          {result[i].status === 'Pendiente' && <i onClick={() => handleDelete(result[i])} className='fas fa-trash-alt mt-1' title='Eliminar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
           {result[i].status === 'Pendiente' && <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i>}
           {result[i].status === 'Finalizada' && <i onClick={() => handleDetails(result[i])} className='fas fa-eye mt-1' title='Ver detalles' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
           {result[i].status === 'Finalizada' && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
+          {result[i].status === 'Cancelada' && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#d32f2f' }} aria-hidden='true'></i>}
         </div>
       );
     }
   }
 
   function handleDetails() {}
+
+  function handleDelete(obj) {
+    swal(
+      <div>
+        <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
+        <span>Alumno: {obj.name}</span>
+        <p>Fecha: {obj.date}</p>
+        <input id='message' placeholder='Comentario' onChange={handleChange} value={params.comments} type='text' className='form-control mt-4' />
+      </div>,
+      {
+        icon: 'warning',
+        buttons: {
+          cancel: 'No',
+          catch: {
+            text: 'Si',
+            value: 'delete'
+          }
+        }
+      }
+    ).then((value) => {
+      if (value === 'delete') patchSchedule(obj);
+    });
+  }
+
+  async function patchSchedule(obj) {
+    setLoading(true);
+    console.log(params);
+    // const data = { status: obj.id, comments: params.comments };
+    // await patchApi("endpoint", data);
+    setLoading(false);
+    await showAlert('Sesión eliminada', `La sesión: ${obj.date} ha sido dada de baja`, 'success');
+    history.push(`/home`);
+  }
 
   function fillTable(result) {
     if (result.length > 0) {
@@ -81,7 +122,6 @@ const Index = () => {
           { label: 'Dificultad', field: 'difficulty' },
           { label: 'Observaciones', field: 'comments' },
           { label: 'Estado', field: 'status' },
-          { label: 'Código', field: 'code' },
           { label: 'Fecha sesión', field: 'date' }
         ],
         rows: result,
@@ -96,7 +136,7 @@ const Index = () => {
   }
 
   return (
-    <Layout title={module.Schedule}>
+    <Layout>
       <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           {loading && (
@@ -133,6 +173,9 @@ const Index = () => {
                   </span>
                   <span>
                     <i className='fas fa-square ml-2' style={{ color: '#388e3c' }}></i> = Finalizada
+                  </span>
+                  <span>
+                    <i className='fas fa-square ml-2' style={{ color: '#dd4b39' }}></i> = Cancelada
                   </span>
                   <Table data={table} />
                 </div>

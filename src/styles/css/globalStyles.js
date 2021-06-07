@@ -25,6 +25,16 @@ const global = createGlobalStyle`
     height: 34px;
   }
 
+  .sidebar-footer {
+    bottom: 0px;
+    clear: both;
+    display: block;
+    padding: 5px 0 0 0;
+    position: fixed;
+    background: #d7d7d7eb;
+    width: 291px
+}
+
   .react-datepicker-wrapper,
   .react-datepicker__input-container,
   .react-datepicker__input-container input {

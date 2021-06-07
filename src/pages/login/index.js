@@ -4,6 +4,7 @@ import { MDBInput, MDBBtn, MDBMask, MDBView } from 'mdbreact';
 import './../../styles/css/login.css';
 import Loading from '../../components/Loading';
 import Registration from './registration';
+import postApi from '../../utils/services/post/postApi';
 
 const Index = () => {
   const [values, setValues] = useState({ user: '', password: '' });
@@ -26,8 +27,11 @@ const Index = () => {
 
   async function loginUser() {
     setLoading(true);
+    // const params = { user: values.user.toUpperCase(), password: values.password };
+    // await postApi(process.env.REACT_APP_API_LOGIN, params);
     const name = 'Gonzalo Rodeiro';
     sessionStorage.setItem('name', name);
+    sessionStorage.setItem('professionalId', '02');
     setLoading(false);
     history.push(`/home`);
   }

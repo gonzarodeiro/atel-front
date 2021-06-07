@@ -1,22 +1,14 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class Jitsi extends Component {
   constructor(props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
-      room: "aasdasdasd",
-      user: { name: "augusto" },
-      isAudioMuted: false,
-      isVideoMuted: false,
-      domain: "meet.jit.si",
-=======
-      room: props.room,
-      user: { name: props.userName },
+      room: 'aasdasdasd',
+      user: { name: 'augusto' },
       isAudioMuted: false,
       isVideoMuted: false,
       domain: 'meet.jit.si'
->>>>>>> development
     };
   }
   api = {};
@@ -28,14 +20,9 @@ class Jitsi extends Component {
       interfaceConfigOverwrite: {
         // overwrite interface properties
       },
-<<<<<<< HEAD
-      parentNode: document.querySelector("#jitsi-iframe"),
-      userInfo: { displayName: this.state.user.name },
-      max_participants: 2,
-=======
       parentNode: document.querySelector('#jitsi-iframe'),
-      userInfo: { displayName: this.state.user.name }
->>>>>>> development
+      userInfo: { displayName: this.state.user.name },
+      max_participants: 2
     };
     this.api = new window.JitsiMeetExternalAPI(this.state.domain, options);
     this.api.addEventListeners({
@@ -45,23 +32,6 @@ class Jitsi extends Component {
       videoConferenceJoined: this.handleVideoConferenceJoined,
       videoConferenceLeft: this.handleVideoConferenceLeft,
       audioMuteStatusChanged: this.handleMuteStatus,
-<<<<<<< HEAD
-      videoMuteStatusChanged: this.handleVideoStatus,
-      participantRoleChanged: this.participantRoleChanged,
-    });
-  };
-
-  participantRoleChanged = () => {
-    this.api.executeCommand("password", "hola");
-  };
-
-  handleClose = () => {
-    console.log("handleClose");
-  };
-
-  handleParticipantLeft = async (participant) => {
-    console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
-=======
       videoMuteStatusChanged: this.handleVideoStatus
     });
   };
@@ -72,55 +42,34 @@ class Jitsi extends Component {
 
   handleParticipantLeft = async (participant) => {
     console.log('handleParticipantLeft', participant); // { id: "2baa184e" }
->>>>>>> development
     const data = await this.getParticipants();
     console.log(data);
   };
 
   handleParticipantJoined = async (participant) => {
-<<<<<<< HEAD
-    console.log("handleParticipantJoined", participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
-=======
     console.log('handleParticipantJoined', participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
->>>>>>> development
     const data = await this.getParticipants();
     console.log(data);
   };
 
   handleVideoConferenceJoined = async (participant) => {
-<<<<<<< HEAD
-    console.log("handleVideoConferenceJoined", participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
-=======
     console.log('handleVideoConferenceJoined', participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
->>>>>>> development
     const data = await this.getParticipants();
     console.log(data);
   };
 
   handleVideoConferenceLeft = () => {
-<<<<<<< HEAD
-    console.log("handleVideoConferenceLeft");
-=======
     console.log('handleVideoConferenceLeft');
->>>>>>> development
     this.api.dispose();
     // document.location.href = window.location.origin + '#/thank-you';
   };
 
   handleMuteStatus = (audio) => {
-<<<<<<< HEAD
-    console.log("handleMuteStatus", audio); // { muted: true }
-  };
-
-  handleVideoStatus = (video) => {
-    console.log("handleVideoStatus", video); // { muted: true }
-=======
     console.log('handleMuteStatus', audio); // { muted: true }
   };
 
   handleVideoStatus = (video) => {
     console.log('handleVideoStatus', video); // { muted: true }
->>>>>>> development
   };
 
   getParticipants() {
@@ -131,18 +80,6 @@ class Jitsi extends Component {
     });
   }
 
-<<<<<<< HEAD
-  componentDidMount() {
-    window.JitsiMeetExternalAPI
-      ? this.startMeet()
-      : alert("JitsiMeetExternalAPI not loaded");
-  }
-
-  render() {
-    return (
-      <div style={{ height: "350px", width: "400px" }} id="jitsi-iframe"></div>
-    );
-=======
   executeCommand(command) {
     this.api.executeCommand(command);
     if (command === 'hangup') return this.props.history.push('/thank-you');
@@ -155,8 +92,11 @@ class Jitsi extends Component {
   }
 
   render() {
-    return <div style={{ height: '250px', width: '300px' }} id='jitsi-iframe'></div>;
->>>>>>> development
+    return (
+      <Layout>
+        <div style={{ height: '250px', width: '300px' }} id='jitsi-iframe'></div>;
+      </Layout>
+    );
   }
 }
 

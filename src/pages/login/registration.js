@@ -4,6 +4,8 @@ import Loading from '../../components/Loading';
 import Submit from '../../components/html/button/Submit';
 import Cancel from '../../components/html/button/Cancel';
 import showAlert from '../../utils/commons/showAlert';
+import Dropdownlist from '../../components/html/Dropdownlist';
+import { dlProfession } from '../../utils/dropdownlists/index';
 
 const Registration = ({ showModal, handleClose }) => {
   const [user, setUser] = useState({ name: '', firstPassword: '', secondPassword: '', profession: '' });
@@ -23,10 +25,11 @@ const Registration = ({ showModal, handleClose }) => {
       await showAlert('Profesional registrado', 'Ha sido registrado con éxito en el sistema', 'success');
       handleClose();
     }
+    setLoading(false);
   }
 
   function validateFields() {
-    if (!user.name || !user.firstPassword || !user.secondPassword) {
+    if (!user.name || !user.firstPassword || !user.secondPassword || !user.profession) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -63,6 +66,11 @@ const Registration = ({ showModal, handleClose }) => {
           <div className='col-md-4 my-2'>
             <label>Repita la contraseña</label>
             <input id='secondPassword' onChange={handleChange} value={user.secondPassword} type='password' className={'form-control ' + (!user.secondPassword && showValidation ? 'borderRed' : '')} />
+          </div>
+        </div>
+        <div className='row mb-3'>
+          <div className='col-md-12 my-1'>
+            <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={user.profession} dropdownlist={dlProfession} disabledValue={false} className={'form-control ' + (!user.profession && showValidation ? 'borderRed' : '')} />
           </div>
         </div>
         <div className='col-md-12'>{errors.show === true && <div className='text-danger mb-3 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>

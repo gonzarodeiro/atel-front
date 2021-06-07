@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Header from './components/header/index';
 import Home from './pages/home/index';
+import User from './pages/user/index';
 import Login from './pages/login/index';
 import Jitsi from './components/Jitsi';
 import Students from './pages/students/operation/index';
@@ -62,11 +63,12 @@ class App extends Component {
             debounce={250}
           />
         )}
-        <Route path='/(home|jitsi|students|schedule|new-student|meeting-instantly|meeting-for-later)/' component={Header} />
+        <Route path='/(home|user|jitsi|students|schedule|new-student|meeting-instantly|meeting-for-later)/' component={Header} />
         <Switch>
           <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
           <Route exact path='/home' component={Home} />
           <Route exact path='/jitsi' component={Jitsi} />
+          <Route exact path='/user' component={User} />
           <Route exact path='/students' component={Students} />
           <Route exact path='/new-student' component={NewStudent} />
           <Route exact path='/schedule' component={Schedule} />

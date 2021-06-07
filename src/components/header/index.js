@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import swal from '@sweetalert/with-react';
-import MainMenu from './sidebar/MainMenu';
+import logout from '../../utils/commons/logout';
+import Home from './sidebar/Home';
 import Sessions from './sidebar/Sessions';
 import Students from './sidebar/Students';
 
@@ -23,29 +23,6 @@ const Header = () => {
   window.addEventListener('wheel', function (event) {
     if (sidebar && !values.isOpen && event.deltaY > 0) closeSidebar();
   });
-
-  function logout() {
-    swal(
-      <div>
-        <p className='h4 mt-4 mb-3'>¿Querés salir de la sesión?</p>
-      </div>,
-      {
-        icon: 'error',
-        buttons: {
-          cancel: 'Cancelar',
-          catch: {
-            text: 'Salir',
-            value: 'logout'
-          }
-        }
-      }
-    ).then((value) => {
-      if (value === 'logout') {
-        sessionStorage.clear();
-        history.push(`/login`);
-      }
-    });
-  }
 
   const openSidebar = () => {
     setSidebar(true);
@@ -75,7 +52,7 @@ const Header = () => {
       <li onClick={() => (open ? openSidebar() : closeSidebar())} className={open ? 'white-text menu' : 'menu-white'}>
         <i className={open ? 'fas fa-bars mr-2 mt-1' : 'fas fa-times mr-2 mt-1'}></i>Menu
       </li>
-      {menu.home && <MainMenu sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
+      {menu.home && <Home sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
       {menu.sessions && <Sessions sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       {menu.students && <Students sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       <div onClick={closeSidebar} className={'black-cast ' + (sidebar ? 'open' : null)}></div>
@@ -93,7 +70,7 @@ const Header = () => {
           </div>
         </ul>
         <ul data-test='navbar-nav' className='navbar-nav ml-auto'>
-          <a href='#/home' className='white-text headerRight'>
+          <a href='#/user' className='white-text headerRight'>
             <i className='far fa-user-circle mr-1' style={{ fontSize: '15px' }}></i>
             {sessionStorage.getItem('name')}
           </a>

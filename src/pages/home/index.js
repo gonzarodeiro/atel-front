@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from './menu/route';
-import * as moment from 'moment';
-import 'moment/locale/es';
 
 const Index = () => {
   let history = useHistory();
-  const [localDate, setLocalDate] = useState();
-  const DATE_FORMAT = 'dddd D [de] MMMM [de] YYYY - HH:mm [hs]';
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
-    const date = moment(new Date()).format(DATE_FORMAT);
-    setLocalDate(date.charAt(0).toUpperCase() + date.slice(1));
   }, []);
 
   return (
@@ -20,8 +14,8 @@ const Index = () => {
       <div className='content'>
         <div className='section-title'>
           <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>Hola, {sessionStorage.getItem('name')}</h1>
-          <div className='dates' style={{ fontSize: '16.5px', marginRight: '2px', marginBottom: '30px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
-            <div className='actual-date'>{localDate}</div>
+          <div className='dates' style={{ fontSize: '17.2px', marginTop: '2px', marginRight: '3px', marginBottom: '30px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
+            <div className='actual-date'>Próxima sesión: 12/06/2021 16:00 hs</div>
           </div>
         </div>
         <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid rgb(206, 203, 203)' }}>

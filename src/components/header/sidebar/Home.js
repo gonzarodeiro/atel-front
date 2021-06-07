@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Footer from '../Footer';
 
 const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
   let history = useHistory();
@@ -21,6 +22,7 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
         <i className='fas fa-list' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Agenda</span>
       </div>
+      <Footer redirectPage={redirectPage} />
     </div>
   );
 };

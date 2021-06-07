@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../../utils/layout/index';
 import Loading from '../../../components/Loading';
-import module from '../../../utils/enums/modules';
 import Cancel from '../../../components/html/button/Cancel';
 import Submit from '../../../components/html/button/Submit';
 import Dropdownlist from '../../../components/html/Dropdownlist';
@@ -47,12 +46,12 @@ const Index = () => {
   }
 
   return (
-    <Layout title={module.Students}>
+    <Layout>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-3 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              Alta de alumno
+              Alta del alumno
             </div>
             {loading && (
               <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
