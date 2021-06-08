@@ -3,7 +3,7 @@ import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 const Jitsi = forwardRef((props, ref) => {
   useEffect(() => {
     window.JitsiMeetExternalAPI ? startMeet() : alert('JitsiMeetExternalAPI not loaded');
-  });
+  }, []);
 
   let containerStyle = props.containerStyle ?? {
     width: '400px',

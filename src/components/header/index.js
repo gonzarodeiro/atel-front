@@ -43,7 +43,6 @@ const Header = () => {
   }
 
   function redirectPage(path) {
-    debugger;
     history.push({ pathname: path });
     closeSidebar();
   }
