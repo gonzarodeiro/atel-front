@@ -1,103 +1,73 @@
-import React, { Component } from 'react';
+import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 
-class Jitsi extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      room: 'aasdasdasd',
-      user: { name: 'augusto' },
-      isAudioMuted: false,
-      isVideoMuted: false,
-      domain: 'meet.jit.si'
-    };
-  }
-  api = {};
+const Jitsi = forwardRef((props, ref) => {
+  useEffect(() => {
+    window.JitsiMeetExternalAPI ? startMeet() : alert('JitsiMeetExternalAPI not loaded');
+  });
 
-  startMeet = () => {
+  let containerStyle = props.containerStyle ?? {
+    width: '400px',
+    height: '350px'
+  };
+
+  const jitsiContainerStyle = {
+    width: '100%',
+    height: '100%'
+  };
+  let api = {};
+  const domain = 'meet.jit.si';
+
+  const startMeet = () => {
     const options = {
-      roomName: this.state.room,
+      roomName: props.roomId,
       configOverwrite: { prejoinPageEnabled: false },
-      interfaceConfigOverwrite: {
-        // overwrite interface properties
+      configOverwrite: {
+        //Necesario para version mobile
+        disableDeepLinking: true,
+        prejoinPageEnabled: false
       },
       parentNode: document.querySelector('#jitsi-iframe'),
-      userInfo: { displayName: this.state.user.name },
-      max_participants: 2
+      userInfo: { displayName: props.userName }
     };
-    this.api = new window.JitsiMeetExternalAPI(this.state.domain, options);
-    this.api.addEventListeners({
-      readyToClose: this.handleClose,
-      participantLeft: this.handleParticipantLeft,
-      participantJoined: this.handleParticipantJoined,
-      videoConferenceJoined: this.handleVideoConferenceJoined,
-      videoConferenceLeft: this.handleVideoConferenceLeft,
-      audioMuteStatusChanged: this.handleMuteStatus,
-      videoMuteStatusChanged: this.handleVideoStatus
+    api = new window.JitsiMeetExternalAPI(domain, options);
+
+    api.addEventListeners({
+      readyToClose: handleClose,
+      videoConferenceLeft: handleVideoConferenceLeft
     });
   };
 
-  handleClose = () => {
+  const handleClose = () => {
     console.log('handleClose');
   };
 
-  handleParticipantLeft = async (participant) => {
-    console.log('handleParticipantLeft', participant); // { id: "2baa184e" }
-    const data = await this.getParticipants();
-    console.log(data);
-  };
-
-  handleParticipantJoined = async (participant) => {
-    console.log('handleParticipantJoined', participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
-    const data = await this.getParticipants();
-    console.log(data);
-  };
-
-  handleVideoConferenceJoined = async (participant) => {
-    console.log('handleVideoConferenceJoined', participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
-    const data = await this.getParticipants();
-    console.log(data);
-  };
-
-  handleVideoConferenceLeft = () => {
+  const handleVideoConferenceLeft = () => {
     console.log('handleVideoConferenceLeft');
-    this.api.dispose();
-    // document.location.href = window.location.origin + '#/thank-you';
+    // Podemos hacer el redirect, y guardar datos de la session (a definir)
+    api.dispose();
   };
 
-  handleMuteStatus = (audio) => {
-    console.log('handleMuteStatus', audio); // { muted: true }
-  };
+  //Pruebas
+  useImperativeHandle(ref, () => ({
+    resizeJitsi(height, width) {
+      api.resizeLargeVideo(700, 700);
+      //height = '700px';
+    }
+    // getAlert() {
+    //   alert('getAlert from Child');
+    // }
+  }));
+  //
 
-  handleVideoStatus = (video) => {
-    console.log('handleVideoStatus', video); // { muted: true }
-  };
+  return (
+    <>
+      <div style={containerStyle}>
+        <div id='jitsi-iframe' style={jitsiContainerStyle} />
+      </div>
+    </>
+  );
+});
 
-  getParticipants() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.api.getParticipantsInfo()); // get all participants
-      }, 500);
-    });
-  }
-
-  executeCommand(command) {
-    this.api.executeCommand(command);
-    if (command === 'hangup') return this.props.history.push('/thank-you');
-    if (command === 'toggleAudio') this.setState({ isAudioMuted: !this.state.isAudioMuted });
-    if (command === 'toggleVideo') this.setState({ isVideoMuted: !this.state.isVideoMuted });
-  }
-
-  componentDidMount() {
-    window.JitsiMeetExternalAPI ? this.startMeet() : alert('JitsiMeetExternalAPI not loaded');
-  }
-
-  render() {
-    return (
-      <Layout>
-        <div style={{ height: '250px', width: '300px' }} id='jitsi-iframe'></div>;
-      </Layout>
-    );
-  }
-}
+//<div style={{ height: height, width: width }} id='jitsi-iframe'></div>
 
 export default Jitsi;

@@ -10,8 +10,17 @@ import showAlert from '../../../utils/commons/showAlert';
 import swal from '@sweetalert/with-react';
 
 const Index = () => {
-  const [params, setParams] = useState({ studentName: '', age: '', difficulty: '' });
-  const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [params, setParams] = useState({
+    studentName: '',
+    age: '',
+    difficulty: ''
+  });
+  const [table, setTable] = useState({
+    columns: [],
+    rows: [],
+    actions: [],
+    show: false
+  });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
   let history = useHistory();

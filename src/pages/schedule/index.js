@@ -167,9 +167,24 @@ const Index = () => {
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
               {table.show && (
-                <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
+                <div
+                  className='animated fadeInUp faster mb-1'
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 'bold',
+                    color: '#66696b'
+                  }}
+                >
                   <span>
-                    <i className='fas fa-square' style={{ color: 'orange', marginBottom: '13px', marginLeft: '2px' }}></i> = Pendiente
+                    <i
+                      className='fas fa-square'
+                      style={{
+                        color: 'orange',
+                        marginBottom: '13px',
+                        marginLeft: '2px'
+                      }}
+                    ></i>{' '}
+                    = Pendiente
                   </span>
                   <span>
                     <i className='fas fa-square ml-2' style={{ color: '#388e3c' }}></i> = Finalizada
