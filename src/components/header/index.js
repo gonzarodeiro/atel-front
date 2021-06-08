@@ -7,11 +7,7 @@ import Students from './sidebar/Students';
 
 const Header = () => {
   const [values, setValues] = useState({ isOpen: false });
-  const [menu, setMenu] = useState({
-    home: true,
-    sessions: false,
-    students: false
-  });
+  const [menu, setMenu] = useState({ home: true, sessions: false, students: false });
   const [sidebar, setSidebar] = useState(false);
   const [open, setOpen] = useState(true);
   let history = useHistory();
@@ -54,8 +50,7 @@ const Header = () => {
   return (
     <nav data-test='navbar' className={'navbar-light navbar navbar-expand-md w-100 shadow-sm ' + (values.isOpen ? 'null' : 'header-height')} role='navigation' style={{ background: 'rgb(29 37 45 / 91%)' }}>
       <li onClick={() => (open ? openSidebar() : closeSidebar())} className={open ? 'white-text menu' : 'menu-white'}>
-        <i className={open ? 'fas fa-bars mr-2 mt-1' : 'fas fa-times mr-2 mt-1'}></i>
-        Menu
+        <i className={open ? 'fas fa-bars mr-2 mt-1' : 'fas fa-times mr-2 mt-1'}></i>Menu
       </li>
       {menu.home && <Home sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
       {menu.sessions && <Sessions sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
@@ -66,17 +61,7 @@ const Header = () => {
       </button>
       <div data-test='collapse' className={'collapse navbar-collapse ' + (values.isOpen ? 'show' : 'null')}>
         <ul data-test='navbar-nav' className='navbar-nav mr-auto'>
-          <div
-            onClick={goToHome}
-            style={{
-              marginTop: '3px',
-              textAlign: 'center',
-              cursor: 'pointer',
-              color: 'white',
-              marginLeft: '27px',
-              fontWeight: '600'
-            }}
-          >
+          <div onClick={goToHome} style={{ marginTop: '3px', textAlign: 'center', cursor: 'pointer', color: 'white', marginLeft: '27px', fontWeight: '600' }}>
             <span className='brand' style={{ marginRight: '16px' }}>
               ATEL
             </span>

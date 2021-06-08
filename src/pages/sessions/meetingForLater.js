@@ -14,7 +14,7 @@ import datepicker from '../../utils/commons/datepicker';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [session, setSession] = useState({ name: '', password: '', date: new Date(), hour: '' });
+  const [session, setSession] = useState({ name: '', date: new Date(), hour: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ const Index = () => {
   };
 
   function validateFields() {
-    if (!session.name || !session.password || !session.hour) {
+    if (!session.name || !session.hour) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -65,18 +65,14 @@ const Index = () => {
             )}
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
-                <div className='col-md-3 my-1'>
+                <div className='col-md-4 my-1'>
                   <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={session.name} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.name && showValidation ? 'borderRed' : '')} />
                 </div>
-                {/* <div className='col-md-3 my-1'>
-                  <label>Contraseña de la reunión</label>
-                  <input id='password' onChange={handleChange} value={session.password} type='text' className={'form-control ' + (!session.password && showValidation ? 'borderRed' : '')} />
-                </div> */}
-                <div className='col-md-3 my-1'>
+                <div className='col-md-4 my-1'>
                   <label>Fecha</label>
                   <DatePicker id='date' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' locale='es' />
                 </div>
-                <div className='col-md-3 my-1'>
+                <div className='col-md-4 my-1'>
                   <label>Horario</label>
                   <input id='hour' onChange={handleChange} value={session.hour} type='text' className={'form-control ' + (!session.hour && showValidation ? 'borderRed' : '')} />
                 </div>

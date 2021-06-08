@@ -1,11 +1,11 @@
 import React, { forwardRef, useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-
 import Jitsi from '../../components/Jitsi';
+import Layout from '../../utils/layout/index';
 
-const ProfessionalSession = (props) => {
+const ProfessionalSession = () => {
   let { roomId } = useParams();
-  let user = sessionStorage.getItem('name');
+  let sharedLink = window.location.href.replace('professionalSession', 'studentSession');
 
   //Pruebas
   // const jitsiRef = useRef();
@@ -14,21 +14,16 @@ const ProfessionalSession = (props) => {
   // };
   // //
 
-  let sharedLink = window.location.href.replace('professionalSession', 'studentSession');
+  function copyClipboard() {
+    navigator.clipboard.writeText(sharedLink);
+  }
 
   return (
-    <>
-      <Jitsi roomId={roomId} userName={user}></Jitsi>
-      <input style={{ width: '350px' }} diseabled='true' id='sharedLink' type='text' value={sharedLink} />
-      <button
-        type='button'
-        className='fas fa-share'
-        style={{ width: '50px', height: '28px', cursor: 'pointer', borderRadius: '10px' }}
-        onClick={() => {
-          navigator.clipboard.writeText(sharedLink);
-        }}
-      ></button>
-    </>
+    <Layout>
+      <Jitsi roomId={roomId} userName={sessionStorage.getItem('name')}></Jitsi>
+      <input style={{ width: '500px' }} diseabled='true' id='sharedLink' type='text' value={sharedLink} />
+      <button type='button' className='fas fa-share' style={{ marginLeft: '7px', width: '40px', height: '28px', cursor: 'pointer', borderRadius: '10px' }} onClick={copyClipboard}></button>
+    </Layout>
   );
 };
 

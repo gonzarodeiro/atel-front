@@ -9,7 +9,7 @@ import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlStudents } from '../../utils/dropdownlists/index';
 
 const Index = () => {
-  const [session, setSession] = useState({ name: '', password: '' });
+  const [session, setSession] = useState({ name: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -32,10 +32,7 @@ const Index = () => {
       //   postServiceData("endpoint", values);
       setLoading(false);
       await showAlert('Sesión generada', 'Código de la reunión: asdad', 'success');
-
-      var room = session.name;
-
-      history.push({ pathname: 'professionalSession/' + room });
+      history.push({ pathname: 'professionalSession/' + session.name });
     }
   };
 
@@ -63,18 +60,16 @@ const Index = () => {
             )}
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
-                <div className='col-md-6 my-1'>
+                <div className='col-md-12 my-1'>
                   <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={session.name} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.name && showValidation ? 'borderRed' : '')} />
                 </div>
-                {/* <div className='col-md-6 my-1'>
-                  <label>Contraseña de la reunión</label>
-                  <input id='password' onChange={handleChange} value={session.password} type='text' className={'form-control ' + (!session.password && showValidation ? 'borderRed' : '')} />
-                </div> */}
               </div>
               <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
-                <Cancel onClick={() => history.push(`/home`)} title='Volver' />
-                <Submit onClick={handleSubmit} />
                 <div className='col-md-6'>{errors.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>
+                <div className='col-md-6 d-flex justify-content-center justify-content-md-end my-2'>
+                  <Cancel onClick={() => history.push(`/home`)} title='Volver' />
+                  <Submit onClick={handleSubmit} />
+                </div>
               </div>
             </form>
           </div>
