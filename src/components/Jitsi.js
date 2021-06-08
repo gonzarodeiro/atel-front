@@ -5,7 +5,7 @@ const Jitsi = forwardRef((props, ref) => {
     window.JitsiMeetExternalAPI ? startMeet() : alert('JitsiMeetExternalAPI not loaded');
   }, []);
 
-  let containerStyle = props.containerStyle ?? { width: '400px', height: '350px' };
+  let containerStyle = props.containerStyle ?? { width: '600px', height: '450px' };
   const jitsiContainerStyle = { width: '100%', height: '100%' };
   let api = {};
   const domain = 'meet.jit.si';

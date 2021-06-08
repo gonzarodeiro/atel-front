@@ -64,7 +64,7 @@ class App extends Component {
             debounce={250}
           />
         )}
-        <Route path='/(home|user|professionalSession|studentSession|students|schedule|new-student|meeting-instantly|meeting-for-later)/' component={Header} />
+        <Route path='/(home|user|professionalSession|students|schedule|new-student|meeting-instantly|meeting-for-later)/' component={Header} />
         <Switch>
           <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
           <Route exact path='/home' component={Home} />
