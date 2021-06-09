@@ -31,8 +31,11 @@ const Index = () => {
       // const values = { ...session };
       //   postServiceData("endpoint", values);
       setLoading(false);
-      await showAlert('Sesión generada', 'Código de la reunión: asdad', 'success');
-      history.push({ pathname: 'professionalSession/' + session.name });
+      await showAlert('Sesión generada', `Se ha generado la sesión con ${session.name} `, 'success');
+      history.push({
+        pathname: 'professionalSession',
+        state: { roomId: session.name, userName: session.name, date: '12/06/2021' }
+      });
     }
   };
 
