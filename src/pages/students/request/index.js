@@ -61,7 +61,7 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='col-md-4 my-1'>
-                  <label>Nombre</label>
+                  <label>Nombre y apellido</label>
                   <input id='name' onChange={handleChange} value={student.name} type='text' className={'form-control ' + (!student.name && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-1'>

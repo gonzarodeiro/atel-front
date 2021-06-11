@@ -8,7 +8,7 @@ import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlProfession } from '../../utils/dropdownlists/index';
 
 const Registration = ({ showModal, handleClose }) => {
-  const [user, setUser] = useState({ name: '', firstPassword: '', secondPassword: '', profession: '' });
+  const [user, setUser] = useState({ name: '', userName: '', email: '', firstPassword: '', secondPassword: '', profession: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -29,17 +29,29 @@ const Registration = ({ showModal, handleClose }) => {
   }
 
   function validateFields() {
-    if (!user.name || !user.firstPassword || !user.secondPassword || !user.profession) {
+    if (!user.name || !user.userName || !user.email || !user.firstPassword || !user.secondPassword || !user.profession) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
     }
 
-    if (user.firstPassword !== user.secondPassword) {
-      setErrors({ show: true, message: 'Debe ingresar la misma contraseña' });
-      setShowValidation(true);
+    const validEmail = /\S+@\S+\.\S+/;
+
+    if (!validEmail.test(user.email)) {
+      setErrors({ show: true, message: 'Ingrese un email válido' });
       return;
     }
+
+    if (user.firstPassword.length !== 6) {
+      setErrors({ show: true, message: 'La contraseña debe tener más de 6 caracteres' });
+      return;
+    }
+
+    if (user.firstPassword !== user.secondPassword) {
+      setErrors({ show: true, message: 'Debe ingresar la misma contraseña' });
+      return;
+    }
+
     return true;
   }
 
@@ -56,14 +68,24 @@ const Registration = ({ showModal, handleClose }) => {
       <Modal.Body style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
         <div className='row mb-3'>
           <div className='col-md-4 my-2'>
-            <label>Nombre </label>
+            <label>Nombre y apellido </label>
             <input id='name' onChange={handleChange} value={user.name} type='text' className={'form-control ' + (!user.name && showValidation ? 'borderRed' : '')} />
           </div>
           <div className='col-md-4 my-2'>
+            <label>Usuario</label>
+            <input id='userName' onChange={handleChange} value={user.userName} type='text' className={'form-control ' + (!user.userName && showValidation ? 'borderRed' : '')} />
+          </div>
+          <div className='col-md-4 my-2'>
+            <label>Email</label>
+            <input id='email' onChange={handleChange} value={user.email} type='text' className={'form-control ' + (!user.email && showValidation ? 'borderRed' : '')} />
+          </div>
+        </div>
+        <div className='row mb-3'>
+          <div className='col-md-6 my-2'>
             <label>Contraseña</label>
             <input id='firstPassword' onChange={handleChange} value={user.firstPassword} type='password' className={'form-control ' + (!user.firstPassword && showValidation ? 'borderRed' : '')} />
           </div>
-          <div className='col-md-4 my-2'>
+          <div className='col-md-6 my-2'>
             <label>Repita la contraseña</label>
             <input id='secondPassword' onChange={handleChange} value={user.secondPassword} type='password' className={'form-control ' + (!user.secondPassword && showValidation ? 'borderRed' : '')} />
           </div>

@@ -15,7 +15,7 @@ const Sessions = ({ sidebar, showItemMenu, redirectPage }) => {
         <span className='sidebar-item'>Iniciar una reunión al instante</span>
       </div>
       <div className={'menu-item ' + (history.location.pathname === '/meeting-for-later' ? 'active' : '')} onClick={() => redirectPage('meeting-for-later')}>
-        <span className='sidebar-item'>Programar una nueva sesión</span>
+        <span className='sidebar-item'>Programar una sesión</span>
       </div>
       <Footer redirectPage={redirectPage} />
     </div>

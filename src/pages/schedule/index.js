@@ -12,12 +12,14 @@ import { registerLocale } from 'react-datepicker';
 import datepicker from '../../utils/commons/datepicker';
 import showAlert from '../../utils/commons/showAlert';
 import swal from '@sweetalert/with-react';
+import ScheduleDetails from './modal/ScheduleDetails';
 registerLocale('es', datepicker);
 
 const Index = () => {
   const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', status: '', message: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
+  const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
@@ -78,7 +80,13 @@ const Index = () => {
     }
   }
 
-  function handleDetails() {}
+  function handleDetails() {
+    setShowModal({ details: true });
+  }
+
+  function handleCloseDetails() {
+    setShowModal({ details: false });
+  }
 
   function handleDelete(obj) {
     swal(
@@ -105,7 +113,6 @@ const Index = () => {
 
   async function patchSchedule(obj) {
     setLoading(true);
-    console.log(params);
     // const data = { status: obj.id, comments: params.comments };
     // await patchApi("endpoint", data);
     setLoading(false);
@@ -166,6 +173,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
+              {showModal.details && <ScheduleDetails showModal={showModal} handleClose={handleCloseDetails} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>

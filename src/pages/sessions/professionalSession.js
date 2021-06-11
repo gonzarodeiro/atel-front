@@ -49,8 +49,7 @@ const ProfessionalSession = (props) => {
                   <div data-test='container' className='container-fluid section mb-5 border p-3 col-md-12'>
                     <div className='row'>
                       <MDBBtn onClick={copyClipboard} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100' style={{ marginLeft: '15px', marginRight: '15px' }}>
-                        <span className='mr-2'>Link de la reunion</span>
-                        <i className='fas fa-chevron-right'></i>
+                        <span>Link de la reunion</span>
                       </MDBBtn>
                     </div>
                   </div>

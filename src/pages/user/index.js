@@ -9,7 +9,7 @@ import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlProfession } from '../../utils/dropdownlists/index';
 
 const Index = () => {
-  const [user, setUser] = useState({ name: '', firstPassword: '', secondPassword: '', profession: '' });
+  const [user, setUser] = useState({ name: '', userName: '', password: '', profession: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -23,8 +23,8 @@ const Index = () => {
   function loadUserDetails() {
     setUser({
       name: 'Gonzalo Rodeiro',
-      firstPassword: '123',
-      secondPassword: '123',
+      userName: 'grodeiro',
+      password: '12345678',
       profession: 'Asistente social'
     });
   }
@@ -44,14 +44,8 @@ const Index = () => {
   }
 
   function validateFields() {
-    if (!user.name || !user.firstPassword || !user.secondPassword || !user.profession) {
+    if (!user.name || !user.userName || !user.password || !user.profession) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
-      setShowValidation(true);
-      return;
-    }
-
-    if (user.firstPassword !== user.secondPassword) {
-      setErrors({ show: true, message: 'Debe ingresar la misma contraseña' });
       setShowValidation(true);
       return;
     }
@@ -74,16 +68,16 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row mb-3'>
                 <div className='col-md-4 my-2'>
-                  <label>Nombre </label>
+                  <label>Nombre y apellido </label>
                   <input id='name' onChange={handleChange} value={user.name} type='text' className={'form-control ' + (!user.name && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-2'>
-                  <label>Contraseña</label>
-                  <input id='firstPassword' onChange={handleChange} value={user.firstPassword} type='password' className={'form-control ' + (!user.firstPassword && showValidation ? 'borderRed' : '')} />
+                  <label>Usuario </label>
+                  <input id='userName' onChange={handleChange} value={user.userName} type='text' className={'form-control ' + (!user.userName && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-2'>
-                  <label>Repita la contraseña</label>
-                  <input id='secondPassword' onChange={handleChange} value={user.secondPassword} type='password' className={'form-control ' + (!user.secondPassword && showValidation ? 'borderRed' : '')} />
+                  <label>Contraseña</label>
+                  <input id='password' onChange={handleChange} value={user.password} type='password' className={'form-control ' + (!user.password && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
               <div className='row mb-3'>
