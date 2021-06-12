@@ -18,12 +18,13 @@ const StudentSession = () => {
   async function loadSessionStatus() {
     const fields = roomId.split('-');
     setStudent(fields[0]);
-    const filters = { roomName: fields[0], sessionId: fields[1] };
-    let result = await getResponseByFilters('http://localhost:3005/session/ask-to-join', filters);
-    if (result.data.status !== status.Created) {
-      await showAlert('Error en la sesión', result.data.message, 'error');
-      setShowJitsi(false);
-    } else setShowJitsi(true);
+    // const filters = { roomName: fields[0], sessionId: fields[1] };
+    // let result = await getResponseByFilters('http://localhost:3005/session/ask-to-join', filters);
+    // if (result.data.status !== status.Created) {
+    //   await showAlert('Error en la sesión', result.data.message, 'error');
+    //   setShowJitsi(false);
+    // } else setShowJitsi(true);
+    setShowJitsi(true);
   }
 
   return (

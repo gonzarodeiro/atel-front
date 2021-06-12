@@ -14,9 +14,9 @@ const Sessions = ({ sidebar, showItemMenu, redirectPage }) => {
       <div className={'menu-item ' + (history.location.pathname === '/meeting-instantly' ? 'active' : '')} onClick={() => redirectPage('meeting-instantly')}>
         <span className='sidebar-item'>Iniciar una reunión al instante</span>
       </div>
-      <div className={'menu-item ' + (history.location.pathname === '/meeting-for-later' ? 'active' : '')} onClick={() => redirectPage('meeting-for-later')}>
+      {/* <div className={'menu-item ' + (history.location.pathname === '/meeting-for-later' ? 'active' : '')} onClick={() => redirectPage('meeting-for-later')}>
         <span className='sidebar-item'>Programar una sesión</span>
-      </div>
+      </div> */}
       <Footer redirectPage={redirectPage} />
     </div>
   );

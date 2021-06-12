@@ -14,14 +14,14 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
         <i className='fas fa-video' style={{ fontSize: '18px', marginRight: '18px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '2px' }}>Sesiones</span>
       </div>
-      <div className={'menu-item ' + (history.location.pathname === '/students' ? 'active' : '')} onClick={() => showItemMenu('students', 'home')}>
+      {/* <div className={'menu-item ' + (history.location.pathname === '/students' ? 'active' : '')} onClick={() => showItemMenu('students', 'home')}>
         <i className='fas fa-user-friends' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Alumnos</span>
       </div>
       <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => redirectPage('schedule')}>
         <i className='fas fa-list' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Agenda</span>
-      </div>
+      </div> */}
       <Footer redirectPage={redirectPage} />
     </div>
   );

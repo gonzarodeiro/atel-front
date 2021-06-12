@@ -30,11 +30,12 @@ const Index = () => {
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      const filters = createFilters();
-      const response = await postResponseApi('http://localhost:3005/session', filters);
+      // const filters = createFilters();
+      // const response = await postResponseApi('http://localhost:3005/session', filters);
       setLoading(false);
       await showAlert('Sesión generada', `Se ha generado la sesión con ${session.userName} `, 'success');
-      redirectPage(response);
+      // redirectPage(response);
+      redirectPage();
     }
 
     function validateFields() {
@@ -59,7 +60,8 @@ const Index = () => {
     function redirectPage(response) {
       history.push({
         pathname: 'professionalSession',
-        state: { roomId: session.userName, userName: session.userName, date: '12/06/2021', sessionId: response.data.id_session }
+        // state: { roomId: session.userName, userName: session.userName, date: '12/06/2021', sessionId: response.data.id_session }
+        state: { roomId: session.userName, userName: session.userName, date: '12/06/2021', sessionId: '123' }
       });
     }
   };
