@@ -11,10 +11,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../utils/commons/datepicker';
+import status from '../../utils/enums/sessionStatus';
+import postResponseApi from '../../utils/services/post/postResponseApi';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [session, setSession] = useState({ name: '', date: new Date(), hour: '' });
+  const [session, setSession] = useState({ userName: '', date: new Date(), hour: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -33,21 +35,31 @@ const Index = () => {
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      // const values = { ...session, age: parseInt(session.age) };
-      //   postServiceData("endpoint", values);
+      const filters = createFilters();
+      await postResponseApi('http://localhost:3005/session', filters);
       setLoading(false);
-      await showAlert('Sesión programada', 'Código de la reunión: asdad', 'success');
-      history.push({ pathname: 'schedule' });
+      await showAlert('Sesión programada', `Se ha programado la sesión con ${session.userName} para el día ${session.date} `, 'success');
+      history.push({ pathname: 'home' });
     }
   };
 
   function validateFields() {
-    if (!session.name || !session.hour) {
+    if (!session.userName || !session.hour) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
     }
     return true;
+  }
+
+  function createFilters() {
+    return {
+      id_student: 1,
+      id_professional: 1,
+      status: status.Created,
+      start_datetime: new Date(),
+      room_name: session.userName
+    };
   }
 
   return (
@@ -66,7 +78,7 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='col-md-4 my-1'>
-                  <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={session.name} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.name && showValidation ? 'borderRed' : '')} />
+                  <Dropdownlist title='Nombre del alumno' id='userName' handleChange={handleChange} value={session.userName} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-1'>
                   <label>Fecha</label>

@@ -3,21 +3,22 @@ import Jitsi from '../../components/Jitsi';
 import Layout from '../../utils/layout/index';
 import { useHistory } from 'react-router-dom';
 import { MDBBtn } from 'mdbreact';
+import Notification from '../../components/html/Notification';
 
 const ProfessionalSession = (props) => {
   const [session, setSession] = useState({ comments: '' });
+  const [modal, showModal] = useState({ notification: false });
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
-    else {
-      if (!props.location.state) history.push(`/home`);
-    }
+    else if (!props.location.state) history.push(`/home`);
   }, []);
 
   function copyClipboard() {
-    const sharedLink = window.location.href.replace('professionalSession', 'studentSession/' + props.location.state.userName);
+    const sharedLink = window.location.href.replace('professionalSession', 'studentSession/' + props.location.state.userName + '-' + props.location.state.sessionId);
     navigator.clipboard.writeText(sharedLink);
+    showModal({ notification: true });
   }
 
   const handleChange = (event) => {
@@ -87,6 +88,7 @@ const ProfessionalSession = (props) => {
                   <textarea id='comments' rows='3' onChange={handleChange} value={session.comments} type='text' className='form-control' />
                 </div>
               </div>
+              {modal.notification && <Notification title='Link copiado' message='Debe compartirlo con el alumno' />}
             </form>
           </div>
         </div>

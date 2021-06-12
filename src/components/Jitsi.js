@@ -1,9 +1,11 @@
 import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const Jitsi = forwardRef((props, ref) => {
   let containerStyle = props.containerStyle ?? { height: '450px' };
   let api = {};
   const domain = 'meet.jit.si';
+  let history = useHistory();
 
   useEffect(() => {
     window.JitsiMeetExternalAPI ? startMeet() : alert('JitsiMeetExternalAPI not loaded');
@@ -26,9 +28,8 @@ const Jitsi = forwardRef((props, ref) => {
   };
 
   const handleVideoConferenceLeft = () => {
-    console.log('handleVideoConferenceLeft');
-    // Podemos hacer el redirect, y guardar datos de la session (a definir)
     api.dispose();
+    history.push({ pathname: 'home' });
   };
 
   useImperativeHandle(ref, () => ({

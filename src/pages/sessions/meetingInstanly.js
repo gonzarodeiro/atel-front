@@ -7,9 +7,11 @@ import Cancel from '../../components/html/button/Cancel';
 import Submit from '../../components/html/button/Submit';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlStudents } from '../../utils/dropdownlists/index';
+import postResponseApi from '../../utils/services/post/postResponseApi';
+import status from '../../utils/enums/sessionStatus';
 
 const Index = () => {
-  const [session, setSession] = useState({ name: '' });
+  const [session, setSession] = useState({ userName: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -28,25 +30,39 @@ const Index = () => {
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      // const values = { ...session };
-      //   postServiceData("endpoint", values);
+      const filters = createFilters();
+      const response = await postResponseApi('http://localhost:3005/session', filters);
       setLoading(false);
-      await showAlert('Sesión generada', `Se ha generado la sesión con ${session.name} `, 'success');
+      await showAlert('Sesión generada', `Se ha generado la sesión con ${session.userName} `, 'success');
+      redirectPage(response);
+    }
+
+    function validateFields() {
+      if (!session.userName) {
+        setErrors({ show: true, message: 'Complete los campos obligatorios' });
+        setShowValidation(true);
+        return;
+      }
+      return true;
+    }
+
+    function createFilters() {
+      return {
+        id_student: 1,
+        id_professional: 1,
+        status: status.Created,
+        start_datetime: new Date(),
+        room_name: session.userName
+      };
+    }
+
+    function redirectPage(response) {
       history.push({
         pathname: 'professionalSession',
-        state: { roomId: session.name, userName: session.name, date: '12/06/2021' }
+        state: { roomId: session.userName, userName: session.userName, date: '12/06/2021', sessionId: response.data.id_session }
       });
     }
   };
-
-  function validateFields() {
-    if (!session.name) {
-      setErrors({ show: true, message: 'Complete los campos obligatorios' });
-      setShowValidation(true);
-      return;
-    }
-    return true;
-  }
 
   return (
     <Layout>
@@ -64,7 +80,7 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='col-md-12 my-1'>
-                  <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={session.name} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.name && showValidation ? 'borderRed' : '')} />
+                  <Dropdownlist title='Nombre del alumno' id='userName' handleChange={handleChange} value={session.userName} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
               <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
