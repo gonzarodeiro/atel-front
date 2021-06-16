@@ -57,7 +57,7 @@ const Index = () => {
                 </div>
               )}
               <div className='title-header'>ATEL - Asistente terapéutico en línea</div>
-              <div className='tittle'>¡Hola! Bienvenido</div>
+              <div className='tittle'>¡Hola! Bienvenidoaa</div>
               <div className='d-block mt-3' style={{ fontSize: '16px !important' }}>
                 <MDBInput label='Usuario' id='user' onChange={handleChange} value={values.user} group type='text' validate success='right' style={{ marginBottom: '25px' }} />
                 <MDBInput label='Contraseña' id='password' onChange={handleChange} value={values.password} group type='password' validate='container' className='mb-4' />
