@@ -4,7 +4,7 @@ import Header from './components/header/index';
 import Home from './pages/home/index';
 import User from './pages/user/index';
 import Login from './pages/login/index';
-import ProfessionalSession from './pages/sessions/professionalSession';
+import ProfessionalSession from './pages/sessions/professional/index';
 import StudentSession from './pages/sessions/studentSession';
 import Students from './pages/students/operation/index';
 import NewStudent from './pages/students/request/index';
