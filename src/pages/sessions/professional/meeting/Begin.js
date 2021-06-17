@@ -2,6 +2,7 @@ import React from 'react';
 import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
 import Notification from '../../../../components/html/Notification';
+import finishSession from '../finishSession';
 
 const Begin = ({ props, handleChange, modal, session, showModal, showTools, showMeeting }) => {
   function copyClipboard() {
@@ -15,19 +16,23 @@ const Begin = ({ props, handleChange, modal, session, showModal, showTools, show
     showTools({ [tool]: true });
   }
 
+  function redirectEnd() {
+    showMeeting({ begin: false, end: true });
+  }
+
   return (
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} />}</div>
-        <div className='col-md-4' style={{ marginTop: '3px' }}>
+        <div className='col-md-4' style={{ marginTop: '4.5px' }}>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Compartir link con el alumno
             </label>
           </div>
-          <div data-test='container' className='container-fluid section mb-5 border p-3 col-md-12'>
+          <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
-              <MDBBtn onClick={copyClipboard} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100' style={{ marginLeft: '15px', marginRight: '15px' }}>
+              <MDBBtn onClick={copyClipboard} size='lg' className='py-2 red darken-1 shadow-none text-white btnOption w-100' style={{ marginLeft: '15px', marginRight: '15px' }}>
                 <span>Link de la reunion</span>
               </MDBBtn>
             </div>
@@ -40,20 +45,34 @@ const Begin = ({ props, handleChange, modal, session, showModal, showTools, show
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('numerical')} size='lg' className='py-2 red darken-1 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool('numerical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Númerica y lógica</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('alphabetical')} size='lg' className='py-2 red darken-1 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool('alphabetical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Alfabetización</span>
                 </MDBBtn>
               </div>
             </div>
             <div className='row'>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('pictogram')} size='lg' className='py-2 red darken-1 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool('pictogram')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
+                </MDBBtn>
+              </div>
+            </div>
+          </div>
+          <div data-test='col'>
+            <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
+              Fin de la sesión
+            </label>
+          </div>
+          <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
+            <div className='row'>
+              <div className='col-md-12 mt-1 mb-1'>
+                <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
+                  <span>Finalizar</span>
                 </MDBBtn>
               </div>
             </div>

@@ -29,7 +29,7 @@ const End = ({ handleChange, session }) => {
       </div>
       <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
         <div className='col-md-12 d-flex justify-content-center justify-content-md-end my-2'>
-          <Submit onClick={() => history.push(`/home`)} />
+          <Submit onClick={() => history.push(`/home`)} title='Guardar' />
         </div>
       </div>
     </React.Fragment>

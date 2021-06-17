@@ -63,29 +63,29 @@ const Registration = ({ showModal, handleClose }) => {
         </div>
       )}
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
-        <Modal.Title style={{ fontSize: '19px' }}>Registrarse en ATEL</Modal.Title>
+        <Modal.Title style={{ fontSize: '19px' }}>Crea tu cuenta en ATEL</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
         <div className='row mb-3'>
-          <div className='col-md-4 my-2'>
+          <div className='col-md-4 my-1'>
             <label>Nombre y apellido </label>
             <input id='name' onChange={handleChange} value={user.name} type='text' className={'form-control ' + (!user.name && showValidation ? 'borderRed' : '')} />
           </div>
-          <div className='col-md-4 my-2'>
+          <div className='col-md-4 my-1'>
             <label>Usuario</label>
             <input id='userName' onChange={handleChange} value={user.userName} type='text' className={'form-control ' + (!user.userName && showValidation ? 'borderRed' : '')} />
           </div>
-          <div className='col-md-4 my-2'>
+          <div className='col-md-4 my-1'>
             <label>Email</label>
             <input id='email' onChange={handleChange} value={user.email} type='text' className={'form-control ' + (!user.email && showValidation ? 'borderRed' : '')} />
           </div>
         </div>
         <div className='row mb-3'>
-          <div className='col-md-6 my-2'>
+          <div className='col-md-6 my-1'>
             <label>Contraseña</label>
             <input id='firstPassword' onChange={handleChange} value={user.firstPassword} type='password' className={'form-control ' + (!user.firstPassword && showValidation ? 'borderRed' : '')} />
           </div>
-          <div className='col-md-6 my-2'>
+          <div className='col-md-6 my-1'>
             <label>Repita la contraseña</label>
             <input id='secondPassword' onChange={handleChange} value={user.secondPassword} type='password' className={'form-control ' + (!user.secondPassword && showValidation ? 'borderRed' : '')} />
           </div>
@@ -98,7 +98,7 @@ const Registration = ({ showModal, handleClose }) => {
         <div className='col-md-12'>{errors.show === true && <div className='text-danger mb-3 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>
         <Modal.Footer>
           <Cancel onClick={handleClose} title='Cancelar' />
-          <Submit onClick={handleSubmit} />
+          <Submit onClick={handleSubmit} title='Guardar' />
         </Modal.Footer>
       </Modal.Body>
     </Modal>

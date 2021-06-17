@@ -1,11 +1,11 @@
 import React from 'react';
 import { MDBBtn } from 'mdbreact';
 
-const Submit = ({ onClick }) => {
+const Submit = ({ onClick, title }) => {
   return (
     <React.Fragment>
       <MDBBtn onClick={onClick} size='lg' className='py-2 blue darken-2 mr-0 shadow-none text-white btnOption'>
-        <span className='mr-2'>Guardar</span>
+        <span className='mr-2'>{title}</span>
         <i className='fas fa-chevron-right'></i>
       </MDBBtn>
     </React.Fragment>

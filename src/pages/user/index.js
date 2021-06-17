@@ -89,7 +89,7 @@ const Index = () => {
                 <div className='col-md-6'>{errors.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>
                 <div className='col-md-6 d-flex justify-content-center justify-content-md-end my-2'>
                   <Cancel onClick={() => history.push(`/home`)} title='Volver' />
-                  <Submit onClick={handleSubmit} />
+                  <Submit onClick={handleSubmit} title='Guardar' />
                 </div>
               </div>
             </form>
