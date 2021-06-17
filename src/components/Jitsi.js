@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const Jitsi = forwardRef((props, ref) => {
-  let containerStyle = props.containerStyle ?? { height: '450px' };
+  let containerStyle = { height: props.height };
   let api = {};
   const domain = 'meet.jit.si';
   let history = useHistory();

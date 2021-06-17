@@ -9,7 +9,6 @@ const StudentSession = () => {
   const [student, setStudent] = useState();
   const [showJitsi, setShowJitsi] = useState();
   let { roomId } = useParams();
-  let containerStyle = { height: '580px' };
 
   useEffect(() => {
     loadSessionStatus();
@@ -38,7 +37,7 @@ const StudentSession = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='pb-3 mt-2 col-md-12'>
-                  <Jitsi roomId={roomId} userName={roomId} containerStyle={containerStyle}></Jitsi>
+                  <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>
                 </div>
               </div>
             </form>

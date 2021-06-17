@@ -23,7 +23,7 @@ const Begin = ({ props, handleChange, modal, session, showModal, showTools, show
   return (
     <React.Fragment>
       <div className='row'>
-        <div className='pb-3 mt-2 col-md-8'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} />}</div>
+        <div className='pb-3 mt-2 col-md-8'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='450px' />}</div>
         <div className='col-md-4' style={{ marginTop: '4.5px' }}>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
