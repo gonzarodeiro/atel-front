@@ -1,7 +1,8 @@
 import React from 'react';
 import { MDBBtn } from 'mdbreact';
+
 import Jitsi from '../../../../components/Jitsi';
-import { Stage, Layer, Rect, Circle } from 'react-konva';
+import Activity, { ActivityType } from '../../../../components/Activity';
 import finishSession from '../finishSession';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
@@ -20,12 +21,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Stage width={window.innerWidth} height={window.innerHeight}>
-            <Layer>
-              <Rect x={20} y={50} width={100} height={100} fill='red' shadowBlur={10} draggable />
-              <Circle x={300} y={50} radius={50} fill='green' draggable />
-            </Layer>
-          </Stage>
+          <Activity type={ActivityType.ALPHA} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>

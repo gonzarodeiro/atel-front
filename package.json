@@ -32,6 +32,7 @@
     "sweetalert": "^2.1.2",
     "typeface-open-sans": "0.0.75",
     "typeface-roboto": "0.0.75",
+    "use-image": "^1.0.7",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
