@@ -1,11 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MDBBtn } from 'mdbreact';
-
 import Jitsi from '../../../../components/Jitsi';
-import Activity, { ActivityType } from '../../../../components/Activity';
+import Activity from '../../../../components/Activity/Alphabetical/index';
 import finishSession from '../finishSession';
+import { v4 as uuidv4 } from 'uuid';
+import imgCherry from '../../../../components/Activity/Alphabetical/images/fruits/fruit_cherry.png';
+import imgGrape from '../../../../components/Activity/Alphabetical/images/fruits/fruit_grape.png';
+import imgApple from '../../../../components/Activity/Alphabetical/images/fruits/fruit_apple.png';
+import imgLemon from '../../../../components/Activity/Alphabetical/images/fruits/fruit_lemon.png';
+import imgBanana from '../../../../components/Activity/Alphabetical/images/fruits/fruit_banana.png';
+import imgCat from '../../../../components/Activity/Alphabetical/images/animals/cat.png';
+import imgGiraffe from '../../../../components/Activity/Alphabetical/images/animals/giraffe.png';
+import imgLion from '../../../../components/Activity/Alphabetical/images/animals/lion.png';
+import imgDog from '../../../../components/Activity/Alphabetical/images/animals/dog.png';
+import imgElephant from '../../../../components/Activity/Alphabetical/images/animals/elephant.png';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
+  const [activityData, setActivityData] = useState({
+    elements: [
+      {
+        id: uuidv4(),
+        name: 'CEREZA',
+        src: imgCherry,
+        width: 90,
+        height: 85,
+        draggable: true
+      },
+      {
+        id: uuidv4(),
+        name: 'UVA',
+        src: imgGrape,
+        width: 90,
+        height: 85,
+        draggable: true
+      },
+      {
+        id: uuidv4(),
+        name: 'MANZANA',
+        src: imgApple,
+        width: 90,
+        height: 85,
+        draggable: true
+      },
+      {
+        id: uuidv4(),
+        name: 'LIMÓN',
+        src: imgLemon,
+        width: 90,
+        height: 85,
+        draggable: true
+      },
+      {
+        id: uuidv4(),
+        name: 'BANANA',
+        src: imgBanana,
+        width: 90,
+        height: 85,
+        draggable: true
+      }
+    ],
+    colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
+  });
+
   function redirectTool(tool) {
     showTools({ [tool]: true });
   }
@@ -15,13 +71,59 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
     showMeeting({ end: true });
   }
 
-  function restart() {}
+  function restart() {
+    setActivityData({
+      elements: [
+        {
+          id: uuidv4(),
+          name: 'GATO',
+          src: imgCat,
+          width: 90,
+          height: 85,
+          draggable: true
+        },
+        {
+          id: uuidv4(),
+          name: 'JIRAFA',
+          src: imgGiraffe,
+          width: 90,
+          height: 85,
+          draggable: true
+        },
+        {
+          id: uuidv4(),
+          name: 'LEÓN',
+          src: imgLion,
+          width: 90,
+          height: 85,
+          draggable: true
+        },
+        {
+          id: uuidv4(),
+          name: 'PERRO',
+          src: imgDog,
+          width: 90,
+          height: 85,
+          draggable: true
+        },
+        {
+          id: uuidv4(),
+          name: 'ELEFANTE',
+          src: imgElephant,
+          width: 90,
+          height: 85,
+          draggable: true
+        }
+      ],
+      colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
+    });
+  }
 
   return (
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity type={ActivityType.ALPHA} />
+          <Activity data={activityData} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
