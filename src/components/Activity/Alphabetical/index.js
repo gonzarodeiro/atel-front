@@ -1,10 +1,20 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow } from 'react-konva';
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import Konva from "konva";
+import {
+  Stage,
+  Layer,
+  Image as KonvaImage,
+  Text,
+  Group,
+  Arrow,
+  Circle,
+} from "react-konva";
 
-import data from './alphabetical-data';
-import banner from './images/others/banner.png';
+import data from "./alphabetical-data";
+import startAnimationConfites from "./confites";
+import banner from "./images/others/banner.png";
 
-const CONTAINER_SIZE = '100%';
+const CONTAINER_SIZE = "100%";
 const MARGIN = 16;
 const MARGIN_TOP = 40;
 const BANNER_SIZE = 240;
@@ -17,6 +27,8 @@ const Alphabetical = () => {
   const stageRef = useRef(null);
   const layerRef = useRef(null);
   const arrowRef = useRef(null);
+
+  const confites = data.generateConfites(100, divRef);
   const [itemGroupLeft] = useState(data.elements);
   const [itemGroupRight] = useState(data.elementsReordered);
   const [color] = useState(data.colors[0]);
@@ -62,39 +74,117 @@ const Alphabetical = () => {
     const point = stageRef.current.getPointerPosition();
     const el = stageRef.current.getIntersection(point);
     if (el.parent.attrs.id === id) {
-      console.log('Match');
+      console.log("Match");
       // Festejar o dibujar match
     }
     console.log(el);
   }, []);
 
   function imageFactory(x) {
-    const rv = document.createElement('img');
+    const rv = document.createElement("img");
     rv.src = x;
     return rv;
   }
 
   function oposedColor(color) {
     const aux = color.substring(1);
-    const hex = '0x' + aux;
+    const hex = "0x" + aux;
     const num = parseInt(hex);
-    const comp = parseInt('0xffffff') - num;
-    return '#' + comp.toString(16) + 'ff';
+    const comp = parseInt("0xffffff") - num;
+    return "#" + comp.toString(16) + "ff";
   }
 
+  const animateCircles = () => {
+    startAnimationConfites(stageRef, layerRef);
+  };
+
   return (
-    <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
-      <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
+    <div
+      style={{
+        width: CONTAINER_SIZE,
+        height: CONTAINER_SIZE,
+        backgroundColor: color,
+      }}
+      ref={divRef}
+    >
+      <button onClick={animateCircles}>asdasdas</button>
+      <Stage
+        width={width}
+        height={height}
+        d
+        ref={stageRef}
+        onMouseMove={onMouseMove}
+      >
         <Layer ref={layerRef}>
-          {itemGroupLeft && itemGroupLeft.map((element, index) => <KonvaImage key={element.id} id={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} onClick={onOriginClick} />)}
+          {itemGroupLeft &&
+            itemGroupLeft.map((element, index) => (
+              <KonvaImage
+                key={element.id}
+                id={element.id}
+                x={MARGIN}
+                y={MARGIN_TOP + (MARGIN + element.height) * index}
+                width={element.width}
+                height={element.height}
+                image={imageFactory(element.src)}
+                onClick={onOriginClick}
+              />
+            ))}
           {itemGroupRight &&
             itemGroupRight.map((element, index) => (
-              <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} onMouseUp={() => onTargetMouseUp(element.id)}>
-                <KonvaImage image={imageFactory(banner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
-                <Text text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
+              <Group
+                key={element.id}
+                id={element.id}
+                x={width - BANNER_SIZE - MARGIN}
+                y={MARGIN_TOP + (MARGIN + element.height) * index}
+                onMouseUp={() => onTargetMouseUp(element.id)}
+              >
+                <KonvaImage
+                  image={imageFactory(banner)}
+                  height={BANNER_SIZE * BANNER_RATIO}
+                  width={BANNER_SIZE}
+                />
+                <Text
+                  text={element.name}
+                  height={element.height}
+                  width={BANNER_SIZE}
+                  fontVariant="bold"
+                  fontSize={24}
+                  align="center"
+                  verticalAlign="middle"
+                  strokeWidth={1}
+                  fill="white"
+                  shadowColor="black"
+                  shadowBlur={10}
+                />
               </Group>
             ))}
-          <Arrow ref={arrowRef} points={arrowPoints.length === 4 ? arrowPoints : originPoint.concat(targetPoint)} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} onClick={onTargetClick} lineJoin='round' lineCap='round' visible={arrowPoints.length || targetPoint.length} />
+          <Arrow
+            ref={arrowRef}
+            points={
+              arrowPoints.length === 4
+                ? arrowPoints
+                : originPoint.concat(targetPoint)
+            }
+            fill={oposedColor(color)}
+            stroke={oposedColor(color)}
+            strokeWidth={8}
+            onClick={onTargetClick}
+            lineJoin="round"
+            lineCap="round"
+            visible={arrowPoints.length || targetPoint.length}
+          />
+        </Layer>
+        <Layer>
+          {confites &&
+            confites.map((element, index) => (
+              <Circle
+                id={"circle"}
+                x={element.confite.x}
+                y={element.confite.y}
+                radius={element.confite.radius}
+                fill={element.confite.fill}
+              />
+            ))}
         </Layer>
       </Stage>
     </div>
