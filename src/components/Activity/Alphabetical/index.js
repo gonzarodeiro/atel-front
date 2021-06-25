@@ -26,6 +26,8 @@ const Alphabetical = ({ data }) => {
   const [targetPoint, setTargetPoint] = useState([]);
   const [arrowPoints, setArrowPoints] = useState([]);
   const [{ width, height }, setDimensions] = useState({});
+  const [showConfites, setShowConfites] = useState(false);
+  const [itemLeftSelected, setItemLeftSelected] = useState();
 
   useEffect(() => {
     if (divRef.current) {
@@ -34,17 +36,11 @@ const Alphabetical = ({ data }) => {
       const height = rect.height;
       setDimensions({ width, height });
     }
+    setShowConfites(false);
     setItemGroupLeft(getRandomItems(data.elements));
     setItemGroupRight(getRandomItems(elementsToUse));
     setColor(getRandomItems(data.colors)[1]);
   }, [data]);
-
-  const onOriginClick = useCallback(() => {
-    const point = stageRef.current.getPointerPosition();
-    const coords = Object.values(point);
-    setOriginPoint(coords);
-    setArrowPoints(coords);
-  }, []);
 
   const onMouseMove = useCallback(() => {
     if (originPoint.length) {
@@ -63,13 +59,12 @@ const Alphabetical = ({ data }) => {
     setTargetPoint([]);
   }, []);
 
-  const onTargetMouseUp = useCallback((id) => {
-    const point = stageRef.current.getPointerPosition();
-    const el = stageRef.current.getIntersection(point);
-    if (el.parent.attrs.id === id) {
+  function onTargetMouseUp(element) {
+    if (itemLeftSelected === element.name) {
+      setShowConfites(true);
       startAnimationConfites(stageRef, layerRef);
     }
-  }, []);
+  }
 
   function imageFactory(x) {
     const rv = document.createElement('img');
@@ -85,21 +80,35 @@ const Alphabetical = ({ data }) => {
     return '#' + comp.toString(16) + 'ff';
   }
 
+  function handleLeftItem(element) {
+    setShowConfites(false);
+    setItemLeftSelected(element.name);
+    const point = stageRef.current.getPointerPosition();
+    const coords = Object.values(point);
+    setOriginPoint(coords);
+    setArrowPoints(coords);
+  }
+
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
       <Stage width={width} height={height} d ref={stageRef} onMouseMove={onMouseMove}>
         <Layer ref={layerRef}>
-          {itemGroupLeft && itemGroupLeft.map((element, index) => <KonvaImage key={element.id} id={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} onClick={onOriginClick} />)}
+          {itemGroupLeft &&
+            itemGroupLeft.map((element, index) => (
+              <Group onMouseUp={() => handleLeftItem(element)}>
+                <KonvaImage key={element.id} id={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} />
+              </Group>
+            ))}
           {itemGroupRight &&
             itemGroupRight.map((element, index) => (
-              <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} onMouseUp={() => onTargetMouseUp(element.id)}>
+              <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} onMouseUp={() => onTargetMouseUp(element)}>
                 <KonvaImage image={imageFactory(banner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
                 <Text text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
           <Arrow ref={arrowRef} points={arrowPoints.length === 4 ? arrowPoints : originPoint.concat(targetPoint)} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} onClick={onTargetClick} lineJoin='round' lineCap='round' visible={arrowPoints.length || targetPoint.length} />
         </Layer>
-        <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>
+        {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
       </Stage>
     </div>
   );
