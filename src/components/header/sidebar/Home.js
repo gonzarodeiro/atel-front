@@ -17,8 +17,8 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
       {/* <div className={'menu-item ' + (history.location.pathname === '/students' ? 'active' : '')} onClick={() => showItemMenu('students', 'home')}>
         <i className='fas fa-user-friends' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Alumnos</span>
-      </div>
-      <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => redirectPage('schedule')}>
+      </div> */}
+      {/* <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => showItemMenu('schedule', 'home')}>
         <i className='fas fa-list' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Agenda</span>
       </div> */}
