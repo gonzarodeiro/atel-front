@@ -31,7 +31,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         voice: voiceCherry,
         width: 90,
         height: 85,
-        draggable: true
+        draggable: true,
+        matched: false
       },
       {
         id: uuidv4(),
@@ -40,7 +41,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         voice: voiceGrape,
         width: 90,
         height: 85,
-        draggable: true
+        draggable: true,
+        matched: false
       },
       {
         id: uuidv4(),
@@ -49,7 +51,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         voice: voiceApple,
         width: 90,
         height: 85,
-        draggable: true
+        draggable: true,
+        matched: false
       },
       {
         id: uuidv4(),
@@ -58,7 +61,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         voice: voiceLemon,
         width: 90,
         height: 85,
-        draggable: true
+        draggable: true,
+        matched: false
       },
       {
         id: uuidv4(),
@@ -67,7 +71,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         voice: voiceBanana,
         width: 90,
         height: 85,
-        draggable: true
+        draggable: true,
+        matched: false
       }
     ],
     colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
@@ -91,7 +96,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           src: imgCat,
           width: 90,
           height: 85,
-          draggable: true
+          draggable: true,
+          matched: false
         },
         {
           id: uuidv4(),
@@ -99,7 +105,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           src: imgGiraffe,
           width: 90,
           height: 85,
-          draggable: true
+          draggable: true,
+          matched: false
         },
         {
           id: uuidv4(),
@@ -107,7 +114,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           src: imgLion,
           width: 90,
           height: 85,
-          draggable: true
+          draggable: true,
+          matched: false
         },
         {
           id: uuidv4(),
@@ -115,7 +123,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           src: imgDog,
           width: 90,
           height: 85,
-          draggable: true
+          draggable: true,
+          matched: false
         },
         {
           id: uuidv4(),
@@ -123,7 +132,8 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           src: imgElephant,
           width: 90,
           height: 85,
-          draggable: true
+          draggable: true,
+          matched: false
         }
       ],
       colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
@@ -135,7 +145,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={activityData} resetActivity={resetActivity} />
+          <Activity data={activityData} resetActivity={resetActivity} restartActivity={restart} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>

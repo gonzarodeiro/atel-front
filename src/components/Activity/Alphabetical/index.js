@@ -2,8 +2,9 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'react-konva';
 import { startAnimationConfites, generateConfites, getRandomItems } from './confites';
 import banner from './images/others/banner.png';
+import correctBanner from './images/others/correctBanner.png';
 
-const Alphabetical = ({ data, resetActivity }) => {
+const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -70,8 +71,40 @@ const Alphabetical = ({ data, resetActivity }) => {
   function checkTargetMatch(element) {
     if (element && itemLeftSelected.name === element.attrs.text) {
       setShowConfites(true);
+      let banner = layerRef.current.find('#banner' + element.attrs.text);
+      checkMatch();
+      banner[0].image(imageFactory(correctBanner));
+      banner[0].draw();
       startAnimationConfites(stageRef, layerRef);
       playAudio(itemLeftSelected.voice);
+      checkFinishActivity();
+    }
+  }
+
+  function checkMatch() {
+    for (let i in itemGroupLeft) {
+      if (itemGroupLeft[i].name == itemLeftSelected.name) {
+        let tempItemGroupLeft = [...itemGroupLeft];
+        tempItemGroupLeft[i].matched = true;
+        setItemGroupLeft(tempItemGroupLeft);
+        break;
+      }
+    }
+  }
+
+  function checkFinishActivity() {
+    let finish = true;
+    for (let i in itemGroupLeft) {
+      if (itemGroupLeft[i].matched == false) {
+        finish = false;
+        break;
+      }
+    }
+    if (finish) {
+      restartActivity();
+      setOriginPoint([]);
+      setTargetPoint([]);
+      setArrowPoints([]);
     }
   }
 
@@ -120,19 +153,26 @@ const Alphabetical = ({ data, resetActivity }) => {
   }
 
   return (
-    <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
-      <Stage width={width} height={height} d ref={stageRef} onMouseMove={onMouseMove}>
+    <div
+      style={{
+        width: CONTAINER_SIZE,
+        height: CONTAINER_SIZE,
+        backgroundColor: color
+      }}
+      ref={divRef}
+    >
+      <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
         <Layer ref={layerRef}>
           {itemGroupLeft &&
             itemGroupLeft.map((element, index) => (
               <Group onMouseUp={() => handleLeftItem(element)}>
-                <KonvaImage key={element.id} id={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} />
+                <KonvaImage key={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} />
               </Group>
             ))}
           {itemGroupRight &&
             itemGroupRight.map((element, index) => (
               <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index}>
-                <KonvaImage image={imageFactory(banner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
+                <KonvaImage id={'banner' + element.name} image={element.matched == false ? imageFactory(banner) : imageFactory(correctBanner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
                 <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
