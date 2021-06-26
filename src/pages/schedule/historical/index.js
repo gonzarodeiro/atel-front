@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import Layout from '../../utils/layout/index';
-import Table from '../../components/html/Table';
-import Loading from '../../components/Loading';
-import Footer from '../../components/html/Footer';
-import Dropdownlist from '../../components/html/Dropdownlist';
-import { dlStudents, dlStatus } from '../../utils/dropdownlists/index';
+import Layout from '../../../utils/layout/index';
+import Table from '../../../components/html/Table';
+import Loading from '../../../components/Loading';
+import Footer from '../../../components/html/Footer';
+import Dropdownlist from '../../../components/html/Dropdownlist';
+import { dlStudents, dlStatus } from '../../../utils/dropdownlists/index';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
-import datepicker from '../../utils/commons/datepicker';
-import showAlert from '../../utils/commons/showAlert';
-import swal from '@sweetalert/with-react';
-import ScheduleDetails from './modal/ScheduleDetails';
+import datepicker from '../../../utils/commons/datepicker';
+import HistoricalSessionDetails from './modal/HistoricalSessionDetails';
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -43,22 +41,19 @@ const Index = () => {
       {
         name: 'German Perez',
         difficulty: 'TEA',
-        comments: 'Tuvo dificultad en la herramienta alfabética',
         status: 'Finalizada',
         date: '01/06/2021 14:00 hs'
       },
       {
         name: 'Augusto Gomez',
-        difficulty: 'Down',
-        comments: 'Se cancelo la reunión porque el alumno esta enfermo',
-        status: 'Cancelada',
+        difficulty: 'Dislexia',
+        status: 'Finalizada',
         date: '05/06/2021 16:00 hs'
       },
       {
         name: 'Lucas Gomez',
-        difficulty: 'Down',
-        comments: '',
-        status: 'Pendiente',
+        difficulty: 'TDA',
+        status: 'Cancelada',
         date: '12/06/2021 16:00 hs'
       }
     ];
@@ -70,9 +65,8 @@ const Index = () => {
     for (let i = 0; i < result.length; i++) {
       result[i].actions = (
         <div>
-          {result[i].status === 'Pendiente' && <i onClick={() => handleDelete(result[i])} className='fas fa-trash-alt mt-1' title='Eliminar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
-          {result[i].status === 'Pendiente' && <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i>}
           {result[i].status === 'Finalizada' && <i onClick={() => handleDetails(result[i])} className='fas fa-eye mt-1' title='Ver detalles' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
+          {result[i].status === 'Cancelada' && <i onClick={() => handleObservation(result[i])} className='fas fa-eye mt-1' title='Ver detalles' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
           {result[i].status === 'Finalizada' && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
           {result[i].status === 'Cancelada' && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#d32f2f' }} aria-hidden='true'></i>}
         </div>
@@ -84,40 +78,10 @@ const Index = () => {
     setShowModal({ details: true });
   }
 
+  function handleObservation() {}
+
   function handleCloseDetails() {
     setShowModal({ details: false });
-  }
-
-  function handleDelete(obj) {
-    swal(
-      <div>
-        <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
-        <span>Alumno: {obj.name}</span>
-        <p>Fecha: {obj.date}</p>
-        <input id='message' placeholder='Comentario' onChange={handleChange} value={params.comments} type='text' className='form-control mt-4' />
-      </div>,
-      {
-        icon: 'warning',
-        buttons: {
-          cancel: 'No',
-          catch: {
-            text: 'Si',
-            value: 'delete'
-          }
-        }
-      }
-    ).then((value) => {
-      if (value === 'delete') patchSchedule(obj);
-    });
-  }
-
-  async function patchSchedule(obj) {
-    setLoading(true);
-    // const data = { status: obj.id, comments: params.comments };
-    // await patchApi("endpoint", data);
-    setLoading(false);
-    await showAlert('Sesión eliminada', `La sesión: ${obj.date} ha sido dada de baja`, 'success');
-    history.push(`/home`);
   }
 
   function fillTable(result) {
@@ -127,7 +91,6 @@ const Index = () => {
           { label: '', field: 'actions' },
           { label: 'Nombre', field: 'name' },
           { label: 'Dificultad', field: 'difficulty' },
-          { label: 'Observaciones', field: 'comments' },
           { label: 'Estado', field: 'status' },
           { label: 'Fecha sesión', field: 'date' }
         ],
@@ -153,7 +116,7 @@ const Index = () => {
           )}
           <div className='card-body pb-3'>
             <div className='card-title pb-3 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              Listado de sesiones
+              Histórico de sesiones
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row pb-1'>
@@ -173,14 +136,11 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <ScheduleDetails showModal={showModal} handleClose={handleCloseDetails} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>
-                    <i className='fas fa-square' style={{ color: 'orange', marginBottom: '13px', marginLeft: '2px' }}></i> = Pendiente
-                  </span>
-                  <span>
-                    <i className='fas fa-square ml-2' style={{ color: '#388e3c' }}></i> = Finalizada
+                    <i className='fas fa-square ml-2' style={{ color: '#388e3c', marginBottom: '13px', marginLeft: '2px' }}></i> = Finalizada
                   </span>
                   <span>
                     <i className='fas fa-square ml-2' style={{ color: '#dd4b39' }}></i> = Cancelada

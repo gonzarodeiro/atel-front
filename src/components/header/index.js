@@ -3,11 +3,12 @@ import { useHistory } from 'react-router-dom';
 import logout from '../../utils/commons/logout';
 import Home from './sidebar/Home';
 import Sessions from './sidebar/Sessions';
+import Schedule from './sidebar/Schedule';
 import Students from './sidebar/Students';
 
 const Header = () => {
   const [values, setValues] = useState({ isOpen: false });
-  const [menu, setMenu] = useState({ home: true, sessions: false, students: false });
+  const [menu, setMenu] = useState({ home: true, sessions: false, students: false, schedule: false });
   const [sidebar, setSidebar] = useState(false);
   const [open, setOpen] = useState(true);
   let history = useHistory();
@@ -54,6 +55,7 @@ const Header = () => {
       </li>
       {menu.home && <Home sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} />}
       {menu.sessions && <Sessions sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
+      {menu.schedule && <Schedule sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       {menu.students && <Students sidebar={sidebar} showItemMenu={showItemMenu} redirectPage={redirectPage} closeSidebar={closeSidebar} />}
       <div onClick={closeSidebar} className={'black-cast ' + (sidebar ? 'open' : null)}></div>
       <button onClick={toggleCollapse} data-test='navbar-toggler' type='button' className='navbar-toggler'>

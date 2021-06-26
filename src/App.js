@@ -10,7 +10,8 @@ import Students from './pages/students/operation/index';
 import NewStudent from './pages/students/request/index';
 import MeetingInstanly from './pages/sessions/meetingInstanly';
 import MeetingForLater from './pages/sessions/meetingForLater';
-import Schedule from './pages/schedule/index';
+import SessionPending from './pages/schedule/pending/index';
+import HistoricalSession from './pages/schedule/historical/index';
 import NoExist from './pages/noExists';
 import GlobalStyle from './styles/css/globalStyles';
 import IdleTimer from 'react-idle-timer';
@@ -64,7 +65,7 @@ class App extends Component {
             debounce={250}
           />
         )}
-        <Route path='/(home|user|professionalSession|students|schedule|new-student|meeting-instantly|meeting-for-later)/' component={Header} />
+        <Route path='/(home|user|professionalSession|students|historical-session|pending-session|new-student|meeting-instantly|meeting-for-later)/' component={Header} />
         <Switch>
           <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
           <Route exact path='/home' component={Home} />
@@ -73,7 +74,8 @@ class App extends Component {
           <Route exact path='/user' component={User} />
           <Route exact path='/students' component={Students} />
           <Route exact path='/new-student' component={NewStudent} />
-          <Route exact path='/schedule' component={Schedule} />
+          <Route exact path='/historical-session' component={HistoricalSession} />
+          <Route exact path='/pending-session' component={SessionPending} />
           <Route exact path='/meeting-instantly' component={MeetingInstanly} />
           <Route exact path='/meeting-for-later' component={MeetingForLater} />
           <Route exact component={NoExist} />

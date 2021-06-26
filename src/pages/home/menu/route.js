@@ -21,7 +21,7 @@ const Route = ({ title, module, colorStyle, colorClass, description, iconItem })
       {/* {item.students && <Item title={title} colorStyle={colorStyle} request='students' firstItem='Crear nuevo alumno' secondItem='Listado de alumnos' redirectFirstItem='new-student' redirectSecondItem='students' />} */}
       {item.sessions && redirectSchedule('meeting-instantly')}
       {item.students && redirectSchedule('new-student')}
-      {item.schedule && redirectSchedule('schedule')}
+      {item.schedule && redirectSchedule('pending-session')}
     </React.Fragment>
   );
 };
