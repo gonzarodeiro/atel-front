@@ -61,7 +61,7 @@ const Index = () => {
       history.push({
         pathname: 'professionalSession',
         // state: { roomId: session.userName, userName: session.userName, date: '12/06/2021', sessionId: response.data.id_session }
-        state: { roomId: session.userName, userName: session.userName, date: '12/06/2021', sessionId: '123' }
+        state: { roomId: session.userName, userName: session.userName, date: '26/06/2021', sessionId: '123' }
       });
     }
   };
