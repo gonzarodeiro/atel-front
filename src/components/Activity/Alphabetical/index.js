@@ -83,7 +83,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
 
   function checkMatch() {
     for (let i in itemGroupLeft) {
-      if (itemGroupLeft[i].name == itemLeftSelected.name) {
+      if (itemGroupLeft[i].name === itemLeftSelected.name) {
         let tempItemGroupLeft = [...itemGroupLeft];
         tempItemGroupLeft[i].matched = true;
         setItemGroupLeft(tempItemGroupLeft);
@@ -95,7 +95,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   function checkFinishActivity() {
     let finish = true;
     for (let i in itemGroupLeft) {
-      if (itemGroupLeft[i].matched == false) {
+      if (itemGroupLeft[i].matched === false) {
         finish = false;
         break;
       }
@@ -142,10 +142,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
 
   function handleLeftItem(element) {
     setShowConfites(false);
-    setItemLeftSelected({
-      name: element.name,
-      voice: element.voice
-    });
+    setItemLeftSelected({ name: element.name, voice: element.voice });
     const point = stageRef.current.getPointerPosition();
     const coords = Object.values(point);
     setOriginPoint(coords);
@@ -153,14 +150,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   }
 
   return (
-    <div
-      style={{
-        width: CONTAINER_SIZE,
-        height: CONTAINER_SIZE,
-        backgroundColor: color
-      }}
-      ref={divRef}
-    >
+    <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
         <Layer ref={layerRef}>
           {itemGroupLeft &&
@@ -172,7 +162,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
           {itemGroupRight &&
             itemGroupRight.map((element, index) => (
               <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index}>
-                <KonvaImage id={'banner' + element.name} image={element.matched == false ? imageFactory(banner) : imageFactory(correctBanner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
+                <KonvaImage id={'banner' + element.name} image={element.matched === false ? imageFactory(banner) : imageFactory(correctBanner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
                 <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
