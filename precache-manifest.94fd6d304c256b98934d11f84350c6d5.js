@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e690b65711eb7573314a1834c9ab3a01",
+    "revision": "bf6001814cc7be82f68943ae48ab9dae",
     "url": "/atel-front/index.html"
   },
   {
-    "revision": "52e7f8b75193681004cd",
+    "revision": "fe8925b1c809c210b83a",
     "url": "/atel-front/static/css/2.c2774f4f.chunk.css"
   },
   {
-    "revision": "68f50207b094d3577a21",
+    "revision": "a813a312d35932774770",
     "url": "/atel-front/static/css/main.eddd4c50.chunk.css"
   },
   {
-    "revision": "52e7f8b75193681004cd",
-    "url": "/atel-front/static/js/2.57c51eb6.chunk.js"
+    "revision": "fe8925b1c809c210b83a",
+    "url": "/atel-front/static/js/2.10145002.chunk.js"
   },
   {
     "revision": "e3f4dcb94f77865b15c24b0a68cbe16d",
-    "url": "/atel-front/static/js/2.57c51eb6.chunk.js.LICENSE.txt"
+    "url": "/atel-front/static/js/2.10145002.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "68f50207b094d3577a21",
-    "url": "/atel-front/static/js/main.113999b3.chunk.js"
+    "revision": "a813a312d35932774770",
+    "url": "/atel-front/static/js/main.bd992d52.chunk.js"
   },
   {
     "revision": "0ed2c031c6f88dda54f0",
@@ -328,12 +328,32 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/atel-front/static/media/voice-banana.1cc0b2fe.mp3"
   },
   {
+    "revision": "f887f822aed198ef92f033fb7b7f8c66",
+    "url": "/atel-front/static/media/voice-cat.f887f822.mp3"
+  },
+  {
     "revision": "bdd1b09044e9a3efc72dd1d112ff0241",
     "url": "/atel-front/static/media/voice-cereza.bdd1b090.mp3"
   },
   {
+    "revision": "a8f96378bba59fa9a1f3ccfb576e818d",
+    "url": "/atel-front/static/media/voice-dog.a8f96378.mp3"
+  },
+  {
+    "revision": "510f6994a15965e0babe5c0b2f7c22a0",
+    "url": "/atel-front/static/media/voice-elephant.510f6994.mp3"
+  },
+  {
+    "revision": "c2d8e0907a3b715f41de7380fc5d8077",
+    "url": "/atel-front/static/media/voice-giraffe.c2d8e090.mp3"
+  },
+  {
     "revision": "5ea03c5b93ec19b2471fee1b1128f856",
     "url": "/atel-front/static/media/voice-limon.5ea03c5b.mp3"
+  },
+  {
+    "revision": "37aa47306023aeb430cbd4cde0982d2e",
+    "url": "/atel-front/static/media/voice-lion.37aa4730.mp3"
   },
   {
     "revision": "31d9bad73a25ee0ee084b91b71007a60",
