@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c0cb34239bed04675958453c4499a093",
+    "revision": "e690b65711eb7573314a1834c9ab3a01",
     "url": "/atel-front/index.html"
   },
   {
-    "revision": "845d2e3db0fcc2400bef",
+    "revision": "52e7f8b75193681004cd",
     "url": "/atel-front/static/css/2.c2774f4f.chunk.css"
   },
   {
-    "revision": "6dbb9dd065a98ccac3db",
+    "revision": "68f50207b094d3577a21",
     "url": "/atel-front/static/css/main.eddd4c50.chunk.css"
   },
   {
-    "revision": "845d2e3db0fcc2400bef",
-    "url": "/atel-front/static/js/2.429fcb03.chunk.js"
+    "revision": "52e7f8b75193681004cd",
+    "url": "/atel-front/static/js/2.57c51eb6.chunk.js"
   },
   {
-    "revision": "dcaa4246f1df04b6ddaaea1db36c1eb7",
-    "url": "/atel-front/static/js/2.429fcb03.chunk.js.LICENSE.txt"
+    "revision": "e3f4dcb94f77865b15c24b0a68cbe16d",
+    "url": "/atel-front/static/js/2.57c51eb6.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "6dbb9dd065a98ccac3db",
-    "url": "/atel-front/static/js/main.1c9eca19.chunk.js"
+    "revision": "68f50207b094d3577a21",
+    "url": "/atel-front/static/js/main.113999b3.chunk.js"
   },
   {
     "revision": "0ed2c031c6f88dda54f0",
@@ -34,6 +34,26 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "8ef6a08cdc1154920165680a4edde771",
     "url": "/atel-front/static/media/arrow_right.8ef6a08c.svg"
+  },
+  {
+    "revision": "6970c4f62314782d258bb688f02c7bc3",
+    "url": "/atel-front/static/media/banner.6970c4f6.png"
+  },
+  {
+    "revision": "cb465994aabdb6c4e4bc497876b7fcce",
+    "url": "/atel-front/static/media/cat.cb465994.png"
+  },
+  {
+    "revision": "b2b6d6a8b44eeaa2f5672fe41f31fd48",
+    "url": "/atel-front/static/media/correctBanner.b2b6d6a8.png"
+  },
+  {
+    "revision": "accc5f2902e9665411b04be3622c2785",
+    "url": "/atel-front/static/media/dog.accc5f29.png"
+  },
+  {
+    "revision": "5dc4ae80690c6770d7eaaec314d1ac1f",
+    "url": "/atel-front/static/media/elephant.5dc4ae80.png"
   },
   {
     "revision": "099a9556e1a63ece24f8a99859c94c7d",
@@ -94,6 +114,34 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "e8a427e15cc502bef99cfd722b37ea98",
     "url": "/atel-front/static/media/fa-solid-900.e8a427e1.woff2"
+  },
+  {
+    "revision": "98376fddf6b7f3c2a2f2f5f1eac035c4",
+    "url": "/atel-front/static/media/fruit_apple.98376fdd.png"
+  },
+  {
+    "revision": "269dd147294cef0e13e1c10c2f9969f4",
+    "url": "/atel-front/static/media/fruit_banana.269dd147.png"
+  },
+  {
+    "revision": "8061358a6b13dc2e0c92446ce4107747",
+    "url": "/atel-front/static/media/fruit_cherry.8061358a.png"
+  },
+  {
+    "revision": "ff2a46f33a6b2cc31b4e213a12b7d814",
+    "url": "/atel-front/static/media/fruit_grape.ff2a46f3.png"
+  },
+  {
+    "revision": "b8281f29e3aed74e7705350dae80f37b",
+    "url": "/atel-front/static/media/fruit_lemon.b8281f29.png"
+  },
+  {
+    "revision": "55dc51d0500a8632eea733a6b0ee5d97",
+    "url": "/atel-front/static/media/giraffe.55dc51d0.png"
+  },
+  {
+    "revision": "656313b8822617cf4e8a80403e6d1887",
+    "url": "/atel-front/static/media/lion.656313b8.png"
   },
   {
     "revision": "bf921a9441b70a719d25e8df31c772df",
@@ -274,5 +322,25 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "ebf6d1640ccddb99fb49f73c052c55a8",
     "url": "/atel-front/static/media/roboto-latin-900italic.ebf6d164.woff2"
+  },
+  {
+    "revision": "1cc0b2fee008f4a42808f63606078064",
+    "url": "/atel-front/static/media/voice-banana.1cc0b2fe.mp3"
+  },
+  {
+    "revision": "bdd1b09044e9a3efc72dd1d112ff0241",
+    "url": "/atel-front/static/media/voice-cereza.bdd1b090.mp3"
+  },
+  {
+    "revision": "5ea03c5b93ec19b2471fee1b1128f856",
+    "url": "/atel-front/static/media/voice-limon.5ea03c5b.mp3"
+  },
+  {
+    "revision": "31d9bad73a25ee0ee084b91b71007a60",
+    "url": "/atel-front/static/media/voice-manzana.31d9bad7.mp3"
+  },
+  {
+    "revision": "5091df0c48b52122a509d66b7eeda332",
+    "url": "/atel-front/static/media/voice-uva.5091df0c.mp3"
   }
 ]);
