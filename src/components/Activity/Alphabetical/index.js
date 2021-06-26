@@ -3,7 +3,7 @@ import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'r
 import { startAnimationConfites, generateConfites, getRandomItems } from './confites';
 import banner from './images/others/banner.png';
 
-const Alphabetical = ({ data }) => {
+const Alphabetical = ({ data, resetActivity }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -43,6 +43,11 @@ const Alphabetical = ({ data }) => {
     setItemGroupLeft(getRandomItems(data.elements));
     setItemGroupRight(getRandomItems(elementsToUse));
     setColor(getRandomItems(data.colors)[1]);
+    if (resetActivity) {
+      setOriginPoint([]);
+      setTargetPoint([]);
+      setArrowPoints([]);
+    }
   }, [data]);
 
   const onMouseMove = useCallback(() => {

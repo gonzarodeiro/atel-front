@@ -21,6 +21,7 @@ import voiceGrape from '../../../../components/Activity/Alphabetical/audio/fruit
 import voiceLemon from '../../../../components/Activity/Alphabetical/audio/fruits/voice-limon.mp3';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
+  const [resetActivity, setResetActivity] = useState(false);
   const [activityData, setActivityData] = useState({
     elements: [
       {
@@ -127,13 +128,14 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
       ],
       colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
     });
+    setResetActivity(!resetActivity);
   }
 
   return (
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={activityData} />
+          <Activity data={activityData} resetActivity={resetActivity} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
@@ -141,7 +143,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
               Cámara del alumno
             </label>
           </div>
-          {/* {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />} */}
+          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones
