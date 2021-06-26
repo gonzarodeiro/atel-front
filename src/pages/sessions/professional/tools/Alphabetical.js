@@ -14,6 +14,11 @@ import imgGiraffe from '../../../../components/Activity/Alphabetical/images/anim
 import imgLion from '../../../../components/Activity/Alphabetical/images/animals/lion.png';
 import imgDog from '../../../../components/Activity/Alphabetical/images/animals/dog.png';
 import imgElephant from '../../../../components/Activity/Alphabetical/images/animals/elephant.png';
+import voiceApple from '../../../../components/Activity/Alphabetical/audio/fruits/voice-manzana.mp3';
+import voiceBanana from '../../../../components/Activity/Alphabetical/audio/fruits/voice-banana.mp3';
+import voiceCherry from '../../../../components/Activity/Alphabetical/audio/fruits/voice-cereza.mp3';
+import voiceGrape from '../../../../components/Activity/Alphabetical/audio/fruits/voice-uva.mp3';
+import voiceLemon from '../../../../components/Activity/Alphabetical/audio/fruits/voice-limon.mp3';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
   const [activityData, setActivityData] = useState({
@@ -22,6 +27,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         id: uuidv4(),
         name: 'CEREZA',
         src: imgCherry,
+        voice: voiceCherry,
         width: 90,
         height: 85,
         draggable: true
@@ -30,6 +36,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         id: uuidv4(),
         name: 'UVA',
         src: imgGrape,
+        voice: voiceGrape,
         width: 90,
         height: 85,
         draggable: true
@@ -38,6 +45,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         id: uuidv4(),
         name: 'MANZANA',
         src: imgApple,
+        voice: voiceApple,
         width: 90,
         height: 85,
         draggable: true
@@ -46,6 +54,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         id: uuidv4(),
         name: 'LIMÓN',
         src: imgLemon,
+        voice: voiceLemon,
         width: 90,
         height: 85,
         draggable: true
@@ -54,6 +63,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         id: uuidv4(),
         name: 'BANANA',
         src: imgBanana,
+        voice: voiceBanana,
         width: 90,
         height: 85,
         draggable: true
@@ -131,7 +141,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
               Cámara del alumno
             </label>
           </div>
-          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
+          {/* {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />} */}
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones

@@ -10,12 +10,14 @@ const Alphabetical = ({ data }) => {
     BANNER_SIZE = 250,
     BANNER_WIDTH = 650,
     BANNER_HEIGHT = 200,
-    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH;
+    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH,
+    POINTS_COUNT = 4;
 
   const divRef = useRef(null),
     stageRef = useRef(null),
     layerRef = useRef(null),
-    arrowRef = useRef(null);
+    arrowRef = useRef(null),
+    audioRef = useRef(null);
 
   const confites = generateConfites(100, divRef);
   const elementsToUse = getRandomItems(data.elements);
@@ -27,7 +29,8 @@ const Alphabetical = ({ data }) => {
   const [arrowPoints, setArrowPoints] = useState([]);
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
-  const [itemLeftSelected, setItemLeftSelected] = useState();
+  const [itemLeftSelected, setItemLeftSelected] = useState({ name: '', voice: '' });
+  const [playing, setPlaying] = useState('');
 
   useEffect(() => {
     if (divRef.current) {
@@ -59,11 +62,30 @@ const Alphabetical = ({ data }) => {
     setTargetPoint([]);
   }, []);
 
-  function onTargetMouseUp(element) {
-    if (itemLeftSelected === element.name) {
+  function checkTargetMatch(element) {
+    if (element && itemLeftSelected.name === element.attrs.text) {
       setShowConfites(true);
       startAnimationConfites(stageRef, layerRef);
+      playAudio(itemLeftSelected.voice);
     }
+  }
+
+  function handleArrowMouseUp() {
+    const point = stageRef.current.getPointerPosition();
+    const elements = stageRef.current.getAllIntersections(point);
+    let el = elements.find((element) => element.attrs.id === 'text');
+    checkTargetMatch(el);
+  }
+
+  const playAudio = (voice) => {
+    setPlaying(voice);
+    play();
+  };
+
+  function play() {
+    audioRef.current.pause();
+    audioRef.current.load();
+    audioRef.current.play();
   }
 
   function imageFactory(x) {
@@ -82,7 +104,10 @@ const Alphabetical = ({ data }) => {
 
   function handleLeftItem(element) {
     setShowConfites(false);
-    setItemLeftSelected(element.name);
+    setItemLeftSelected({
+      name: element.name,
+      voice: element.voice
+    });
     const point = stageRef.current.getPointerPosition();
     const coords = Object.values(point);
     setOriginPoint(coords);
@@ -101,15 +126,18 @@ const Alphabetical = ({ data }) => {
             ))}
           {itemGroupRight &&
             itemGroupRight.map((element, index) => (
-              <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} onMouseUp={() => onTargetMouseUp(element)}>
+              <Group key={element.id} id={element.id} x={width - BANNER_SIZE - MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index}>
                 <KonvaImage image={imageFactory(banner)} height={BANNER_SIZE * BANNER_RATIO} width={BANNER_SIZE} />
-                <Text text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
+                <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
-          <Arrow ref={arrowRef} points={arrowPoints.length === 4 ? arrowPoints : originPoint.concat(targetPoint)} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} onClick={onTargetClick} lineJoin='round' lineCap='round' visible={arrowPoints.length || targetPoint.length} />
+          <Arrow ref={arrowRef} points={arrowPoints.length === POINTS_COUNT ? arrowPoints : originPoint.concat(targetPoint)} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} onClick={onTargetClick} lineJoin='round' lineCap='round' visible={arrowPoints.length || targetPoint.length} onMouseUp={handleArrowMouseUp} />
         </Layer>
         {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
       </Stage>
+      <audio controls={false} ref={audioRef}>
+        <source src={playing} />
+      </audio>
     </div>
   );
 };
