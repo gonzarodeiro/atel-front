@@ -19,6 +19,11 @@ import voiceBanana from '../../../../components/Activity/Alphabetical/audio/frui
 import voiceCherry from '../../../../components/Activity/Alphabetical/audio/fruits/voice-cereza.mp3';
 import voiceGrape from '../../../../components/Activity/Alphabetical/audio/fruits/voice-uva.mp3';
 import voiceLemon from '../../../../components/Activity/Alphabetical/audio/fruits/voice-limon.mp3';
+import voiceDog from '../../../../components/Activity/Alphabetical/audio/animals/voice-dog.mp3';
+import voiceCat from '../../../../components/Activity/Alphabetical/audio/animals/voice-cat.mp3';
+import voiceGiraffe from '../../../../components/Activity/Alphabetical/audio/animals/voice-giraffe.mp3';
+import voiceLion from '../../../../components/Activity/Alphabetical/audio/animals/voice-lion.mp3';
+import voiceElephant from '../../../../components/Activity/Alphabetical/audio/animals/voice-elephant.mp3';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
   const [resetActivity, setResetActivity] = useState(false);
@@ -94,6 +99,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           id: uuidv4(),
           name: 'GATO',
           src: imgCat,
+          voice: voiceCat,
           width: 90,
           height: 85,
           draggable: true,
@@ -103,6 +109,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           id: uuidv4(),
           name: 'JIRAFA',
           src: imgGiraffe,
+          voice: voiceGiraffe,
           width: 90,
           height: 85,
           draggable: true,
@@ -111,6 +118,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         {
           id: uuidv4(),
           name: 'LEÓN',
+          voice: voiceLion,
           src: imgLion,
           width: 90,
           height: 85,
@@ -121,6 +129,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           id: uuidv4(),
           name: 'PERRO',
           src: imgDog,
+          voice: voiceDog,
           width: 90,
           height: 85,
           draggable: true,
@@ -129,6 +138,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
         {
           id: uuidv4(),
           name: 'ELEFANTE',
+          voice: voiceElephant,
           src: imgElephant,
           width: 90,
           height: 85,
