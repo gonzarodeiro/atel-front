@@ -16,19 +16,21 @@ import {
 import banner from "./images/others/banner.png";
 import correctBanner from "./images/others/correctBanner.png";
 
-const Alphabetical = ({ data }) => {
+const Alphabetical = ({ data, resetActivity }) => {
   const CONTAINER_SIZE = "100%",
     MARGIN = 20,
     MARGIN_TOP = 20,
     BANNER_SIZE = 250,
     BANNER_WIDTH = 650,
     BANNER_HEIGHT = 200,
-    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH;
+    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH,
+    POINTS_COUNT = 4;
 
   const divRef = useRef(null),
     stageRef = useRef(null),
     layerRef = useRef(null),
-    arrowRef = useRef(null);
+    arrowRef = useRef(null),
+    audioRef = useRef(null);
 
   const confites = generateConfites(100, divRef);
   const elementsToUse = getRandomItems(data.elements);
@@ -42,7 +44,11 @@ const Alphabetical = ({ data }) => {
   const [arrowPoints, setArrowPoints] = useState([]);
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
-  const [itemLeftSelected, setItemLeftSelected] = useState();
+  const [itemLeftSelected, setItemLeftSelected] = useState({
+    name: "",
+    voice: "",
+  });
+  const [playing, setPlaying] = useState("");
 
   useEffect(() => {
     if (divRef.current) {
@@ -55,6 +61,11 @@ const Alphabetical = ({ data }) => {
     setItemGroupLeft(getRandomItems(data.elements));
     setItemGroupRight(getRandomItems(elementsToUse));
     setColor(getRandomItems(data.colors)[1]);
+    if (resetActivity) {
+      setOriginPoint([]);
+      setTargetPoint([]);
+      setArrowPoints([]);
+    }
   }, [data]);
 
   const onMouseMove = useCallback(() => {
@@ -74,8 +85,8 @@ const Alphabetical = ({ data }) => {
     setTargetPoint([]);
   }, []);
 
-  function onTargetMouseUp(element) {
-    if (itemLeftSelected === element.name) {
+  function checkTargetMatch(element) {
+    if (element && itemLeftSelected.name === element.attrs.text) {
       setShowConfites(true);
       let banner = layerRef.current.find("#banner" + element.id);
       for (var i in itemGroupLeft) {
@@ -87,7 +98,26 @@ const Alphabetical = ({ data }) => {
       banner[0].image(imageFactory(correctBanner));
       banner[0].draw();
       startAnimationConfites(stageRef, layerRef);
+      playAudio(itemLeftSelected.voice);
     }
+  }
+
+  function handleArrowMouseUp() {
+    const point = stageRef.current.getPointerPosition();
+    const elements = stageRef.current.getAllIntersections(point);
+    let el = elements.find((element) => element.attrs.id === "text");
+    checkTargetMatch(el);
+  }
+
+  const playAudio = (voice) => {
+    setPlaying(voice);
+    play();
+  };
+
+  function play() {
+    audioRef.current.pause();
+    audioRef.current.load();
+    audioRef.current.play();
   }
 
   function imageFactory(x) {
@@ -106,7 +136,10 @@ const Alphabetical = ({ data }) => {
 
   function handleLeftItem(element) {
     setShowConfites(false);
-    setItemLeftSelected(element.name);
+    setItemLeftSelected({
+      name: element.name,
+      voice: element.voice,
+    });
     const point = stageRef.current.getPointerPosition();
     const coords = Object.values(point);
     setOriginPoint(coords);
@@ -150,19 +183,14 @@ const Alphabetical = ({ data }) => {
                 id={element.id}
                 x={width - BANNER_SIZE - MARGIN}
                 y={MARGIN_TOP + (MARGIN + element.height) * index}
-                onMouseUp={() => onTargetMouseUp(element)}
               >
                 <KonvaImage
-                  id={"banner" + element.id}
-                  image={
-                    element.matched == false
-                      ? imageFactory(banner)
-                      : imageFactory(correctBanner)
-                  }
+                  image={imageFactory(banner)}
                   height={BANNER_SIZE * BANNER_RATIO}
                   width={BANNER_SIZE}
                 />
                 <Text
+                  id={"text"}
                   text={element.name}
                   height={element.height}
                   width={BANNER_SIZE}
@@ -180,7 +208,7 @@ const Alphabetical = ({ data }) => {
           <Arrow
             ref={arrowRef}
             points={
-              arrowPoints.length === 4
+              arrowPoints.length === POINTS_COUNT
                 ? arrowPoints
                 : originPoint.concat(targetPoint)
             }
@@ -191,6 +219,7 @@ const Alphabetical = ({ data }) => {
             lineJoin="round"
             lineCap="round"
             visible={arrowPoints.length || targetPoint.length}
+            onMouseUp={handleArrowMouseUp}
           />
         </Layer>
         {showConfites && (
@@ -208,6 +237,9 @@ const Alphabetical = ({ data }) => {
           </Layer>
         )}
       </Stage>
+      <audio controls={false} ref={audioRef}>
+        <source src={playing} />
+      </audio>
     </div>
   );
 };

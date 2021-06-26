@@ -14,6 +14,11 @@ import imgGiraffe from "../../../../components/Activity/Alphabetical/images/anim
 import imgLion from "../../../../components/Activity/Alphabetical/images/animals/lion.png";
 import imgDog from "../../../../components/Activity/Alphabetical/images/animals/dog.png";
 import imgElephant from "../../../../components/Activity/Alphabetical/images/animals/elephant.png";
+import voiceApple from "../../../../components/Activity/Alphabetical/audio/fruits/voice-manzana.mp3";
+import voiceBanana from "../../../../components/Activity/Alphabetical/audio/fruits/voice-banana.mp3";
+import voiceCherry from "../../../../components/Activity/Alphabetical/audio/fruits/voice-cereza.mp3";
+import voiceGrape from "../../../../components/Activity/Alphabetical/audio/fruits/voice-uva.mp3";
+import voiceLemon from "../../../../components/Activity/Alphabetical/audio/fruits/voice-limon.mp3";
 
 const Alphabetical = ({
   props,
@@ -22,12 +27,14 @@ const Alphabetical = ({
   showTools,
   showMeeting,
 }) => {
+  const [resetActivity, setResetActivity] = useState(false);
   const [activityData, setActivityData] = useState({
     elements: [
       {
         id: uuidv4(),
         name: "CEREZA",
         src: imgCherry,
+        voice: voiceCherry,
         width: 90,
         height: 85,
         draggable: true,
@@ -37,6 +44,7 @@ const Alphabetical = ({
         id: uuidv4(),
         name: "UVA",
         src: imgGrape,
+        voice: voiceGrape,
         width: 90,
         height: 85,
         draggable: true,
@@ -46,6 +54,7 @@ const Alphabetical = ({
         id: uuidv4(),
         name: "MANZANA",
         src: imgApple,
+        voice: voiceApple,
         width: 90,
         height: 85,
         draggable: true,
@@ -55,6 +64,7 @@ const Alphabetical = ({
         id: uuidv4(),
         name: "LIMÓN",
         src: imgLemon,
+        voice: voiceLemon,
         width: 90,
         height: 85,
         draggable: true,
@@ -64,6 +74,7 @@ const Alphabetical = ({
         id: uuidv4(),
         name: "BANANA",
         src: imgBanana,
+        voice: voiceBanana,
         width: 90,
         height: 85,
         draggable: true,
@@ -128,13 +139,14 @@ const Alphabetical = ({
       ],
       colors: ["#DE8971", "#7B6079", "#A7D0CD", "#FFE9D6"],
     });
+    setResetActivity(!resetActivity);
   }
 
   return (
     <React.Fragment>
       <div className="row">
         <div className="pb-3 mt-2 col-md-8">
-          <Activity data={activityData} />
+          <Activity data={activityData} resetActivity={resetActivity} />
         </div>
         <div className="col-md-4" style={{ marginTop: "3px" }}>
           <div data-test="col">
