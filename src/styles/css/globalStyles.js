@@ -42,6 +42,15 @@ const global = createGlobalStyle`
     width: 100%;
     font-weight: 400 !important;
   }
+  
+  .react-datepicker__time-container--with-today-button {
+    display: inline;
+    border: 1px solid #aeaeae;
+    border-radius: 0.3rem;
+    position: absolute;
+    right: -85px !important;
+    top: 0;
+  }
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
