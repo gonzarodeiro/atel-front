@@ -4,7 +4,7 @@ import { startAnimationConfites, generateConfites, getRandomItems } from './conf
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
 
-const Alphabetical = ({ data, resetActivity, restartActivity }) => {
+const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -34,22 +34,26 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   const [playing, setPlaying] = useState('');
 
   useEffect(() => {
-    if (divRef.current) {
-      let rect = divRef.current.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      setDimensions({ width, height });
-    }
+    setResolution();
     setShowConfites(false);
     setItemGroupLeft(getRandomItems(data.elements));
     setItemGroupRight(getRandomItems(elementsToUse));
     setColor(getRandomItems(data.colors)[1]);
-    if (resetActivity) {
-      setOriginPoint([]);
-      setTargetPoint([]);
-      setArrowPoints([]);
-    }
+    if (resetActivity) reset();
   }, [data]);
+
+  function setResolution() {
+    if (divRef.current && isProfessional) {
+      let rect = divRef.current.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      setDimensions({ width, height });
+    } else {
+      const width = 700;
+      const height = 550;
+      setDimensions({ width, height });
+    }
+  }
 
   const onMouseMove = useCallback(() => {
     if (originPoint.length) {
@@ -102,10 +106,14 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     }
     if (finish) {
       restartActivity();
-      setOriginPoint([]);
-      setTargetPoint([]);
-      setArrowPoints([]);
+      reset();
     }
+  }
+
+  function reset() {
+    setOriginPoint([]);
+    setTargetPoint([]);
+    setArrowPoints([]);
   }
 
   function handleArrowMouseUp() {
