@@ -4,6 +4,7 @@ import { startAnimationConfites, generateConfites, getRandomItems } from './comm
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
 import { registerEvent } from '../../../utils/socketClient/socketManager';
+import events from '../../Activity/Alphabetical/commons/events';
 
 const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
@@ -12,8 +13,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     BANNER_SIZE = 250,
     BANNER_WIDTH = 650,
     BANNER_HEIGHT = 200,
-    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH,
-    POINTS_COUNT = 4;
+    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH;
 
   const divRef = useRef(null),
     stageRef = useRef(null),
@@ -22,24 +22,22 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     audioRef = useRef(null);
 
   const confites = generateConfites(100, divRef);
-  const elementsToUse = getRandomItems(data.elements);
-  const [itemGroupLeft, setItemGroupLeft] = useState(elementsToUse);
-  const [itemGroupRight, setItemGroupRight] = useState(getRandomItems(elementsToUse));
+
+  const [itemGroupLeft, setItemGroupLeft] = useState([]);
+  const [itemGroupRight, setItemGroupRight] = useState([]);
   const [color, setColor] = useState(getRandomItems(data.colors)[0]);
-  const [originPoint, setOriginPoint] = useState([]);
-  const [targetPoint, setTargetPoint] = useState([]);
-  const [arrowPoints, setArrowPoints] = useState([]);
+
+  const [arrowEnable, setArrowEnable] = useState(false);
+  const [arrowPoints, setArrowPoints] = useState([]); // Contiene un par de coordenadas ( Inicio y Fin )
+
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
-  const [itemLeftSelected, setItemLeftSelected] = useState({ name: '', voice: '' });
   const [playing, setPlaying] = useState('');
 
   useEffect(() => {
     setResolution();
     setShowConfites(false);
-    elementsPosition();
-    getStudentsMovements();
-    setItemGroupRight(getRandomItems(elementsToUse));
+    setEventListeners();
     setColor(getRandomItems(data.colors)[1]);
     if (resetActivity) reset();
   }, [data]);
@@ -51,99 +49,51 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     setDimensions({ width, height });
   }
 
-  function elementsPosition() {
+  function setEventListeners() {
+    setConfiguration();
+    getStudentsMovements();
+  }
+
+  function setConfiguration() {
     registerEvent((obj) => {
-      setItemGroupLeft(obj);
-    }, 'itemsLeft');
+      debugger;
+      setItemGroupLeft(obj.elementsLeft);
+      setItemGroupRight(obj.elementsRigth);
+    }, events.setConfiguration);
   }
 
   function getStudentsMovements() {
+    //resuelto
     registerEvent((obj) => {
       setShowConfites(false);
-      setOriginPoint(obj);
+      setArrowEnable(true);
+      setArrowPoints(obj.coords);
+    }, events.onLeftItemClick);
+
+    //resuelto
+    registerEvent((obj) => {
       setArrowPoints(obj);
-    }, 'handleLeftItem');
+    }, events.onMouseMove);
 
-    registerEvent((obj) => {
-      setShowConfites(false);
-      setTargetPoint(obj);
-    }, 'onMouseOver');
-
-    registerEvent((text) => {
+    registerEvent((element) => {
       setShowConfites(true);
-      let banner = layerRef.current.find('#banner' + text);
+      let banner = layerRef.current.find('#banner' + element.text);
       banner[0].image(imageFactory(correctBanner));
       banner[0].draw();
+
+      let tempItemGroupLeft = itemGroupLeft.map((item) => ({
+        ...item,
+        matched: item.name == element.name
+      }));
+
+      setItemGroupLeft(tempItemGroupLeft);
       startAnimationConfites(stageRef, layerRef);
-    }, 'checkTargetMatch');
-  }
-
-  const onMouseMove = useCallback(() => {
-    if (originPoint.length) {
-      const point = stageRef.current.getPointerPosition();
-      const coords = Object.values(point);
-      setTargetPoint(coords);
-    }
-  }, [originPoint.length]);
-
-  const onTargetClick = useCallback(() => {
-    const point = stageRef.current.getPointerPosition();
-    const coords = Object.values(point);
-    setTargetPoint(coords);
-    setArrowPoints((old) => old.concat(coords));
-    setOriginPoint([]);
-    setTargetPoint([]);
-  }, []);
-
-  function checkTargetMatch(element) {
-    if (element && itemLeftSelected.name === element.attrs.text) {
-      setShowConfites(true);
-      let banner = layerRef.current.find('#banner' + element.attrs.text);
-      checkMatch();
-      banner[0].image(imageFactory(correctBanner));
-      banner[0].draw();
-      startAnimationConfites(stageRef, layerRef);
-      playAudio(itemLeftSelected.voice);
-      checkFinishActivity();
-    }
-  }
-
-  function checkMatch() {
-    for (let i in itemGroupLeft) {
-      if (itemGroupLeft[i].name === itemLeftSelected.name) {
-        let tempItemGroupLeft = [...itemGroupLeft];
-        tempItemGroupLeft[i].matched = true;
-        setItemGroupLeft(tempItemGroupLeft);
-        break;
-      }
-    }
-  }
-
-  function checkFinishActivity() {
-    let finish = true;
-    for (let i in itemGroupLeft) {
-      if (itemGroupLeft[i].matched === false) {
-        finish = false;
-        break;
-      }
-    }
-    if (finish) {
-      restartActivity();
-      reset();
-    }
+    }, events.targetMatch);
   }
 
   function reset() {
-    setOriginPoint([]);
-    setTargetPoint([]);
+    setArrowEnable(false);
     setArrowPoints([]);
-  }
-
-  function handleArrowMouseUp() {
-    const point = stageRef.current.getPointerPosition();
-    const elements = stageRef.current.getAllIntersections(point);
-    let el = elements.find((element) => element.attrs.id === 'text');
-    checkTargetMatch(el);
   }
 
   const playAudio = (voice) => {
@@ -171,22 +121,17 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     return '#' + comp.toString(16) + 'ff';
   }
 
-  function handleLeftItem(element) {
-    setShowConfites(false);
-    setItemLeftSelected({ name: element.name, voice: element.voice });
-    const point = stageRef.current.getPointerPosition();
-    const coords = Object.values(point);
-    setOriginPoint(coords);
-    setArrowPoints(coords);
-  }
+  //Cada vez que se modifica un state del componente esto se vuelve a ejecutar
+  //Del lado del profesional no se capturan eventos
 
+  //TODO itemsGroupLeft e itemsGroupRigth se pueden unificar en un mismo arraw de objetos
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
-      <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
+      <Stage width={width} height={height} ref={stageRef}>
         <Layer ref={layerRef}>
           {itemGroupLeft &&
             itemGroupLeft.map((element, index) => (
-              <Group onMouseUp={() => handleLeftItem(element)}>
+              <Group>
                 <KonvaImage key={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} />
               </Group>
             ))}
@@ -197,7 +142,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
                 <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
-          <Arrow ref={arrowRef} points={arrowPoints.length === POINTS_COUNT ? arrowPoints : originPoint.concat(targetPoint)} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} onClick={onTargetClick} lineJoin='round' lineCap='round' visible={arrowPoints.length || targetPoint.length} onMouseUp={handleArrowMouseUp} />
+          <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length || arrowEnable} />
         </Layer>
         {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
       </Stage>
