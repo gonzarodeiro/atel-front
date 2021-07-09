@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Jitsi from '../../../../components/Jitsi';
-import Activity from '../../../../components/Activity/Alphabetical/index';
+import Activity from '../../../../components/Activity/Alphabetical';
 import { v4 as uuidv4 } from 'uuid';
 import imgCherry from '../../../../components/Activity/Alphabetical/images/fruits/fruit_cherry.png';
 import imgGrape from '../../../../components/Activity/Alphabetical/images/fruits/fruit_grape.png';

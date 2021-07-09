@@ -8,6 +8,7 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
+import { connect, registerEvent } from '../../../utils/socketClient/socketManager';
 
 const StudentSession = (props) => {
   const [student, setStudent] = useState();
@@ -17,6 +18,11 @@ const StudentSession = (props) => {
   let { roomId } = useParams();
 
   useEffect(() => {
+    connect(roomId);
+    registerEvent(() => {
+      showMeeting({ begin: false });
+      showTools({ alphabetical: true });
+    }, 'init-alphabetical');
     loadSessionStatus();
   }, []);
 
@@ -29,7 +35,8 @@ const StudentSession = (props) => {
     //   await showAlert('Error en la sesión', result.data.message, 'error');
     //   setShowJitsi(false);
     // } else setShowJitsi(true);
-    showTools({ alphabetical: true });
+    showMeeting({ begin: true });
+    showTools({ alphabetical: false });
     setShowJitsi(true);
   }
 
