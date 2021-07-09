@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
-import Activity from '../../../../components/Activity/Alphabetical/index';
+import Activity from '../../../../components/Activity/Alphabetical';
 import finishSession from '../finishSession';
 import { v4 as uuidv4 } from 'uuid';
 import imgCherry from '../../../../components/Activity/Alphabetical/images/fruits/fruit_cherry.png';
