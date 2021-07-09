@@ -5,7 +5,7 @@ import Home from './pages/home/index';
 import User from './pages/user/index';
 import Login from './pages/login/index';
 import ProfessionalSession from './pages/sessions/professional/index';
-import StudentSession from './pages/sessions/studentSession';
+import StudentSession from './pages/sessions/student/index';
 import Students from './pages/students/operation/index';
 import NewStudent from './pages/students/request/index';
 import MeetingInstanly from './pages/sessions/meetingInstanly';

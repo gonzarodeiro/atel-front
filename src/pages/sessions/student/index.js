@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Jitsi from '../../components/Jitsi';
-import getResponseByFilters from '../../utils/services/get/getByFilters/getResponseByFilters';
-import showAlert from '../../utils/commons/showAlert';
-import status from '../../utils/enums/sessionStatus';
+import Jitsi from '../../../components/Jitsi';
+import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
+import showAlert from '../../../utils/commons/showAlert';
+import status from '../../../utils/enums/sessionStatus';
+import End from './meeting/End';
+import Numerical from './tools/Numerical';
+import Alphabetical from './tools/Alphabetical';
+import Pictogram from './tools/Pictogram';
+import { connect, registerEvent } from '../../../utils/socketClient/socketManager';
 
-const StudentSession = () => {
+const StudentSession = (props) => {
   const [student, setStudent] = useState();
+  const [meeting, showMeeting] = useState({ begin: false, end: false });
+  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
   const [showJitsi, setShowJitsi] = useState();
   let { roomId } = useParams();
 
   useEffect(() => {
+    connect(roomId);
+    registerEvent(() => {
+      showMeeting({ begin: false });
+      showTools({ alphabetical: true });
+    }, 'init-alphabetical');
     loadSessionStatus();
   }, []);
 
@@ -23,6 +35,8 @@ const StudentSession = () => {
     //   await showAlert('Error en la sesión', result.data.message, 'error');
     //   setShowJitsi(false);
     // } else setShowJitsi(true);
+    showMeeting({ begin: true });
+    showTools({ alphabetical: false });
     setShowJitsi(true);
   }
 
@@ -37,7 +51,11 @@ const StudentSession = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='pb-3 mt-2 col-md-12'>
-                  <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>
+                  {meeting.begin && <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>}
+                  {tools.alphabetical && <Alphabetical props={props} />}
+                  {tools.numerical && <Numerical props={props} />}
+                  {tools.pictogram && <Pictogram props={props} />}
+                  {meeting.end && <End />}
                 </div>
               </div>
             </form>

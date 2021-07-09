@@ -3,8 +3,9 @@ import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'r
 import { startAnimationConfites, generateConfites, getRandomItems } from './confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
+import { sendMessage, registerEvent } from '../../../utils/socketClient/socketManager';
 
-const Alphabetical = ({ data, resetActivity, restartActivity }) => {
+const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -34,22 +35,37 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   const [playing, setPlaying] = useState('');
 
   useEffect(() => {
-    if (divRef.current) {
+    setResolution();
+    setShowConfites(false);
+
+    let itemsLeft;
+    if (isProfessional) {
+      registerEvent((obj) => {
+        setItemGroupLeft(obj);
+      }, 'itemsLeft');
+    } else {
+      itemsLeft = getRandomItems(data.elements);
+      sendMessage('itemsLeft', itemsLeft);
+      setItemGroupLeft(itemsLeft);
+    }
+
+    setItemGroupRight(getRandomItems(elementsToUse));
+    setColor(getRandomItems(data.colors)[1]);
+    if (resetActivity) reset();
+  }, [data]);
+
+  function setResolution() {
+    if (divRef.current && isProfessional) {
       let rect = divRef.current.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;
       setDimensions({ width, height });
+    } else {
+      const width = 700;
+      const height = 550;
+      setDimensions({ width, height });
     }
-    setShowConfites(false);
-    setItemGroupLeft(getRandomItems(data.elements));
-    setItemGroupRight(getRandomItems(elementsToUse));
-    setColor(getRandomItems(data.colors)[1]);
-    if (resetActivity) {
-      setOriginPoint([]);
-      setTargetPoint([]);
-      setArrowPoints([]);
-    }
-  }, [data]);
+  }
 
   const onMouseMove = useCallback(() => {
     if (originPoint.length) {
@@ -102,10 +118,14 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     }
     if (finish) {
       restartActivity();
-      setOriginPoint([]);
-      setTargetPoint([]);
-      setArrowPoints([]);
+      reset();
     }
+  }
+
+  function reset() {
+    setOriginPoint([]);
+    setTargetPoint([]);
+    setArrowPoints([]);
   }
 
   function handleArrowMouseUp() {

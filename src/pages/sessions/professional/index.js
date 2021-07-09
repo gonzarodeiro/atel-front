@@ -6,6 +6,7 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
+import { connect } from '../../../utils/socketClient/socketManager';
 
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
@@ -15,8 +16,11 @@ const ProfessionalSession = (props) => {
   let history = useHistory();
 
   useEffect(() => {
+    console.log(props.location.state);
+
     if (!sessionStorage.getItem('name')) history.push(`/login`);
     else if (!props.location.state) history.push(`/home`);
+    else connect(props.location.state.roomId + '-' + props.location.state.sessionId);
   }, []);
 
   const handleChange = (event) => {

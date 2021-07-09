@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
-import Activity from '../../../../components/Activity/Alphabetical/index';
+import Activity from '../../../../components/Activity/Alphabetical';
 import finishSession from '../finishSession';
 import { v4 as uuidv4 } from 'uuid';
 import imgCherry from '../../../../components/Activity/Alphabetical/images/fruits/fruit_cherry.png';
@@ -155,7 +155,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={activityData} resetActivity={resetActivity} restartActivity={restart} />
+          <Activity data={activityData} resetActivity={resetActivity} restartActivity={restart} isProfessional={true} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>

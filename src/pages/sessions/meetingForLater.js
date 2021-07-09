@@ -13,10 +13,11 @@ import { registerLocale } from 'react-datepicker';
 import datepicker from '../../utils/commons/datepicker';
 import status from '../../utils/enums/sessionStatus';
 import postResponseApi from '../../utils/services/post/postResponseApi';
+import convertDateTime from '../../utils/commons/convertDateTime';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [session, setSession] = useState({ userName: '', date: new Date(), hour: '' });
+  const [session, setSession] = useState({ userName: '', date: new Date() });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -36,15 +37,16 @@ const Index = () => {
     if (validateFields()) {
       setLoading(true);
       const filters = createFilters();
-      await postResponseApi('http://localhost:3005/session', filters);
+      // await postResponseApi('http://localhost:3005/session', filters);
+      const date = convertDateTime(session.date);
       setLoading(false);
-      await showAlert('Sesión programada', `Se ha programado la sesión con ${session.userName} para el día ${session.date} `, 'success');
+      await showAlert('Sesión programada', `Se ha programado la sesión con ${session.userName} para el día ${date} `, 'success');
       history.push({ pathname: 'home' });
     }
   };
 
   function validateFields() {
-    if (!session.userName || !session.hour) {
+    if (!session.userName) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -57,7 +59,7 @@ const Index = () => {
       id_student: 1,
       id_professional: 1,
       status: status.Created,
-      start_datetime: new Date(),
+      start_datetime: session.date,
       room_name: session.userName
     };
   }
@@ -77,23 +79,19 @@ const Index = () => {
             )}
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
-                <div className='col-md-4 my-1'>
+                <div className='col-md-6 my-1'>
                   <Dropdownlist title='Nombre del alumno' id='userName' handleChange={handleChange} value={session.userName} dropdownlist={dlStudents} disabledValue={false} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} />
                 </div>
-                <div className='col-md-4 my-1'>
-                  <label>Fecha</label>
-                  <DatePicker id='date' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' locale='es' />
-                </div>
-                <div className='col-md-4 my-1'>
-                  <label>Horario</label>
-                  <input id='hour' onChange={handleChange} value={session.hour} type='text' className={'form-control ' + (!session.hour && showValidation ? 'borderRed' : '')} />
+                <div className='col-md-6 my-1'>
+                  <label>Fecha y hora</label>
+                  <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm ' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' locale='es' timeCaption='Hora' />
                 </div>
               </div>
               <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
                 <div className='col-md-6'>{errors.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>
                 <div className='col-md-6 d-flex justify-content-center justify-content-md-end my-2'>
                   <Cancel onClick={() => history.push(`/home`)} title='Volver' />
-                  <Submit onClick={handleSubmit} title='Iniciar' />
+                  <Submit onClick={handleSubmit} title='Guardar' />
                 </div>
               </div>
             </form>
