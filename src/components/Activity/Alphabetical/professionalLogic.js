@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'react-konva';
-import { startAnimationConfites, generateConfites, getRandomItems } from './confites';
+import { startAnimationConfites, generateConfites, getRandomItems } from './commons/confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
-import { sendMessage, registerEvent } from '../../../utils/socketClient/socketManager';
+import { registerEvent } from '../../../utils/socketClient/socketManager';
 
-const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) => {
+const Alphabetical = ({ data, resetActivity, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -37,34 +37,45 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
   useEffect(() => {
     setResolution();
     setShowConfites(false);
-
-    let itemsLeft;
-    if (isProfessional) {
-      registerEvent((obj) => {
-        setItemGroupLeft(obj);
-      }, 'itemsLeft');
-    } else {
-      itemsLeft = getRandomItems(data.elements);
-      sendMessage('itemsLeft', itemsLeft);
-      setItemGroupLeft(itemsLeft);
-    }
-
+    elementsPosition();
+    getStudentsMovements();
     setItemGroupRight(getRandomItems(elementsToUse));
     setColor(getRandomItems(data.colors)[1]);
     if (resetActivity) reset();
   }, [data]);
 
   function setResolution() {
-    if (divRef.current && isProfessional) {
-      let rect = divRef.current.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      setDimensions({ width, height });
-    } else {
-      const width = 700;
-      const height = 550;
-      setDimensions({ width, height });
-    }
+    let rect = divRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    setDimensions({ width, height });
+  }
+
+  function elementsPosition() {
+    registerEvent((obj) => {
+      setItemGroupLeft(obj);
+    }, 'itemsLeft');
+  }
+
+  function getStudentsMovements() {
+    registerEvent((obj) => {
+      setShowConfites(false);
+      setOriginPoint(obj);
+      setArrowPoints(obj);
+    }, 'handleLeftItem');
+
+    registerEvent((obj) => {
+      setShowConfites(false);
+      setTargetPoint(obj);
+    }, 'onMouseOver');
+
+    registerEvent((text) => {
+      setShowConfites(true);
+      let banner = layerRef.current.find('#banner' + text);
+      banner[0].image(imageFactory(correctBanner));
+      banner[0].draw();
+      startAnimationConfites(stageRef, layerRef);
+    }, 'checkTargetMatch');
   }
 
   const onMouseMove = useCallback(() => {
