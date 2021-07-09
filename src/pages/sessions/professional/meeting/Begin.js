@@ -3,6 +3,7 @@ import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
 import Notification from '../../../../components/html/Notification';
 import finishSession from '../finishSession';
+import { sendMessage } from '../../../../utils/socketClient/socketManager';
 
 const Begin = ({ props, handleChange, modal, session, showModal, showTools, showMeeting }) => {
   function copyClipboard() {
@@ -12,6 +13,7 @@ const Begin = ({ props, handleChange, modal, session, showModal, showTools, show
   }
 
   function redirectTool(tool) {
+    sendMessage('init-' + tool);
     showMeeting({ begin: false });
     showTools({ [tool]: true });
   }

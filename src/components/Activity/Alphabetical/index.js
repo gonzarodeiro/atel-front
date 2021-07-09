@@ -3,6 +3,7 @@ import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'r
 import { startAnimationConfites, generateConfites, getRandomItems } from './confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
+import { sendMessage, registerEvent } from '../../../utils/socketClient/socketManager';
 
 const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) => {
   const CONTAINER_SIZE = '100%',
@@ -36,7 +37,18 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
   useEffect(() => {
     setResolution();
     setShowConfites(false);
-    setItemGroupLeft(getRandomItems(data.elements));
+
+    let itemsLeft;
+    if (isProfessional) {
+      registerEvent((obj) => {
+        setItemGroupLeft(obj);
+      }, 'itemsLeft');
+    } else {
+      itemsLeft = getRandomItems(data.elements);
+      sendMessage('itemsLeft', itemsLeft);
+      setItemGroupLeft(itemsLeft);
+    }
+
     setItemGroupRight(getRandomItems(elementsToUse));
     setColor(getRandomItems(data.colors)[1]);
     if (resetActivity) reset();
