@@ -6,18 +6,16 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { connect } from '../../../utils/socketClient/socketManager';
+import { connect } from '../../../utils/socketManager';
 
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
-  const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', pictogramComments: '' });
+  const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', pictogramComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
   let history = useHistory();
 
   useEffect(() => {
-    console.log(props.location.state);
-
     if (!sessionStorage.getItem('name')) history.push(`/login`);
     else if (!props.location.state) history.push(`/home`);
     else connect(props.location.state.roomId + '-' + props.location.state.sessionId);
@@ -28,9 +26,15 @@ const ProfessionalSession = (props) => {
     setSession({ ...session, [id]: value });
   };
 
+  function copyClipboard() {
+    const sharedLink = window.location.href.replace('professionalSession', 'studentSession/' + props.location.state.userName + '-' + props.location.state.sessionId);
+    navigator.clipboard.writeText(sharedLink);
+    showModal({ notification: true });
+  }
+
   return (
     <Layout>
-      <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           <div className='card-body'>
             <div className='card-title pb-1 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
@@ -41,8 +45,8 @@ const ProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showModal={showModal} showTools={showTools} showMeeting={showMeeting} />}
-              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} session={session} showTools={showTools} showMeeting={showMeeting} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} />}
+              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} />}
               {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
               {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
               {meeting.end && <End handleChange={handleChange} session={session} />}

@@ -1,19 +1,19 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'react-konva';
-import { startAnimationConfites, generateConfites, getRandomItems } from './confites';
+import { startAnimationConfites, generateConfites, getRandomItems } from './commons/confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
-import { sendMessage, registerEvent } from '../../../utils/socketClient/socketManager';
+import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
+import { imageFactory, oposedColor, playAudio } from './commons/index';
 
-const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) => {
+const Alphabetical = ({ data, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
     BANNER_SIZE = 250,
     BANNER_WIDTH = 650,
     BANNER_HEIGHT = 200,
-    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH,
-    POINTS_COUNT = 4;
+    BANNER_RATIO = BANNER_HEIGHT / BANNER_WIDTH;
 
   const divRef = useRef(null),
     stageRef = useRef(null),
@@ -26,8 +26,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
   const [itemGroupLeft, setItemGroupLeft] = useState(elementsToUse);
   const [itemGroupRight, setItemGroupRight] = useState(getRandomItems(elementsToUse));
   const [color, setColor] = useState(getRandomItems(data.colors)[0]);
-  const [originPoint, setOriginPoint] = useState([]);
-  const [targetPoint, setTargetPoint] = useState([]);
+  const [arrowEnable, setArrowEnable] = useState(false);
   const [arrowPoints, setArrowPoints] = useState([]);
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
@@ -35,74 +34,83 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
   const [playing, setPlaying] = useState('');
 
   useEffect(() => {
+    registerEvent(() => {
+      setArrowEnable(false);
+      setArrowPoints([]);
+      restartActivity();
+    }, clientEvents.resetActivity);
+  }, []);
+
+  useEffect(() => {
     setResolution();
     setShowConfites(false);
-
-    let itemsLeft;
-    if (isProfessional) {
-      registerEvent((obj) => {
-        setItemGroupLeft(obj);
-      }, 'itemsLeft');
-    } else {
-      itemsLeft = getRandomItems(data.elements);
-      sendMessage('itemsLeft', itemsLeft);
-      setItemGroupLeft(itemsLeft);
-    }
-
-    setItemGroupRight(getRandomItems(elementsToUse));
-    setColor(getRandomItems(data.colors)[1]);
-    if (resetActivity) reset();
+    setConfiguration();
   }, [data]);
 
   function setResolution() {
-    if (divRef.current && isProfessional) {
-      let rect = divRef.current.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      setDimensions({ width, height });
-    } else {
-      const width = 700;
-      const height = 550;
-      setDimensions({ width, height });
-    }
+    const width = 700;
+    const height = 550;
+    setDimensions({ width, height });
+  }
+
+  function setConfiguration() {
+    const elementsLeft = getRandomItems(data.elements);
+    const elementsRigth = getRandomItems(elementsLeft);
+    const color = getRandomItems(data.colors)[1];
+    setItemGroupLeft(elementsLeft);
+    setItemGroupRight(elementsRigth);
+    setColor(color);
+    sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
+  }
+
+  function handleLeftItem(element) {
+    setShowConfites(false);
+    setItemLeftSelected({ name: element.name, voice: element.voice });
+    const point = stageRef.current.getPointerPosition();
+    const coords = Object.values(point);
+    setArrowEnable(true);
+    setArrowPoints(coords);
+    sendMessage(clientEvents.onLeftItemClick, { coords, element });
   }
 
   const onMouseMove = useCallback(() => {
-    if (originPoint.length) {
-      const point = stageRef.current.getPointerPosition();
-      const coords = Object.values(point);
-      setTargetPoint(coords);
-    }
-  }, [originPoint.length]);
-
-  const onTargetClick = useCallback(() => {
     const point = stageRef.current.getPointerPosition();
     const coords = Object.values(point);
-    setTargetPoint(coords);
-    setArrowPoints((old) => old.concat(coords));
-    setOriginPoint([]);
-    setTargetPoint([]);
-  }, []);
+    if (arrowEnable) {
+      var newArrowPoints = arrowPoints.slice(0, 2).concat(coords);
+      setArrowPoints(newArrowPoints);
+      sendMessage(clientEvents.onMouseMove, newArrowPoints);
+    }
+    sendMessage(clientEvents.studentPointer, { x: coords[0], y: coords[1] });
+  }, [arrowPoints, arrowEnable]);
+
+  const handleArrowClick = useCallback(() => {
+    const point = stageRef.current.getPointerPosition();
+    const elements = stageRef.current.getAllIntersections(point);
+    let element = elements.find((element) => element.attrs.id === 'text');
+    checkTargetMatch(element);
+    setArrowEnable(false);
+  }, [itemLeftSelected]);
 
   function checkTargetMatch(element) {
     if (element && itemLeftSelected.name === element.attrs.text) {
       setShowConfites(true);
-      let banner = layerRef.current.find('#banner' + element.attrs.text);
       checkMatch();
-      banner[0].image(imageFactory(correctBanner));
-      banner[0].draw();
       startAnimationConfites(stageRef, layerRef);
-      playAudio(itemLeftSelected.voice);
-      checkFinishActivity();
+      playAudio(itemLeftSelected.voice, setPlaying, audioRef);
+      if (!checkFinishActivity()) {
+        sendMessage(clientEvents.targetMatch, { itemGroupRight });
+      }
+      sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
     }
   }
 
   function checkMatch() {
-    for (let i in itemGroupLeft) {
-      if (itemGroupLeft[i].name === itemLeftSelected.name) {
-        let tempItemGroupLeft = [...itemGroupLeft];
-        tempItemGroupLeft[i].matched = true;
-        setItemGroupLeft(tempItemGroupLeft);
+    for (let i in itemGroupRight) {
+      if (itemGroupRight[i].name === itemLeftSelected.name) {
+        let tempItemGroupRight = [...itemGroupRight];
+        tempItemGroupRight[i].matched = true;
+        setItemGroupRight(tempItemGroupRight);
         break;
       }
     }
@@ -120,53 +128,12 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
       restartActivity();
       reset();
     }
+    return finish;
   }
 
   function reset() {
-    setOriginPoint([]);
-    setTargetPoint([]);
+    setArrowEnable(false);
     setArrowPoints([]);
-  }
-
-  function handleArrowMouseUp() {
-    const point = stageRef.current.getPointerPosition();
-    const elements = stageRef.current.getAllIntersections(point);
-    let el = elements.find((element) => element.attrs.id === 'text');
-    checkTargetMatch(el);
-  }
-
-  const playAudio = (voice) => {
-    setPlaying(voice);
-    play();
-  };
-
-  function play() {
-    audioRef.current.pause();
-    audioRef.current.load();
-    audioRef.current.play();
-  }
-
-  function imageFactory(x) {
-    const rv = document.createElement('img');
-    rv.src = x;
-    return rv;
-  }
-
-  function oposedColor(color) {
-    const aux = color.substring(1);
-    const hex = '0x' + aux;
-    const num = parseInt(hex);
-    const comp = parseInt('0xffffff') - num;
-    return '#' + comp.toString(16) + 'ff';
-  }
-
-  function handleLeftItem(element) {
-    setShowConfites(false);
-    setItemLeftSelected({ name: element.name, voice: element.voice });
-    const point = stageRef.current.getPointerPosition();
-    const coords = Object.values(point);
-    setOriginPoint(coords);
-    setArrowPoints(coords);
   }
 
   return (
@@ -175,7 +142,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
         <Layer ref={layerRef}>
           {itemGroupLeft &&
             itemGroupLeft.map((element, index) => (
-              <Group onMouseUp={() => handleLeftItem(element)}>
+              <Group onClick={() => handleLeftItem(element)}>
                 <KonvaImage key={element.id} x={MARGIN} y={MARGIN_TOP + (MARGIN + element.height) * index} width={element.width} height={element.height} image={imageFactory(element.src)} />
               </Group>
             ))}
@@ -186,7 +153,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity, isProfessional }) 
                 <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
-          <Arrow ref={arrowRef} points={arrowPoints.length === POINTS_COUNT ? arrowPoints : originPoint.concat(targetPoint)} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} onClick={onTargetClick} lineJoin='round' lineCap='round' visible={arrowPoints.length || targetPoint.length} onMouseUp={handleArrowMouseUp} />
+          <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length || arrowEnable} onClick={handleArrowClick} />
         </Layer>
         {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
       </Stage>
