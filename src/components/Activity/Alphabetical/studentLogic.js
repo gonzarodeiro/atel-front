@@ -34,7 +34,12 @@ const Alphabetical = ({ data, restartActivity }) => {
   const [itemLeftSelected, setItemLeftSelected] = useState({ name: '', voice: '' });
   const [playing, setPlaying] = useState('');
 
-  registerEvent(() => restartActivity(), clientEvents.resetActivity);
+  useEffect(() => {
+    //Evitamnos registrar varias veces el evento para que el socket lo ejecute 1 vez y no N
+    registerEvent(() => {
+      restartActivity();
+    }, clientEvents.resetActivity);
+  }, []);
 
   useEffect(() => {
     setResolution();

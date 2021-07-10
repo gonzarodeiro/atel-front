@@ -28,62 +28,6 @@ import voiceLion from '../../../../components/Activity/Alphabetical/audio/animal
 import voiceElephant from '../../../../components/Activity/Alphabetical/audio/animals/voice-elephant.mp3';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
-  const [activityData, setActivityData] = useState({
-    elements: [
-      {
-        id: uuidv4(),
-        name: 'CEREZA',
-        src: imgCherry,
-        voice: voiceCherry,
-        width: 90,
-        height: 85,
-        draggable: true,
-        matched: false
-      },
-      {
-        id: uuidv4(),
-        name: 'UVA',
-        src: imgGrape,
-        voice: voiceGrape,
-        width: 90,
-        height: 85,
-        draggable: true,
-        matched: false
-      },
-      {
-        id: uuidv4(),
-        name: 'MANZANA',
-        src: imgApple,
-        voice: voiceApple,
-        width: 90,
-        height: 85,
-        draggable: true,
-        matched: false
-      },
-      {
-        id: uuidv4(),
-        name: 'LIMÓN',
-        src: imgLemon,
-        voice: voiceLemon,
-        width: 90,
-        height: 85,
-        draggable: true,
-        matched: false
-      },
-      {
-        id: uuidv4(),
-        name: 'BANANA',
-        src: imgBanana,
-        voice: voiceBanana,
-        width: 90,
-        height: 85,
-        draggable: true,
-        matched: false
-      }
-    ],
-    colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
-  });
-
   function redirectTool(tool) {
     showTools({ [tool]: true });
   }
@@ -94,61 +38,6 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
   }
 
   function restart() {
-    setActivityData({
-      elements: [
-        {
-          id: uuidv4(),
-          name: 'GATO',
-          src: imgCat,
-          voice: voiceCat,
-          width: 90,
-          height: 85,
-          draggable: true,
-          matched: false
-        },
-        {
-          id: uuidv4(),
-          name: 'JIRAFA',
-          src: imgGiraffe,
-          voice: voiceGiraffe,
-          width: 90,
-          height: 85,
-          draggable: true,
-          matched: false
-        },
-        {
-          id: uuidv4(),
-          name: 'LEÓN',
-          voice: voiceLion,
-          src: imgLion,
-          width: 90,
-          height: 85,
-          draggable: true,
-          matched: false
-        },
-        {
-          id: uuidv4(),
-          name: 'PERRO',
-          src: imgDog,
-          voice: voiceDog,
-          width: 90,
-          height: 85,
-          draggable: true,
-          matched: false
-        },
-        {
-          id: uuidv4(),
-          name: 'ELEFANTE',
-          voice: voiceElephant,
-          src: imgElephant,
-          width: 90,
-          height: 85,
-          draggable: true,
-          matched: false
-        }
-      ],
-      colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
-    });
     sendMessage(clientEvents.resetActivity);
   }
 
@@ -156,7 +45,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={activityData} restartActivity={restart} />
+          <Activity />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
@@ -173,7 +62,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
               <div className='col-md-12'>
-                <MDBBtn onClick={restart} size='lg' className='py-2 green darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => restart()} size='lg' className='py-2 green darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Reiniciar actividad</span>
                 </MDBBtn>
               </div>
