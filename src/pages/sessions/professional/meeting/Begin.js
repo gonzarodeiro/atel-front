@@ -5,13 +5,7 @@ import Notification from '../../../../components/html/Notification';
 import finishSession from '../finishSession';
 import { clientEvents, sendMessage } from '../../../../utils/socketManager';
 import tools from '../../../../utils/enums/tools';
-const Begin = ({ props, handleChange, modal, session, showModal, showTools, showMeeting }) => {
-  function copyClipboard() {
-    const sharedLink = window.location.href.replace('professionalSession', 'studentSession/' + props.location.state.userName + '-' + props.location.state.sessionId);
-    navigator.clipboard.writeText(sharedLink);
-    showModal({ notification: true });
-  }
-
+const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard }) => {
   function getMessageByTool(tool) {
     let mapToolToEvent = {
       [tools.alphabetical]: clientEvents.initAlphabetical,

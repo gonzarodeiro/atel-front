@@ -3,5 +3,6 @@ const dlDifficulty = [chooseAnOption, { id: 1, code: 'TPA', description: 'TPA - 
 const dlStudents = [chooseAnOption, { id: 1, code: 'LucasGomez', description: 'Lucas Gomez' }, { id: 2, code: 'LeandroPerez', description: 'Leandro Perez' }];
 const dlStatus = [chooseAnOption, { id: 1, code: 'Finalizada', description: 'Finalizada' }, { id: 2, code: 'Cancelada', description: 'Cancelada' }];
 const dlProfession = [chooseAnOption, { id: 1, code: 'Asistente terapéutico', description: 'Asistente Terapéutico' }, { id: 2, code: 'Asistente social', description: 'Asistente Social' }, { id: 3, code: 'Fonoaudiólogo', description: 'Fonoaudiólogo' }, { id: 4, code: 'Psiquiatra', description: 'Psiquiatra' }, { id: 5, code: 'Pediatra', description: 'Pediatra' }, { id: 6, code: 'Psicólogo', description: 'Psicólogo' }, { id: 7, code: 'Psicopedagogo', description: 'Psicopedagogo' }, { id: 8, code: 'T.O', description: 'T.O' }, { id: 9, code: 'Otra', description: 'Otra' }];
+const dlEvaluationSession = [chooseAnOption, { id: 1, code: 'Muy buena', description: 'Muy buena' }, { id: 2, code: 'Buena', description: 'Buena' }, { id: 3, code: 'Regular', description: 'Regular' }, { id: 4, code: 'Mala', description: 'Mala' }];
 
-export { dlDifficulty, dlStudents, dlStatus, dlProfession };
+export { dlDifficulty, dlStudents, dlStatus, dlProfession, dlEvaluationSession };

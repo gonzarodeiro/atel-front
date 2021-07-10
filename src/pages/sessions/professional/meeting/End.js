@@ -1,13 +1,34 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Submit from '../../../../components/html/button/Submit';
+import Dropdownlist from '../../../../components/html/Dropdownlist';
+import { dlEvaluationSession } from '../../../../utils/dropdownlists';
 
 const End = ({ handleChange, session }) => {
   let history = useHistory();
 
   return (
     <React.Fragment>
-      <div className='row mb-2 mt-3'>
+      <div className='mt-3' data-test='col'>
+        <label className='mb-2'>Datos de la sesión</label>
+      </div>
+      <div data-test='container' className='container-fluid section mb-3 border p-2'>
+        <div className='text-center' style={{ marginTop: '2px', marginBottom: '-5px' }}>
+          <label>Duración: </label> 15 minutos
+          <label className='ml-2 mr-2'> - </label>H. alfabética: 8 minutos
+          <label className='ml-2 mr-2'> - </label>H. numérica: 3 minutos
+          <label className='ml-2 mr-2'> - </label>Pictogramas: 4 minutos
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col-md-6 my-2'>
+          <Dropdownlist title='Valoración de la sesión' id='evaluation' handleChange={handleChange} value={session.evaluation} dropdownlist={dlEvaluationSession} disabledValue={false} className='form-control' />
+        </div>
+        <div className='col-md-6 my-2'>
+          <Dropdownlist title='Atención del alumno' id='attention' handleChange={handleChange} value={session.attention} dropdownlist={dlEvaluationSession} disabledValue={false} className='form-control' />
+        </div>
+      </div>
+      <div className='row mb-2'>
         <div className='col-md-4 my-1'>
           <label>Pictogramas</label>
           <textarea id='pictogramComments' rows='4' onChange={handleChange} value={session.pictogramComments} type='text' className='form-control' />
@@ -27,7 +48,7 @@ const End = ({ handleChange, session }) => {
           <textarea id='generalComments' rows='4' onChange={handleChange} value={session.generalComments} type='text' className='form-control' />
         </div>
       </div>
-      <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
+      <div className='row align-items-center d-flex flex-column-reverse flex-md-row'>
         <div className='col-md-12 d-flex justify-content-center justify-content-md-end my-2'>
           <Submit onClick={() => history.push(`/home`)} title='Guardar' />
         </div>

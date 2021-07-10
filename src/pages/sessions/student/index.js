@@ -15,6 +15,7 @@ const StudentSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
   const [showJitsi, setShowJitsi] = useState();
+  const [session, setSession] = useState({ generalComments: '' });
   let { roomId } = useParams();
 
   useEffect(() => {
@@ -45,6 +46,11 @@ const StudentSession = (props) => {
     setShowJitsi(true);
   }
 
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setSession({ ...session, [id]: value });
+  };
+
   return (
     <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
       <div className='container'>
@@ -60,7 +66,7 @@ const StudentSession = (props) => {
                   {tools.alphabetical && <Alphabetical props={props} />}
                   {tools.numerical && <Numerical props={props} />}
                   {tools.pictogram && <Pictogram props={props} />}
-                  {meeting.end && <End />}
+                  {meeting.end && <End session={session} handleChange={handleChange} />}
                 </div>
               </div>
             </form>

@@ -4,6 +4,7 @@ import { startAnimationConfites, generateConfites } from './commons/confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
 import { registerEvent, clientEvents } from '../../../utils/socketManager';
+import { imageFactory, oposedColor, playAudio } from './commons/index';
 
 const Alphabetical = () => {
   const defaultColor = '#DE8971';
@@ -22,14 +23,11 @@ const Alphabetical = () => {
     audioRef = useRef(null);
 
   const confites = generateConfites(100, divRef);
-
   const [itemGroupLeft, setItemGroupLeft] = useState([]);
   const [itemGroupRight, setItemGroupRight] = useState([]);
   const [color, setColor] = useState(defaultColor);
-
   const [arrowEnable, setArrowEnable] = useState(false);
-  const [arrowPoints, setArrowPoints] = useState([]); // Contiene un par de coordenadas ( Inicio y Fin )
-
+  const [arrowPoints, setArrowPoints] = useState([]);
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
   const [playing, setPlaying] = useState('');
@@ -39,9 +37,6 @@ const Alphabetical = () => {
     setResolution();
     setShowConfites(false);
     setEventListeners();
-    registerEvent((obj) => {
-      setStudentPointerPosition(obj);
-    }, clientEvents.studentPointer);
   }, []);
 
   function setResolution() {
@@ -81,43 +76,18 @@ const Alphabetical = () => {
       //setShowConfites(true);
       setItemGroupRight(obj.itemGroupRight);
       startAnimationConfites(stageRef, layerRef);
-      playAudio(obj.voice);
+      playAudio(obj.voice, setPlaying, audioRef);
     }, clientEvents.targetMatch);
 
     registerEvent((obj) => {
-      playAudio(obj.voice);
+      playAudio(obj.voice, setPlaying, audioRef);
     }, clientEvents.playAudio);
+
+    registerEvent((obj) => {
+      setStudentPointerPosition(obj);
+    }, clientEvents.studentPointer);
   }
 
-  const playAudio = (voice) => {
-    setPlaying(voice);
-    play();
-  };
-
-  function play() {
-    audioRef.current.pause();
-    audioRef.current.load();
-    audioRef.current.play();
-  }
-
-  function imageFactory(x) {
-    const rv = document.createElement('img');
-    rv.src = x;
-    return rv;
-  }
-
-  function oposedColor(color) {
-    const aux = color.substring(1);
-    const hex = '0x' + aux;
-    const num = parseInt(hex);
-    const comp = parseInt('0xffffff') - num;
-    return '#' + comp.toString(16) + 'ff';
-  }
-
-  //Cada vez que se modifica un state del componente esto se vuelve a ejecutar
-  //Del lado del profesional no se capturan eventos
-
-  //TODO itemsGroupLeft e itemsGroupRigth se pueden unificar en un mismo arraw de objetos
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>

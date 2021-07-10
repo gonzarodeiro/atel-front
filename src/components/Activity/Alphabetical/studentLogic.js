@@ -4,6 +4,7 @@ import { startAnimationConfites, generateConfites, getRandomItems } from './comm
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
 import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
+import { imageFactory, oposedColor, playAudio } from './commons/index';
 
 const Alphabetical = ({ data, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
@@ -25,17 +26,14 @@ const Alphabetical = ({ data, restartActivity }) => {
   const [itemGroupLeft, setItemGroupLeft] = useState(elementsToUse);
   const [itemGroupRight, setItemGroupRight] = useState(getRandomItems(elementsToUse));
   const [color, setColor] = useState(getRandomItems(data.colors)[0]);
-
   const [arrowEnable, setArrowEnable] = useState(false);
-  const [arrowPoints, setArrowPoints] = useState([]); // Contiene un par de coordenadas ( Inicio y Fin )
-
+  const [arrowPoints, setArrowPoints] = useState([]);
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
   const [itemLeftSelected, setItemLeftSelected] = useState({ name: '', voice: '' });
   const [playing, setPlaying] = useState('');
 
   useEffect(() => {
-    //Evitamnos registrar varias veces el evento para que el socket lo ejecute 1 vez y no N
     registerEvent(() => {
       setArrowEnable(false);
       setArrowPoints([]);
@@ -46,13 +44,7 @@ const Alphabetical = ({ data, restartActivity }) => {
   useEffect(() => {
     setResolution();
     setShowConfites(false);
-    const elementsLeft = getRandomItems(data.elements);
-    const elementsRigth = getRandomItems(elementsLeft);
-    const color = getRandomItems(data.colors)[1];
-    setItemGroupLeft(elementsLeft);
-    setItemGroupRight(elementsRigth);
-    setColor(color);
-    sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
+    setConfiguration();
   }, [data]);
 
   function setResolution() {
@@ -61,7 +53,16 @@ const Alphabetical = ({ data, restartActivity }) => {
     setDimensions({ width, height });
   }
 
-  //Captura el click sobre un objeto de la izquieda e instancia la flecha
+  function setConfiguration() {
+    const elementsLeft = getRandomItems(data.elements);
+    const elementsRigth = getRandomItems(elementsLeft);
+    const color = getRandomItems(data.colors)[1];
+    setItemGroupLeft(elementsLeft);
+    setItemGroupRight(elementsRigth);
+    setColor(color);
+    sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
+  }
+
   function handleLeftItem(element) {
     setShowConfites(false);
     setItemLeftSelected({ name: element.name, voice: element.voice });
@@ -72,7 +73,6 @@ const Alphabetical = ({ data, restartActivity }) => {
     sendMessage(clientEvents.onLeftItemClick, { coords, element });
   }
 
-  //Hace que la flecha siga al mouse
   const onMouseMove = useCallback(() => {
     const point = stageRef.current.getPointerPosition();
     const coords = Object.values(point);
@@ -84,7 +84,6 @@ const Alphabetical = ({ data, restartActivity }) => {
     sendMessage(clientEvents.studentPointer, { x: coords[0], y: coords[1] });
   }, [arrowPoints, arrowEnable]);
 
-  // Cuando se detecta el click del arrow se congela el arrow mediante setOriginPoint
   const handleArrowClick = useCallback(() => {
     const point = stageRef.current.getPointerPosition();
     const elements = stageRef.current.getAllIntersections(point);
@@ -98,7 +97,7 @@ const Alphabetical = ({ data, restartActivity }) => {
       setShowConfites(true);
       checkMatch();
       startAnimationConfites(stageRef, layerRef);
-      playAudio(itemLeftSelected.voice);
+      playAudio(itemLeftSelected.voice, setPlaying, audioRef);
       if (!checkFinishActivity()) {
         sendMessage(clientEvents.targetMatch, { itemGroupRight });
       }
@@ -137,32 +136,6 @@ const Alphabetical = ({ data, restartActivity }) => {
     setArrowPoints([]);
   }
 
-  const playAudio = (voice) => {
-    setPlaying(voice);
-    play();
-  };
-
-  function play() {
-    audioRef.current.pause();
-    audioRef.current.load();
-    audioRef.current.play();
-  }
-
-  function imageFactory(x) {
-    const rv = document.createElement('img');
-    rv.src = x;
-    return rv;
-  }
-
-  function oposedColor(color) {
-    const aux = color.substring(1);
-    const hex = '0x' + aux;
-    const num = parseInt(hex);
-    const comp = parseInt('0xffffff') - num;
-    return '#' + comp.toString(16) + 'ff';
-  }
-
-  //Cada vez que se modifica un state del componente esto se vuelve a ejecutar
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
