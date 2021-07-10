@@ -8,7 +8,8 @@ const clientEvents = {
   setConfiguration: 'setConfiguration',
   onLeftItemClick: 'onLeftItemClick',
   targetMatch: 'targetMatch',
-  playAudio: 'playAudio'
+  playAudio: 'playAudio',
+  studentPointer: 'studentPointer'
 };
 
 const serverEvents = {

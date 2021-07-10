@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'react-konva';
+import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle, Shape } from 'react-konva';
 import { startAnimationConfites, generateConfites } from './commons/confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
@@ -33,11 +33,15 @@ const Alphabetical = () => {
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
   const [playing, setPlaying] = useState('');
+  const [studentPointerPosition, setStudentPointerPosition] = useState({ x: -20, y: -20 });
 
   useEffect(() => {
     setResolution();
     setShowConfites(false);
     setEventListeners();
+    registerEvent((obj) => {
+      setStudentPointerPosition(obj);
+    }, clientEvents.studentPointer);
   }, []);
 
   function setResolution() {
@@ -64,7 +68,7 @@ const Alphabetical = () => {
 
   function registerEvents() {
     registerEvent((obj) => {
-      setShowConfites(false);
+      //setShowConfites(false);
       setArrowEnable(true);
       setArrowPoints(obj.coords);
     }, clientEvents.onLeftItemClick);
@@ -74,7 +78,7 @@ const Alphabetical = () => {
     }, clientEvents.onMouseMove);
 
     registerEvent((obj) => {
-      setShowConfites(true);
+      //setShowConfites(true);
       setItemGroupRight(obj.itemGroupRight);
       startAnimationConfites(stageRef, layerRef);
       playAudio(obj.voice);
@@ -134,6 +138,25 @@ const Alphabetical = () => {
           <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length || arrowEnable} />
         </Layer>
         {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
+        <Layer>
+          <Shape
+            sceneFunc={(context, shape) => {
+              context.beginPath();
+              context.moveTo(70, 20);
+              context.lineTo(200, 80);
+              context.quadraticCurveTo(150, 100, 100, 150);
+              context.closePath();
+              context.fillStrokeShape(shape);
+              shape.scaleX(0.1);
+              shape.scaleY(0.1);
+              shape.x(studentPointerPosition.x);
+              shape.y(studentPointerPosition.y);
+            }}
+            fill='#FFFFFFF'
+            stroke='black'
+            strokeWidth={0}
+          />
+        </Layer>
       </Stage>
       <audio controls={false} ref={audioRef}>
         <source src={playing} />

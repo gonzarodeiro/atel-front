@@ -37,6 +37,8 @@ const Alphabetical = ({ data, restartActivity }) => {
   useEffect(() => {
     //Evitamnos registrar varias veces el evento para que el socket lo ejecute 1 vez y no N
     registerEvent(() => {
+      setArrowEnable(false);
+      setArrowPoints([]);
       restartActivity();
     }, clientEvents.resetActivity);
   }, []);
@@ -72,13 +74,14 @@ const Alphabetical = ({ data, restartActivity }) => {
 
   //Hace que la flecha siga al mouse
   const onMouseMove = useCallback(() => {
+    const point = stageRef.current.getPointerPosition();
+    const coords = Object.values(point);
     if (arrowEnable) {
-      const point = stageRef.current.getPointerPosition();
-      const coords = Object.values(point);
       var newArrowPoints = arrowPoints.slice(0, 2).concat(coords);
       setArrowPoints(newArrowPoints);
       sendMessage(clientEvents.onMouseMove, newArrowPoints);
     }
+    sendMessage(clientEvents.studentPointer, { x: coords[0], y: coords[1] });
   }, [arrowPoints, arrowEnable]);
 
   // Cuando se detecta el click del arrow se congela el arrow mediante setOriginPoint
