@@ -29,6 +29,11 @@ const StudentSession = (props) => {
       showMeeting({ begin: false, end: true });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
     }, clientEvents.finishSession);
+
+    registerEvent(() => {
+      showMeeting({ begin: true, end: false });
+      showTools({ alphabetical: false, numerical: false, pictogram: false });
+    }, clientEvents.beginSession);
     loadSessionStatus();
   }, []);
 

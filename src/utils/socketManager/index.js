@@ -1,8 +1,8 @@
 import io from 'socket.io-client';
 import { clientEvents, serverEvents } from './events';
 
-const ENDPOINT = 'https://atel-back-stg.herokuapp.com/';
-// const ENDPOINT = 'http://localhost:3005';
+// const ENDPOINT = 'https://atel-back-stg.herokuapp.com/';
+const ENDPOINT = 'http://localhost:3005';
 
 let _socket = io(ENDPOINT),
   _room;

@@ -25,7 +25,7 @@ const Index = () => {
           <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '20px', marginRight: '20px' }}>
             <Card title='Sesiones' module='sessions' colorStyle='#ec407a' colorClass='violet' description='Generar nuevas reuniones' iconItem='fas fa-video' />
             {/* <Card title='Alumnos' module='students' colorStyle='rgb(50 174 220)' colorClass='info' description='Ver más información' iconItem='fas fa-user-friends' /> */}
-            {/* <Card title='Agenda' module='schedule' colorStyle='#ff7043' colorClass='orange' description='Consulta de sesiones' iconItem='fas fa-list' /> */}
+            <Card title='Agenda' module='schedule' colorStyle='#ff7043' colorClass='orange' description='Consulta de sesiones' iconItem='fas fa-list' />
           </div>
         </div>
       </div>

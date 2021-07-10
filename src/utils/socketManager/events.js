@@ -3,6 +3,7 @@ const clientEvents = {
   initNumerical: 'init-numerical',
   initPictograms: 'init-pictograms',
   resetActivity: 'resetActivity',
+  beginSession: 'beginSession',
   finishSession: 'finishSession',
   onMouseMove: 'onMouseMove',
   setConfiguration: 'setConfiguration',
