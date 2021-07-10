@@ -1,5 +1,6 @@
 import React from 'react';
 import swal from '@sweetalert/with-react';
+import { clientEvents, sendMessage } from '../../../utils/socketManager';
 
 export default function finishSession(redirectEnd) {
   swal(
@@ -17,6 +18,9 @@ export default function finishSession(redirectEnd) {
       }
     }
   ).then((value) => {
-    if (value === 'ok') redirectEnd();
+    if (value === 'ok') {
+      sendMessage(clientEvents.finishSession);
+      redirectEnd();
+    }
   });
 }

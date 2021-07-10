@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Jitsi from '../../../components/Jitsi';
-import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
-import showAlert from '../../../utils/commons/showAlert';
-import status from '../../../utils/enums/sessionStatus';
+// import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
+// import showAlert from '../../../utils/commons/showAlert';
+// import status from '../../../utils/enums/sessionStatus';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { connect, registerEvent } from '../../../utils/socketClient/socketManager';
+import { clientEvents, connect, registerEvent } from '../../../utils/socketManager';
 
 const StudentSession = (props) => {
   const [student, setStudent] = useState();
@@ -22,11 +22,16 @@ const StudentSession = (props) => {
     registerEvent(() => {
       showMeeting({ begin: false });
       showTools({ alphabetical: true });
-    }, 'init-alphabetical');
+    }, clientEvents.initAlphabetical);
+
+    registerEvent(() => {
+      showMeeting({ begin: false, end: true });
+      showTools({ alphabetical: false, numerical: false, pictogram: false });
+    }, clientEvents.finishSession);
     loadSessionStatus();
   }, []);
 
-  async function loadSessionStatus() {
+  function loadSessionStatus() {
     const fields = roomId.split('-');
     setStudent(fields[0]);
     // const filters = { roomName: fields[0], sessionId: fields[1] };

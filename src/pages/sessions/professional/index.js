@@ -6,7 +6,7 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { connect } from '../../../utils/socketClient/socketManager';
+import { connect } from '../../../utils/socketManager';
 
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });

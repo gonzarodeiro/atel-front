@@ -3,8 +3,7 @@ import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'r
 import { startAnimationConfites, generateConfites, getRandomItems } from './commons/confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
-import { sendMessage } from '../../../utils/socketClient/socketManager';
-import events from '../../Activity/Alphabetical/commons/events';
+import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
 
 const Alphabetical = ({ data, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
@@ -35,15 +34,18 @@ const Alphabetical = ({ data, restartActivity }) => {
   const [itemLeftSelected, setItemLeftSelected] = useState({ name: '', voice: '' });
   const [playing, setPlaying] = useState('');
 
+  registerEvent(() => restartActivity(), clientEvents.resetActivity);
+
   useEffect(() => {
     setResolution();
     setShowConfites(false);
     const elementsLeft = getRandomItems(data.elements);
     const elementsRigth = getRandomItems(elementsLeft);
-    sendMessage(events.setConfiguration, { elementsLeft, elementsRigth });
+    const color = getRandomItems(data.colors)[1];
     setItemGroupLeft(elementsLeft);
     setItemGroupRight(elementsRigth);
-    setColor(getRandomItems(data.colors)[1]);
+    setColor(color);
+    sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
   }, [data]);
 
   function setResolution() {
@@ -51,26 +53,6 @@ const Alphabetical = ({ data, restartActivity }) => {
     const height = 550;
     setDimensions({ width, height });
   }
-
-  //Hace que la flecha siga al mouse
-  const onMouseMove = useCallback(() => {
-    if (arrowEnable) {
-      const point = stageRef.current.getPointerPosition();
-      const coords = Object.values(point);
-      var newArrowPoints = arrowPoints.slice(0, 2).concat(coords);
-      setArrowPoints(newArrowPoints);
-      sendMessage(events.onMouseMove, newArrowPoints);
-    }
-  }, [arrowPoints, arrowEnable]);
-
-  // Cuando se detecta el click del arrow se congela el arrow mediante setOriginPoint
-  const handleArrowClick = useCallback(() => {
-    const point = stageRef.current.getPointerPosition();
-    const elements = stageRef.current.getAllIntersections(point);
-    let el = elements.find((element) => element.attrs.id === 'text');
-    checkTargetMatch(el);
-    setArrowEnable(false);
-  }, [itemLeftSelected]);
 
   //Captura el click sobre un objeto de la izquieda e instancia la flecha
   function handleLeftItem(element) {
@@ -80,29 +62,48 @@ const Alphabetical = ({ data, restartActivity }) => {
     const coords = Object.values(point);
     setArrowEnable(true);
     setArrowPoints(coords);
-    sendMessage(events.onLeftItemClick, { coords, element });
+    sendMessage(clientEvents.onLeftItemClick, { coords, element });
   }
+
+  //Hace que la flecha siga al mouse
+  const onMouseMove = useCallback(() => {
+    if (arrowEnable) {
+      const point = stageRef.current.getPointerPosition();
+      const coords = Object.values(point);
+      var newArrowPoints = arrowPoints.slice(0, 2).concat(coords);
+      setArrowPoints(newArrowPoints);
+      sendMessage(clientEvents.onMouseMove, newArrowPoints);
+    }
+  }, [arrowPoints, arrowEnable]);
+
+  // Cuando se detecta el click del arrow se congela el arrow mediante setOriginPoint
+  const handleArrowClick = useCallback(() => {
+    const point = stageRef.current.getPointerPosition();
+    const elements = stageRef.current.getAllIntersections(point);
+    let element = elements.find((element) => element.attrs.id === 'text');
+    checkTargetMatch(element);
+    setArrowEnable(false);
+  }, [itemLeftSelected]);
 
   function checkTargetMatch(element) {
     if (element && itemLeftSelected.name === element.attrs.text) {
       setShowConfites(true);
-      let banner = layerRef.current.find('#banner' + element.attrs.text);
       checkMatch();
-      banner[0].image(imageFactory(correctBanner));
-      banner[0].draw();
       startAnimationConfites(stageRef, layerRef);
       playAudio(itemLeftSelected.voice);
-      checkFinishActivity();
-      sendMessage(events.targetMatch, element);
+      if (!checkFinishActivity()) {
+        sendMessage(clientEvents.targetMatch, { itemGroupRight });
+      }
+      sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
     }
   }
 
   function checkMatch() {
-    for (let i in itemGroupLeft) {
-      if (itemGroupLeft[i].name === itemLeftSelected.name) {
-        let tempItemGroupLeft = [...itemGroupLeft];
-        tempItemGroupLeft[i].matched = true;
-        setItemGroupLeft(tempItemGroupLeft);
+    for (let i in itemGroupRight) {
+      if (itemGroupRight[i].name === itemLeftSelected.name) {
+        let tempItemGroupRight = [...itemGroupRight];
+        tempItemGroupRight[i].matched = true;
+        setItemGroupRight(tempItemGroupRight);
         break;
       }
     }
@@ -120,6 +121,7 @@ const Alphabetical = ({ data, restartActivity }) => {
       restartActivity();
       reset();
     }
+    return finish;
   }
 
   function reset() {

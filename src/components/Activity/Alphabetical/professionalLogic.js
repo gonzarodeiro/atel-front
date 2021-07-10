@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'react-konva';
-import { startAnimationConfites, generateConfites, getRandomItems } from './commons/confites';
+import { startAnimationConfites, generateConfites } from './commons/confites';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
-import { registerEvent } from '../../../utils/socketClient/socketManager';
-import events from '../../Activity/Alphabetical/commons/events';
+import { registerEvent, clientEvents } from '../../../utils/socketManager';
 
-const Alphabetical = ({ data, resetActivity, restartActivity }) => {
+const Alphabetical = () => {
+  const defaultColor = '#DE8971';
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -25,7 +25,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
 
   const [itemGroupLeft, setItemGroupLeft] = useState([]);
   const [itemGroupRight, setItemGroupRight] = useState([]);
-  const [color, setColor] = useState(getRandomItems(data.colors)[0]);
+  const [color, setColor] = useState(defaultColor);
 
   const [arrowEnable, setArrowEnable] = useState(false);
   const [arrowPoints, setArrowPoints] = useState([]); // Contiene un par de coordenadas ( Inicio y Fin )
@@ -38,9 +38,7 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
     setResolution();
     setShowConfites(false);
     setEventListeners();
-    setColor(getRandomItems(data.colors)[1]);
-    if (resetActivity) reset();
-  }, [data]);
+  }, []);
 
   function setResolution() {
     let rect = divRef.current.getBoundingClientRect();
@@ -51,49 +49,40 @@ const Alphabetical = ({ data, resetActivity, restartActivity }) => {
 
   function setEventListeners() {
     setConfiguration();
-    getStudentsMovements();
+    registerEvents();
   }
 
   function setConfiguration() {
     registerEvent((obj) => {
-      debugger;
       setItemGroupLeft(obj.elementsLeft);
       setItemGroupRight(obj.elementsRigth);
-    }, events.setConfiguration);
+      setColor(obj.color);
+      setArrowEnable(false);
+      setArrowPoints([]);
+    }, clientEvents.setConfiguration);
   }
 
-  function getStudentsMovements() {
-    //resuelto
+  function registerEvents() {
     registerEvent((obj) => {
       setShowConfites(false);
       setArrowEnable(true);
       setArrowPoints(obj.coords);
-    }, events.onLeftItemClick);
+    }, clientEvents.onLeftItemClick);
 
-    //resuelto
     registerEvent((obj) => {
       setArrowPoints(obj);
-    }, events.onMouseMove);
+    }, clientEvents.onMouseMove);
 
-    registerEvent((element) => {
+    registerEvent((obj) => {
       setShowConfites(true);
-      let banner = layerRef.current.find('#banner' + element.text);
-      banner[0].image(imageFactory(correctBanner));
-      banner[0].draw();
-
-      let tempItemGroupLeft = itemGroupLeft.map((item) => ({
-        ...item,
-        matched: item.name == element.name
-      }));
-
-      setItemGroupLeft(tempItemGroupLeft);
+      setItemGroupRight(obj.itemGroupRight);
       startAnimationConfites(stageRef, layerRef);
-    }, events.targetMatch);
-  }
+      playAudio(obj.voice);
+    }, clientEvents.targetMatch);
 
-  function reset() {
-    setArrowEnable(false);
-    setArrowPoints([]);
+    registerEvent((obj) => {
+      playAudio(obj.voice);
+    }, clientEvents.playAudio);
   }
 
   const playAudio = (voice) => {

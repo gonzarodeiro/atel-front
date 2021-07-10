@@ -3,6 +3,7 @@ import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
 import { Stage, Layer, Rect, Circle } from 'react-konva';
 import finishSession from '../finishSession';
+import tools from '../../../../utils/enums/tools';
 
 const Pictogram = ({ props, handleChange, session, showTools, showMeeting }) => {
   function redirectTool(tool) {
@@ -47,12 +48,12 @@ const Pictogram = ({ props, handleChange, session, showTools, showMeeting }) => 
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('alphabetical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Herramienta Alfabética</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('numerical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Herramienta Numérica</span>
                 </MDBBtn>
               </div>

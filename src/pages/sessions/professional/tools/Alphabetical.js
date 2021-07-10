@@ -3,6 +3,8 @@ import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
 import Activity from '../../../../components/Activity/Alphabetical/professionalLogic';
 import finishSession from '../finishSession';
+import tools from '../../../../utils/enums/tools';
+import { clientEvents, sendMessage } from '../../../../utils/socketManager';
 import { v4 as uuidv4 } from 'uuid';
 import imgCherry from '../../../../components/Activity/Alphabetical/images/fruits/fruit_cherry.png';
 import imgGrape from '../../../../components/Activity/Alphabetical/images/fruits/fruit_grape.png';
@@ -26,7 +28,6 @@ import voiceLion from '../../../../components/Activity/Alphabetical/audio/animal
 import voiceElephant from '../../../../components/Activity/Alphabetical/audio/animals/voice-elephant.mp3';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) => {
-  const [resetActivity, setResetActivity] = useState(false);
   const [activityData, setActivityData] = useState({
     elements: [
       {
@@ -148,14 +149,14 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
       ],
       colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
     });
-    setResetActivity(!resetActivity);
+    sendMessage(clientEvents.resetActivity);
   }
 
   return (
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={activityData} resetActivity={resetActivity} restartActivity={restart} />
+          <Activity data={activityData} restartActivity={restart} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
@@ -177,7 +178,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting }) 
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('numerical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Herramienta Númerica</span>
                 </MDBBtn>
               </div>

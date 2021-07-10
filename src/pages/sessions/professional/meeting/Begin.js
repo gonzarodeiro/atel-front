@@ -3,8 +3,8 @@ import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../components/Jitsi';
 import Notification from '../../../../components/html/Notification';
 import finishSession from '../finishSession';
-import { sendMessage } from '../../../../utils/socketClient/socketManager';
-
+import { clientEvents, sendMessage } from '../../../../utils/socketManager';
+import tools from '../../../../utils/enums/tools';
 const Begin = ({ props, handleChange, modal, session, showModal, showTools, showMeeting }) => {
   function copyClipboard() {
     const sharedLink = window.location.href.replace('professionalSession', 'studentSession/' + props.location.state.userName + '-' + props.location.state.sessionId);
@@ -12,8 +12,17 @@ const Begin = ({ props, handleChange, modal, session, showModal, showTools, show
     showModal({ notification: true });
   }
 
+  function getMessageByTool(tool) {
+    let mapToolToEvent = {
+      [tools.alphabetical]: clientEvents.initAlphabetical,
+      [tools.numerical]: clientEvents.initNumerical,
+      [tools.pictograms]: clientEvents.initPictograms
+    };
+    return mapToolToEvent[tool];
+  }
+
   function redirectTool(tool) {
-    sendMessage('init-' + tool);
+    sendMessage(getMessageByTool(tool));
     showMeeting({ begin: false });
     showTools({ [tool]: true });
   }
@@ -47,19 +56,19 @@ const Begin = ({ props, handleChange, modal, session, showModal, showTools, show
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('numerical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Númerica y lógica</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('alphabetical')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Alfabetización</span>
                 </MDBBtn>
               </div>
             </div>
             <div className='row'>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('pictogram')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => redirectTool(tools.pictogram)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
                 </MDBBtn>
               </div>
