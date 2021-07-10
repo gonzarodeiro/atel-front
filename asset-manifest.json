@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/atel-front/static/css/main.eddd4c50.chunk.css",
-    "main.js": "/atel-front/static/js/main.bd992d52.chunk.js",
-    "main.js.map": "/atel-front/static/js/main.bd992d52.chunk.js.map",
+    "main.css": "/atel-front/static/css/main.b970cb6b.chunk.css",
+    "main.js": "/atel-front/static/js/main.6fb9a663.chunk.js",
+    "main.js.map": "/atel-front/static/js/main.6fb9a663.chunk.js.map",
     "runtime-main.js": "/atel-front/static/js/runtime-main.c3e874b7.js",
     "runtime-main.js.map": "/atel-front/static/js/runtime-main.c3e874b7.js.map",
     "static/css/2.c2774f4f.chunk.css": "/atel-front/static/css/2.c2774f4f.chunk.css",
-    "static/js/2.10145002.chunk.js": "/atel-front/static/js/2.10145002.chunk.js",
-    "static/js/2.10145002.chunk.js.map": "/atel-front/static/js/2.10145002.chunk.js.map",
+    "static/js/2.434b9e4d.chunk.js": "/atel-front/static/js/2.434b9e4d.chunk.js",
+    "static/js/2.434b9e4d.chunk.js.map": "/atel-front/static/js/2.434b9e4d.chunk.js.map",
     "index.html": "/atel-front/index.html",
-    "precache-manifest.94fd6d304c256b98934d11f84350c6d5.js": "/atel-front/precache-manifest.94fd6d304c256b98934d11f84350c6d5.js",
+    "precache-manifest.3b20d9f01e7076df2dbf6ed8ce71696c.js": "/atel-front/precache-manifest.3b20d9f01e7076df2dbf6ed8ce71696c.js",
     "service-worker.js": "/atel-front/service-worker.js",
     "static/css/2.c2774f4f.chunk.css.map": "/atel-front/static/css/2.c2774f4f.chunk.css.map",
-    "static/css/main.eddd4c50.chunk.css.map": "/atel-front/static/css/main.eddd4c50.chunk.css.map",
-    "static/js/2.10145002.chunk.js.LICENSE.txt": "/atel-front/static/js/2.10145002.chunk.js.LICENSE.txt",
+    "static/css/main.b970cb6b.chunk.css.map": "/atel-front/static/css/main.b970cb6b.chunk.css.map",
+    "static/js/2.434b9e4d.chunk.js.LICENSE.txt": "/atel-front/static/js/2.434b9e4d.chunk.js.LICENSE.txt",
     "static/media/mdb.css": "/atel-front/static/media/arrow_right.8ef6a08c.svg",
     "static/media/banner.png": "/atel-front/static/media/banner.6970c4f6.png",
     "static/media/cat.png": "/atel-front/static/media/cat.cb465994.png",
@@ -44,8 +44,8 @@
   "entrypoints": [
     "static/js/runtime-main.c3e874b7.js",
     "static/css/2.c2774f4f.chunk.css",
-    "static/js/2.10145002.chunk.js",
-    "static/css/main.eddd4c50.chunk.css",
-    "static/js/main.bd992d52.chunk.js"
+    "static/js/2.434b9e4d.chunk.js",
+    "static/css/main.b970cb6b.chunk.css",
+    "static/js/main.6fb9a663.chunk.js"
   ]
 }
