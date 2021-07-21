@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle } from 'react-konva';
-import { startAnimationConfites, generateConfites, getRandomItems } from './commons/confites';
+import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow } from 'react-konva';
+import { getRandomItems } from './commons/index';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
 import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
 import { imageFactory, oposedColor, playAudio } from './commons/index';
+import Confites from '../../Confites';
 
 const Alphabetical = ({ data, restartActivity }) => {
   const CONTAINER_SIZE = '100%',
@@ -17,11 +18,9 @@ const Alphabetical = ({ data, restartActivity }) => {
 
   const divRef = useRef(null),
     stageRef = useRef(null),
-    layerRef = useRef(null),
     arrowRef = useRef(null),
     audioRef = useRef(null);
 
-  const confites = generateConfites(100, divRef);
   const elementsToUse = getRandomItems(data.elements);
   const [itemGroupLeft, setItemGroupLeft] = useState(elementsToUse);
   const [itemGroupRight, setItemGroupRight] = useState(getRandomItems(elementsToUse));
@@ -96,7 +95,6 @@ const Alphabetical = ({ data, restartActivity }) => {
     if (element && itemLeftSelected.name === element.attrs.text) {
       setShowConfites(true);
       checkMatch();
-      startAnimationConfites(stageRef, layerRef);
       playAudio(itemLeftSelected.voice, setPlaying, audioRef);
       if (!checkFinishActivity()) {
         sendMessage(clientEvents.targetMatch, { itemGroupRight });
@@ -139,7 +137,7 @@ const Alphabetical = ({ data, restartActivity }) => {
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: color }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
-        <Layer ref={layerRef}>
+        <Layer>
           {itemGroupLeft &&
             itemGroupLeft.map((element, index) => (
               <Group onClick={() => handleLeftItem(element)}>
@@ -153,9 +151,9 @@ const Alphabetical = ({ data, restartActivity }) => {
                 <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
-          <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length || arrowEnable} onClick={handleArrowClick} />
+          <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length > 0 || arrowEnable} onClick={handleArrowClick} />
         </Layer>
-        {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
+        {showConfites && <Confites stageRef={stageRef} />}
       </Stage>
       <audio controls={false} ref={audioRef}>
         <source src={playing} />
