@@ -11,12 +11,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../../utils/commons/datepicker';
 import showAlert from '../../../utils/commons/showAlert';
+import convertDate from '../../../utils/commons/convertDate';
+import convertDateTime from '../../../utils/commons/convertDateTime';
+import cleanObject from '../../../utils/commons/cleanObject';
 import swal from '@sweetalert/with-react';
 import SessionPendingDetail from './modal/SessionPendingDetail';
+import getParametry from '../../../utils/services/get/getByFilters/index';
+import status from '../../..//utils/enums/sessionStatus';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', difficulty: '', message: '' });
+  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', diagnostic: '', message: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [showModal, setShowModal] = useState({ details: false });
@@ -39,32 +44,27 @@ const Index = () => {
   };
 
   async function getSchedule() {
-    const result = [
-      {
-        name: 'German Perez',
-        difficulty: 'Dislexia',
-        status: 'Pendiente',
-        date: '12/07/2021 14:00 hs'
-      },
-      {
-        name: 'Augusto Gomez',
-        difficulty: 'TDA',
-        status: 'Pendiente',
-        date: '16/07/2021 15:00 hs'
-      },
-      {
-        name: 'Lucas Gomez',
-        difficulty: 'TEA',
-        status: 'Pendiente',
-        date: '22/07/2021 16:00 hs'
-      }
-    ];
+    const values = getParameters();
+    cleanObject(values);
+    const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
     createActions(result);
     fillTable(result);
   }
 
+  function getParameters() {
+    return {
+      id_professional: 1, // agarrar id de sessionStorage cuando se registren
+      status: status.Pending,
+      studentName: params.studentName,
+      diagnostic: params.diagnostic,
+      dateTo: convertDate(params.dateTo),
+      dateFrom: convertDate(params.dateFrom)
+    };
+  }
+
   function createActions(result) {
     for (let i = 0; i < result.length; i++) {
+      result[i].start_datetime = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
           <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
@@ -86,8 +86,8 @@ const Index = () => {
     swal(
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
-        <span>Alumno: {obj.name}</span>
-        <p>Fecha: {obj.date}</p>
+        <span>Alumno: {obj.full_name}</span>
+        <p>Fecha: {obj.start_datetime}</p>
         <input id='message' placeholder='Comentario' onChange={handleChange} value={params.comments} type='text' className='form-control mt-4' />
       </div>,
       {
@@ -119,10 +119,9 @@ const Index = () => {
       setTable({
         columns: [
           { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'name' },
-          { label: 'Dificultad', field: 'difficulty' },
-          { label: 'Estado', field: 'status' },
-          { label: 'Fecha sesión', field: 'date' }
+          { label: 'Nombre', field: 'full_name' },
+          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Fecha sesión', field: 'start_datetime' }
         ],
         rows: result,
         show: true
@@ -159,10 +158,10 @@ const Index = () => {
                   <DatePicker id='dateTo' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateTo} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateTo: date })} value={params.dateTo} className='form-control' locale='es' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={params.name} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
+                  <Dropdownlist title='Nombre del alumno' id='studentName' handleChange={handleChange} value={params.studentName} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={params.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className='form-control' />
+                  <Dropdownlist title='Dificultad' id='diagnostic' handleChange={handleChange} value={params.diagnostic} dropdownlist={dlDifficulty} disabledValue={false} className='form-control' />
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />

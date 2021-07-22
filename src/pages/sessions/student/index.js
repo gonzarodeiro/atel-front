@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Jitsi from '../../../components/Jitsi';
-// import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
-// import showAlert from '../../../utils/commons/showAlert';
-// import status from '../../../utils/enums/sessionStatus';
+import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
+import showAlert from '../../../utils/commons/showAlert';
+import status from '../../../utils/enums/sessionStatus';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
@@ -40,15 +40,19 @@ const StudentSession = (props) => {
   function loadSessionStatus() {
     const fields = roomId.split('-');
     setStudent(fields[0]);
-    // const filters = { roomName: fields[0], sessionId: fields[1] };
-    // let result = await getResponseByFilters('http://localhost:3005/session/ask-to-join', filters);
-    // if (result.data.status !== status.Created) {
-    //   await showAlert('Error en la sesión', result.data.message, 'error');
-    //   setShowJitsi(false);
-    // } else setShowJitsi(true);
+    checkSessionCreated(fields);
     showMeeting({ begin: true });
     showTools({ alphabetical: false });
     setShowJitsi(true);
+  }
+
+  async function checkSessionCreated(fields) {
+    const filters = { roomName: fields[0], sessionId: fields[1] };
+    let result = await getResponseByFilters('https://atel-back-stg.herokuapp.com/session/ask-to-join', filters);
+    if (result.data.status !== status.Created) {
+      await showAlert('Error en la sesión', result.data.message, 'error');
+      setShowJitsi(false);
+    } else setShowJitsi(true);
   }
 
   const handleChange = (event) => {
