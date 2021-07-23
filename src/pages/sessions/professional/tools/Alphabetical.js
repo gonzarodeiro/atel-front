@@ -7,9 +7,10 @@ import tools from '../../../../utils/enums/tools';
 import Notification from '../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../utils/socketManager';
 
-const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal }) => {
+const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard }) => {
   useEffect(() => {
     showModal({ notification: false });
+    showWizard(true);
   }, []);
 
   function redirectTool(tool) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Jitsi from '../../../components/Jitsi';
 import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
@@ -8,7 +8,12 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { clientEvents, connect, registerEvent } from '../../../utils/socketManager';
+import { clientEvents, connect, registerEvent, sendMessage } from '../../../utils/socketManager';
+import ActivityWizard from '../../../components/ActivityWizard';
+import wizardVideo from '../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
+
+const wizardButtonText = 'COMENZAR';
+const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
 
 const StudentSession = (props) => {
   const [student, setStudent] = useState();
@@ -16,6 +21,7 @@ const StudentSession = (props) => {
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
   const [showJitsi, setShowJitsi] = useState();
   const [session, setSession] = useState({ generalComments: '' });
+  const [wizardVisible, showWizard] = useState(false);
   let { roomId } = useParams();
 
   useEffect(() => {
@@ -23,16 +29,19 @@ const StudentSession = (props) => {
     registerEvent(() => {
       showMeeting({ begin: false });
       showTools({ alphabetical: true });
+      showWizard(true);
     }, clientEvents.initAlphabetical);
 
     registerEvent(() => {
       showMeeting({ begin: false, end: true });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
+      showWizard(false);
     }, clientEvents.finishSession);
 
     registerEvent(() => {
       showMeeting({ begin: true, end: false });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
+      showWizard(false);
     }, clientEvents.beginSession);
     loadSessionStatus();
   }, []);
@@ -60,29 +69,37 @@ const StudentSession = (props) => {
     setSession({ ...session, [id]: value });
   };
 
+  const handleWizardClick = useCallback(() => {
+    sendMessage(clientEvents.initAlphabetical);
+    showWizard(false);
+  }, []);
+
   return (
-    <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
-      <div className='container'>
-        <div className='card-body pb-3'>
-          <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-            ¡ Hola, Bienvenido {student} !
-          </div>
-          {showJitsi && (
-            <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              <div className='row'>
-                <div className='pb-3 mt-2 col-md-12'>
-                  {meeting.begin && <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>}
-                  {tools.alphabetical && <Alphabetical props={props} />}
-                  {tools.numerical && <Numerical props={props} />}
-                  {tools.pictogram && <Pictogram props={props} />}
-                  {meeting.end && <End session={session} handleChange={handleChange} />}
+    <>
+      <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
+        <div className='container'>
+          <div className='card-body pb-3'>
+            <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
+              ¡ Hola, Bienvenido {student} !
+            </div>
+            {showJitsi && (
+              <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
+                <div className='row'>
+                  <div className='pb-3 mt-2 col-md-12'>
+                    {meeting.begin && <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>}
+                    {tools.alphabetical && <Alphabetical props={props} />}
+                    {tools.numerical && <Numerical props={props} />}
+                    {tools.pictogram && <Pictogram props={props} />}
+                    {meeting.end && <End session={session} handleChange={handleChange} />}
+                  </div>
                 </div>
-              </div>
-            </form>
-          )}
+              </form>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+      {wizardVisible && <ActivityWizard src={wizardVideo} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+    </>
   );
 };
 
