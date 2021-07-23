@@ -6,8 +6,9 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { clientEvents, connect, registerEvent } from '../../../utils/socketManager';
+import { clientEvents, connect, registerEvent, sendMessage } from '../../../utils/socketManager';
 import ActivityWizard from '../../../components/ActivityWizard';
+import wizardVideo from '../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 
 const wizardTitle = 'Esperando al alumno';
 const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';
@@ -28,7 +29,7 @@ const ProfessionalSession = (props) => {
 
     registerEvent(() => {
       showWizard(false);
-    }, clientEvents.initAlphabetical);
+    }, clientEvents.closeActivityWizard);
   }, []);
 
   const handleChange = (event) => {
@@ -42,7 +43,10 @@ const ProfessionalSession = (props) => {
     showModal({ notification: true });
   }
 
-  const handleCloseWizardClick = useCallback(() => showWizard(false), []);
+  const handleCloseWizardClick = useCallback(() => {
+    sendMessage(clientEvents.closeActivityWizard);
+    showWizard(false);
+  }, []);
 
   return (
     <Layout>
@@ -66,7 +70,7 @@ const ProfessionalSession = (props) => {
           </div>
         </div>
       </div>
-      {wizardVisible && <ActivityWizard title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
+      {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
     </Layout>
   );
 };

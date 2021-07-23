@@ -22,8 +22,16 @@ import voiceCat from '../../../../components/Activity/Alphabetical/audio/animals
 import voiceGiraffe from '../../../../components/Activity/Alphabetical/audio/animals/voice-giraffe.mp3';
 import voiceLion from '../../../../components/Activity/Alphabetical/audio/animals/voice-lion.mp3';
 import voiceElephant from '../../../../components/Activity/Alphabetical/audio/animals/voice-elephant.mp3';
+// TODO: Completar cuando este corregido el el endpoint de imagenes
+/*
+import getByFilters from '../../../../utils/services/get/getByFilters';
+*/
 
 const Alphabetical = () => {
+  // TODO: Completar cuando este corregido el el endpoint de imagenes
+  /*
+  const [images, setImages] = useState([]);
+  */
   const [activityData, setActivityData] = useState({
     elements: [
       {
@@ -137,6 +145,20 @@ const Alphabetical = () => {
       colors: ['#DE8971', '#7B6079', '#A7D0CD', '#FFE9D6']
     });
   }
+
+  // TODO: Completar cuando este corregido el el endpoint de imagenes
+  /*
+  useEffect(() => {
+    async function fetchImages() {
+      console.log('Buscando imagenes');
+      const filters = { category: 'animales' };
+      const images = await getByFilters('https://atel-back-stg.herokuapp.com/literacy-resources', filters);
+      console.log('images', images);
+      setImages(images);
+    }
+    fetchImages();
+  }, []);
+  */
 
   return (
     <React.Fragment>

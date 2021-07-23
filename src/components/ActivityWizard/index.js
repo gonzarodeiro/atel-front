@@ -10,7 +10,6 @@ const ActivityWizard = ({ src, steps, title, message, closeButtonText, onCloseCl
     <div className='w-container' onClick={onCloseClick}>
       <div className='w-dialog'>
         {title && <div className='w-title'>{title}</div>}
-        {message && <div className='w-message'>{message}</div>}
         {src && (
           <div className='w-video-crop'>
             <video className='w-video' controls={false} autoPlay={true} width={CUSTOM_SIZE} height={CUSTOM_SIZE * RATIO} loop={true}>
@@ -18,6 +17,7 @@ const ActivityWizard = ({ src, steps, title, message, closeButtonText, onCloseCl
             </video>
           </div>
         )}
+        {message && <div className='w-message'>{message}</div>}
         {steps && (
           <div className='w-step-container' onClick={onCloseClick}>
             {steps.map((step, i) => (

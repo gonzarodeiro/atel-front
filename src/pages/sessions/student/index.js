@@ -12,6 +12,7 @@ import { clientEvents, connect, registerEvent, sendMessage } from '../../../util
 import ActivityWizard from '../../../components/ActivityWizard';
 import wizardVideo from '../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 
+const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
 const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
 
@@ -43,6 +44,11 @@ const StudentSession = (props) => {
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);
     }, clientEvents.beginSession);
+
+    registerEvent(() => {
+      showWizard(false);
+    }, clientEvents.closeActivityWizard);
+
     loadSessionStatus();
   }, []);
 
@@ -70,7 +76,7 @@ const StudentSession = (props) => {
   };
 
   const handleWizardClick = useCallback(() => {
-    sendMessage(clientEvents.initAlphabetical);
+    sendMessage(clientEvents.closeActivityWizard);
     showWizard(false);
   }, []);
 
@@ -98,7 +104,7 @@ const StudentSession = (props) => {
           </div>
         </div>
       </div>
-      {wizardVisible && <ActivityWizard src={wizardVideo} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
     </>
   );
 };

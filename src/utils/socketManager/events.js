@@ -10,7 +10,9 @@ const clientEvents = {
   onLeftItemClick: 'onLeftItemClick',
   targetMatch: 'targetMatch',
   playAudio: 'playAudio',
-  studentPointer: 'studentPointer'
+  studentPointer: 'studentPointer',
+  showActivityWizard: 'show-activity-wizard',
+  closeActivityWizard: 'close-activity-wizard'
 };
 
 const serverEvents = {
