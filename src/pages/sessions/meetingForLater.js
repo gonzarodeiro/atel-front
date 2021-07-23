@@ -17,7 +17,7 @@ import convertDateTime from '../../utils/commons/convertDateTime';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [session, setSession] = useState({ id_student: '', date: new Date() });
+  const [session, setSession] = useState({ userName: '', date: new Date() });
   const [student, setStudent] = useState({ id: '', name: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
@@ -45,7 +45,7 @@ const Index = () => {
     }
 
     function validateFields() {
-      if (!session.id_student) {
+      if (!session.userName) {
         setErrors({ show: true, message: 'Complete los campos obligatorios' });
         setShowValidation(true);
         return;
@@ -89,7 +89,7 @@ const Index = () => {
                 <div className='col-md-6 my-1'>
                   <Form.Group>
                     <Form.Label> Nombre del alumno </Form.Label>
-                    <Form.Control id='id_student' onChange={handleChange} className={'form-control ' + (!session.id_student && showValidation ? 'borderRed' : '')} value={session.id_student} style={{ cursor: 'pointer' }} as='select'>
+                    <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
                       {dlStudents.map((file) => (
                         <option key={file.id} value={`${file.id}-${file.code}`}>
                           {file.description}
@@ -100,7 +100,7 @@ const Index = () => {
                 </div>
                 <div className='col-md-6 my-1'>
                   <label>Fecha y hora</label>
-                  <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm ' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' locale='es' timeCaption='Hora' />
+                  <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm aa' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' timeCaption='Hora' />
                 </div>
               </div>
               <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>

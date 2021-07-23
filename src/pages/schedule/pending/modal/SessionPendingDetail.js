@@ -41,10 +41,10 @@ const SessionPendingDetail = ({ showModal, handleClose }) => {
             <Loading />
           </div>
         )}
-        <div className='row'>
+        <div className='row mb-4'>
           <div className='col-md-12 my-1'>
-            <label>Fecha</label>
-            <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm ' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' locale='es' timeCaption='Hora' />
+            <label>Fecha y horario</label>
+            <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm aa' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' timeCaption='Hora' />
           </div>
         </div>
         <Modal.Footer>
