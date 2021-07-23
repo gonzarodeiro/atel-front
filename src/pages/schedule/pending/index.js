@@ -17,14 +17,18 @@ import cleanObject from '../../../utils/commons/cleanObject';
 import swal from '@sweetalert/with-react';
 import SessionPendingDetail from './modal/SessionPendingDetail';
 import getParametry from '../../../utils/services/get/getByFilters/index';
-import status from '../../..//utils/enums/sessionStatus';
+import patchApi from '../../../utils/services/patch/patchApi';
+import status from '../../../utils/enums/sessionStatus';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', diagnostic: '', message: '' });
+  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', diagnostic: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [showModal, setShowModal] = useState({ details: false });
+  const [idSession, setIdSession] = useState();
+  const [userName, setUserName] = useState();
+  const [sessionDate, setSessionDate] = useState();
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
@@ -74,8 +78,11 @@ const Index = () => {
     }
   }
 
-  function handleEdit() {
+  function handleEdit(obj) {
     setShowModal({ details: true });
+    setIdSession(obj.id);
+    setUserName(obj.full_name);
+    setSessionDate(obj.start_datetime);
   }
 
   function handleCloseDetails() {
@@ -88,10 +95,10 @@ const Index = () => {
         <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
         <span>Alumno: {obj.full_name}</span>
         <p>Fecha: {obj.start_datetime}</p>
-        <input id='message' placeholder='Comentario' onChange={handleChange} value={params.comments} type='text' className='form-control mt-4' />
       </div>,
       {
         icon: 'warning',
+        input: 'text',
         buttons: {
           cancel: 'No',
           catch: {
@@ -107,8 +114,8 @@ const Index = () => {
 
   async function patchSchedule(obj) {
     setLoading(true);
-    // const data = { status: obj.id, comments: params.comments };
-    // await patchApi("endpoint", data);
+    const values = { status: status.Canceled };
+    await patchApi('https://atel-back-stg.herokuapp.com/session', values, obj.id);
     setLoading(false);
     await showAlert('Sesión eliminada', `La sesión: ${obj.date} ha sido dada de baja`, 'success');
     history.push(`/home`);
@@ -165,7 +172,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleCloseDetails} />}
+              {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleCloseDetails} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
               {table.show && <Table data={table} />}
             </form>
           </div>

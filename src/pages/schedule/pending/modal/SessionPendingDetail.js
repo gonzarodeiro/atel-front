@@ -9,26 +9,32 @@ import { registerLocale } from 'react-datepicker';
 import datepicker from '../../../../utils/commons/datepicker';
 import Loading from '../../../../components/Loading';
 import showAlert from '../../../../utils/commons/showAlert';
+import patchApi from '../../../../utils/services/patch/patchApi';
+import addDays from '../../../../utils/commons/addDays';
 registerLocale('es', datepicker);
 
-const SessionPendingDetail = ({ showModal, handleClose }) => {
+const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, sessionDate }) => {
   const [session, setSession] = useState({ date: new Date() });
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
-    setSession({ userName: 'LucasGomez', date: new Date() });
+    // setSession({ date: addDays('22-07-2021 21:00') });
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    // const filters = createFilters();
-    // await postResponseApi('http://localhost:3005/session', filters);
+    const values = { start_datetime: session.date };
+    await patchApi('https://atel-back-stg.herokuapp.com/session', values, idSession);
     setLoading(false);
-    await showAlert('Sesión modificado', `Se ha modificado la sesión con ${session.userName}`, 'success');
+    await showAlert('Sesión modificada', `Se ha modificado la sesión con ${userName}`, 'success');
     history.push({ pathname: 'home' });
   };
+
+  function handleChange(date) {
+    setSession({ ...session, date: date });
+  }
 
   return (
     <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
@@ -44,7 +50,7 @@ const SessionPendingDetail = ({ showModal, handleClose }) => {
         <div className='row mb-4'>
           <div className='col-md-12 my-1'>
             <label>Fecha y horario</label>
-            <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm aa' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' timeCaption='Hora' />
+            <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm aa' selected={session.date} todayButton='Hoy' onChange={(date) => handleChange(date)} value={session.date} className='form-control' timeCaption='Hora' />
           </div>
         </div>
         <Modal.Footer>
