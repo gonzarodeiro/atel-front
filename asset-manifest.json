@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/atel-front/static/css/main.eddd4c50.chunk.css",
-    "main.js": "/atel-front/static/js/main.b7dd6201.chunk.js",
-    "main.js.map": "/atel-front/static/js/main.b7dd6201.chunk.js.map",
+    "main.css": "/atel-front/static/css/main.187241bf.chunk.css",
+    "main.js": "/atel-front/static/js/main.5579d320.chunk.js",
+    "main.js.map": "/atel-front/static/js/main.5579d320.chunk.js.map",
     "runtime-main.js": "/atel-front/static/js/runtime-main.c3e874b7.js",
     "runtime-main.js.map": "/atel-front/static/js/runtime-main.c3e874b7.js.map",
     "static/css/2.c2774f4f.chunk.css": "/atel-front/static/css/2.c2774f4f.chunk.css",
-    "static/js/2.f6845a4d.chunk.js": "/atel-front/static/js/2.f6845a4d.chunk.js",
-    "static/js/2.f6845a4d.chunk.js.map": "/atel-front/static/js/2.f6845a4d.chunk.js.map",
+    "static/js/2.37661d5b.chunk.js": "/atel-front/static/js/2.37661d5b.chunk.js",
+    "static/js/2.37661d5b.chunk.js.map": "/atel-front/static/js/2.37661d5b.chunk.js.map",
     "index.html": "/atel-front/index.html",
-    "precache-manifest.53c1a64a09a0d7db077559e3c66baed7.js": "/atel-front/precache-manifest.53c1a64a09a0d7db077559e3c66baed7.js",
+    "precache-manifest.cd25ff083b349b278f19a45e3ad27a04.js": "/atel-front/precache-manifest.cd25ff083b349b278f19a45e3ad27a04.js",
     "service-worker.js": "/atel-front/service-worker.js",
     "static/css/2.c2774f4f.chunk.css.map": "/atel-front/static/css/2.c2774f4f.chunk.css.map",
-    "static/css/main.eddd4c50.chunk.css.map": "/atel-front/static/css/main.eddd4c50.chunk.css.map",
-    "static/js/2.f6845a4d.chunk.js.LICENSE.txt": "/atel-front/static/js/2.f6845a4d.chunk.js.LICENSE.txt",
+    "static/css/main.187241bf.chunk.css.map": "/atel-front/static/css/main.187241bf.chunk.css.map",
+    "static/js/2.37661d5b.chunk.js.LICENSE.txt": "/atel-front/static/js/2.37661d5b.chunk.js.LICENSE.txt",
     "static/media/mdb.css": "/atel-front/static/media/arrow_right.8ef6a08c.svg",
     "static/media/banner.png": "/atel-front/static/media/banner.6970c4f6.png",
     "static/media/cat.png": "/atel-front/static/media/cat.cb465994.png",
@@ -39,13 +39,14 @@
     "static/media/voice-limon.mp3": "/atel-front/static/media/voice-limon.5ea03c5b.mp3",
     "static/media/voice-lion.mp3": "/atel-front/static/media/voice-lion.37aa4730.mp3",
     "static/media/voice-manzana.mp3": "/atel-front/static/media/voice-manzana.31d9bad7.mp3",
-    "static/media/voice-uva.mp3": "/atel-front/static/media/voice-uva.5091df0c.mp3"
+    "static/media/voice-uva.mp3": "/atel-front/static/media/voice-uva.5091df0c.mp3",
+    "static/media/wizard_480_1MB.mp4": "/atel-front/static/media/wizard_480_1MB.d744f6c0.mp4"
   },
   "entrypoints": [
     "static/js/runtime-main.c3e874b7.js",
     "static/css/2.c2774f4f.chunk.css",
-    "static/js/2.f6845a4d.chunk.js",
-    "static/css/main.eddd4c50.chunk.css",
-    "static/js/main.b7dd6201.chunk.js"
+    "static/js/2.37661d5b.chunk.js",
+    "static/css/main.187241bf.chunk.css",
+    "static/js/main.5579d320.chunk.js"
   ]
 }
