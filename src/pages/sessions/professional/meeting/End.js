@@ -3,9 +3,35 @@ import { useHistory } from 'react-router-dom';
 import Submit from '../../../../components/html/button/Submit';
 import Dropdownlist from '../../../../components/html/Dropdownlist';
 import { dlEvaluationSession } from '../../../../utils/dropdownlists';
+import showAlert from '../../../../utils/commons/showAlert';
+import status from '../../../../utils/enums/sessionStatus';
+import postResponseApi from '../../../../utils/services/post/postResponseApi';
+import cleanObject from '../../../../utils/commons/cleanObject';
 
-const End = ({ handleChange, session }) => {
+const End = ({ handleChange, session, props }) => {
   let history = useHistory();
+
+  async function handleSubmit() {
+    const filters = createFilters();
+    await postResponseApi('https://atel-back-stg.herokuapp.com/session/finish', filters);
+    await showAlert('Sesión Finalizada', `Se ha finalizado la sesión con ${props.location.state.userName} `, 'success');
+    history.push(`/home`);
+  }
+
+  function createFilters() {
+    const values = {
+      id_session: props.location.state.sessionId,
+      generalComments: session.generalComments,
+      numericalComments: session.numericalComments,
+      alphabeticalComments: session.alphabeticalComments,
+      pictogramComments: session.pictogramComments,
+      status: status.Finished,
+      attention: parseInt(session.attention),
+      evaluation: parseInt(session.evaluation)
+    };
+
+    return cleanObject(values);
+  }
 
   return (
     <React.Fragment>
@@ -50,7 +76,7 @@ const End = ({ handleChange, session }) => {
       </div>
       <div className='row align-items-center d-flex flex-column-reverse flex-md-row'>
         <div className='col-md-12 d-flex justify-content-center justify-content-md-end my-2'>
-          <Submit onClick={() => history.push(`/home`)} title='Guardar' />
+          <Submit onClick={handleSubmit} title='Guardar' />
         </div>
       </div>
     </React.Fragment>

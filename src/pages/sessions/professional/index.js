@@ -61,7 +61,7 @@ const ProfessionalSession = (props) => {
               {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} />}
               {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
               {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
-              {meeting.end && <End handleChange={handleChange} session={session} />}
+              {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
         </div>
