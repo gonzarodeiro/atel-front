@@ -10,7 +10,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../../utils/commons/datepicker';
-import showAlert from '../../../utils/commons/showAlert';
 import convertDate from '../../../utils/commons/convertDate';
 import convertDateTime from '../../../utils/commons/convertDateTime';
 import cleanObject from '../../../utils/commons/cleanObject';
@@ -19,6 +18,7 @@ import SessionPendingDetail from './modal/SessionPendingDetail';
 import getParametry from '../../../utils/services/get/getByFilters/index';
 import patchApi from '../../../utils/services/patch/patchApi';
 import status from '../../../utils/enums/sessionStatus';
+import showAlert from '../../../utils/commons/showAlert';
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -41,11 +41,10 @@ const Index = () => {
     setParams({ ...params, [id]: value });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  function handleSubmit() {
     setLoading(true);
     getSchedule();
-  };
+  }
 
   async function getSchedule() {
     const values = getParameters();
@@ -68,7 +67,7 @@ const Index = () => {
 
   function createActions(result) {
     for (let i = 0; i < result.length; i++) {
-      result[i].start_datetime = convertDateTime(new Date(result[i].start_datetime));
+      result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
           <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
@@ -94,7 +93,7 @@ const Index = () => {
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
         <span>Alumno: {obj.full_name}</span>
-        <p>Fecha: {obj.start_datetime}</p>
+        <p>Fecha: {obj.date}</p>
       </div>,
       {
         icon: 'warning',
@@ -128,7 +127,7 @@ const Index = () => {
           { label: '', field: 'actions' },
           { label: 'Nombre', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
-          { label: 'Fecha sesión', field: 'start_datetime' }
+          { label: 'Fecha sesión', field: 'date' }
         ],
         rows: result,
         show: true

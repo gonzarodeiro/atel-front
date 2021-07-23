@@ -29,8 +29,8 @@ const End = ({ handleChange, session, props }) => {
       attention: parseInt(session.attention),
       evaluation: parseInt(session.evaluation)
     };
-
-    return cleanObject(values);
+    cleanObject(values);
+    return values;
   }
 
   return (

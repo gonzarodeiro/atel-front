@@ -8,18 +8,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../../../utils/commons/datepicker';
 import Loading from '../../../../components/Loading';
-import showAlert from '../../../../utils/commons/showAlert';
 import patchApi from '../../../../utils/services/patch/patchApi';
 import addDays from '../../../../utils/commons/addDays';
+import showAlert from '../../../../utils/commons/showAlert';
+
 registerLocale('es', datepicker);
 
 const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, sessionDate }) => {
-  const [session, setSession] = useState({ date: new Date() });
+  const [session, setSession] = useState({ date: '' });
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
-    // setSession({ date: addDays('22-07-2021 21:00') });
+    setSession({ date: addDays(sessionDate) });
   }, []);
 
   const handleSubmit = async (event) => {
