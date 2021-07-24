@@ -6,13 +6,14 @@ import Loading from '../../components/Loading';
 import showAlert from '../../utils/commons/showAlert';
 import Cancel from '../../components/html/button/Cancel';
 import Submit from '../../components/html/button/Submit';
-import { dlStudents } from '../../utils/dropdownlists/index';
+import { dlStudents, dlSessionType } from '../../utils/dropdownlists/index';
 import postResponseApi from '../../utils/services/post/postResponseApi';
 import status from '../../utils/enums/sessionStatus';
 import convertDate from '../../utils/commons/convertDate';
+import Dropdownlist from '../../components/html/Dropdownlist';
 
 const Index = () => {
-  const [session, setSession] = useState({ userName: '' });
+  const [session, setSession] = useState({ type: '', userName: '', zoom: '', password: '' });
   const [student, setStudent] = useState({ id: '', name: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
@@ -40,11 +41,18 @@ const Index = () => {
     }
 
     function validateFields() {
-      if (!session.userName) {
+      if (!session.type || !session.userName) {
         setErrors({ show: true, message: 'Complete los campos obligatorios' });
         setShowValidation(true);
         return;
       }
+
+      if (session.type === '1' || !session.zoom) {
+        setErrors({ show: true, message: 'Debe ingresar el link de zoom' });
+        setShowValidation(true);
+        return;
+      }
+
       return true;
     }
 
@@ -54,7 +62,10 @@ const Index = () => {
         id_professional: 1, // levantar de sessionStorage
         status: status.Created,
         start_datetime: new Date(),
-        room_name: student.name
+        room_name: student.name,
+        type: parseInt(session.type),
+        zoom: session.zoom,
+        password: session.password
       };
     }
 
@@ -85,18 +96,37 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='col-md-12 my-1'>
-                  <Form.Group>
-                    <Form.Label> Nombre del alumno </Form.Label>
-                    <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
-                      {dlStudents.map((file) => (
-                        <option key={file.id} value={`${file.id}-${file.code}`}>
-                          {file.description}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Form.Group>
+                  <Dropdownlist title='Tipo de sesión' id='type' handleChange={handleChange} value={session.type} dropdownlist={dlSessionType} disabledValue={false} className={'form-control ' + (!session.type && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
+              {session.type && (
+                <div className='row'>
+                  <div className={session.type === '1' ? 'col-md-4 my-1' : 'col-md-12 my-1'}>
+                    <Form.Group>
+                      <Form.Label> Nombre del alumno </Form.Label>
+                      <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
+                        {dlStudents.map((file) => (
+                          <option key={file.id} value={`${file.id}-${file.code}`}>
+                            {file.description}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                  </div>
+                  {session.type === '1' && (
+                    <>
+                      <div className='col-md-4 my-1'>
+                        <label>Link de zoom</label>
+                        <input id='zoom' onChange={handleChange} value={session.zoom} type='text' className={'form-control ' + (!session.Zoom && showValidation ? 'borderRed' : '')} />
+                      </div>
+                      <div className='col-md-4 my-1'>
+                        <label>Contraseña</label>
+                        <input id='password' onChange={handleChange} value={session.password} type='text' className='form-control' />
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
               <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
                 <div className='col-md-6'>{errors.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>
                 <div className='col-md-6 d-flex justify-content-center justify-content-md-end my-2'>

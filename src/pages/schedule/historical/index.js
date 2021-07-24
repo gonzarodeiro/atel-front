@@ -92,6 +92,7 @@ const Index = () => {
           { label: 'Nombre', field: 'name' },
           { label: 'Dificultad', field: 'difficulty' },
           { label: 'Estado', field: 'status' },
+          { label: 'Tipo', field: 'type' },
           { label: 'Fecha sesión', field: 'date' }
         ],
         rows: result,

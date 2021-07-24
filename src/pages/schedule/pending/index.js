@@ -127,6 +127,7 @@ const Index = () => {
           { label: '', field: 'actions' },
           { label: 'Nombre', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Tipo', field: 'type' },
           { label: 'Fecha sesión', field: 'date' }
         ],
         rows: result,
