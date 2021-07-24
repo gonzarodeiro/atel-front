@@ -6,7 +6,7 @@ const Password = ({ params, handleChange, showValidation, errors, handleSubmit }
     <React.Fragment>
       <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
         <div className='row'>
-          <div className='col-md-12 my-2 mb-3'>
+          <div className='col-md-12 my-1 mb-3'>
             <label>Ingrese la contraseña</label>
             <input id='password' onChange={handleChange} value={params.password} type='text' className={'form-control ' + (!params.password && showValidation ? 'borderRed' : '')} />
           </div>

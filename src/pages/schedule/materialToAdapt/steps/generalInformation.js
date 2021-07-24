@@ -8,7 +8,7 @@ import { registerLocale } from 'react-datepicker';
 import AdaptInformation from '../modal/AdaptInformation';
 registerLocale('es', datepicker);
 
-const GeneralInformation = ({ params, error, table, setParams, handleSubmit, showModal, handleClose }) => {
+const GeneralInformation = ({ params, error, table, setParams, handleSubmit, showModal, handleClose, setShowValidation, setErrorsModal, errorsModal }) => {
   return (
     <React.Fragment>
       <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
@@ -28,7 +28,7 @@ const GeneralInformation = ({ params, error, table, setParams, handleSubmit, sho
             <Search onClick={handleSubmit} />
           </div>
         </div>
-        {showModal.adaptInformation && <AdaptInformation showModal={showModal} handleClose={handleClose} />}
+        {showModal.adaptInformation && <AdaptInformation showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} />}
         {table.show && <Table data={table} />}
       </form>
     </React.Fragment>

@@ -14,6 +14,7 @@ const Index = () => {
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [errorsPassword, setErrorsPassword] = useState({ show: false, message: '' });
+  const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [showModal, setShowModal] = useState({ adaptInformation: false });
   const [loading, setLoading] = useState(false);
@@ -129,7 +130,7 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {steps.password && <Password params={params} handleChange={handleChange} showValidation={showValidation} errors={errorsPassword} handleSubmit={handleSubmitPassword} />}
-              {steps.generalInformation && <GeneralInformation params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} />}
+              {steps.generalInformation && <GeneralInformation params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} />}
             </form>
           </div>
         </div>
