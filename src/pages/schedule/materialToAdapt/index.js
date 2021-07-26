@@ -7,16 +7,20 @@ import getParametry from '../../../utils/services/get/getByFilters/index';
 import status from '../../../utils/enums/sessionStatus';
 import Password from './steps/password';
 import GeneralInformation from './steps/generalInformation';
+import swal from '@sweetalert/with-react';
+import showAlert from '../../../utils/commons/showAlert';
 
 const Index = () => {
   const [params, setParams] = useState({ password: '', dateFrom: new Date(), dateTo: new Date() });
   const [steps, setSteps] = useState({ password: true, generalInformation: false });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [tableDelete, setTableDelete] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [errorsPassword, setErrorsPassword] = useState({ show: false, message: '' });
+  const [errorDelete, setErrorsDelete] = useState({ show: false, message: '' });
   const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
   const [showValidation, setShowValidation] = useState(false);
-  const [showModal, setShowModal] = useState({ adaptInformation: false });
+  const [showModal, setShowModal] = useState({ adaptInformation: false, deleteInformation: false });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
@@ -30,6 +34,7 @@ const Index = () => {
       setShowValidation(true);
       return;
     }
+
     // chequear si la contraseña que ingreso es valida
     // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
     if (params.password !== 'Gonza') {
@@ -81,7 +86,8 @@ const Index = () => {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
-          <i onClick={() => handleAdapt(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Adaptar contenido a la sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleAdapt(result[i])} className='fas fa-plus mt-1 mr-2' title='Agregar material a adaptar' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => showDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
       );
     }
@@ -91,8 +97,93 @@ const Index = () => {
     setShowModal({ adaptInformation: true });
   }
 
-  function handleClose() {
-    setShowModal({ adaptInformation: false });
+  function showDelete() {
+    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    const result = [
+      {
+        full_name: 'German',
+        diagnostic: 'Tea',
+        document: 'Material a adaptar 1',
+        date: 'asdad'
+      },
+      {
+        full_name: 'Lucas',
+        diagnostic: 'TDA',
+        document: 'Material a adaptar 2',
+        date: 'asdad'
+      }
+    ];
+    createActionsDelete(result);
+    fillTableDelete(result);
+    setShowModal({ deleteInformation: true });
+  }
+
+  function createActionsDelete(result) {
+    for (let i = 0; i < result.length; i++) {
+      result[i].date = convertDateTime(new Date(result[i].start_datetime));
+      result[i].actions = (
+        <div>
+          <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+        </div>
+      );
+    }
+  }
+
+  function handleDeleteMaterial(obj) {
+    swal(
+      <div>
+        <p className='h4 mt-4 mb-4'>¿Querés eliminar el material a adaptar?</p>
+        <span>Alumno: {obj.full_name}</span>
+        <p>Documento: {obj.document}</p>
+      </div>,
+      {
+        icon: 'warning',
+        input: 'text',
+        buttons: {
+          cancel: 'No',
+          catch: {
+            text: 'Si',
+            value: 'delete'
+          }
+        }
+      }
+    ).then((value) => {
+      if (value === 'delete') patchSchedule(obj);
+    });
+  }
+
+  async function patchSchedule(obj) {
+    setLoading(true);
+    const values = { status: status.Canceled };
+    // await patchApi('https://atel-back-stg.herokuapp.com/session', values, obj.id);
+    setLoading(false);
+    await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
+    handleClose('deleteInformation');
+  }
+
+  function fillTableDelete(result) {
+    if (result.length > 0) {
+      setTableDelete({
+        columns: [
+          { label: '', field: 'actions' },
+          { label: 'Nombre', field: 'full_name' },
+          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Material', field: 'document' },
+          { label: 'Fecha sesión', field: 'date' }
+        ],
+        rows: result,
+        show: true
+      });
+      setErrorsDelete({ show: false });
+    } else {
+      setTableDelete({ show: false });
+      setErrorsDelete({ show: true, message: 'No se ha subido material a adaptar' });
+    }
+    setLoading(false);
+  }
+
+  function handleClose(modal) {
+    setShowModal({ [modal]: false });
   }
 
   function fillTable(result) {
@@ -130,7 +221,7 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {steps.password && <Password params={params} handleChange={handleChange} showValidation={showValidation} errors={errorsPassword} handleSubmit={handleSubmitPassword} />}
-              {steps.generalInformation && <GeneralInformation params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} />}
+              {steps.generalInformation && <GeneralInformation params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
             </form>
           </div>
         </div>

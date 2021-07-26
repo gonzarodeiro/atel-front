@@ -26,7 +26,7 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
 
   function validateFields() {
     if (!params.file) {
-      setErrorsModal({ show: true, message: 'Debe ingresar el archivo a adaptar' });
+      setErrorsModal({ show: true, message: 'Debe ingresar el material a adaptar' });
       setShowValidation(true);
       return;
     }
@@ -39,7 +39,7 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
   }
 
   return (
-    <Modal show={showModal.adaptInformation} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
+    <Modal show={showModal.adaptInformation} onHide={() => handleClose('adaptInformation')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
         <Modal.Title style={{ fontSize: '19px' }}>Material a adaptar</Modal.Title>
       </Modal.Header>
@@ -63,7 +63,7 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
         </div>
         <div className='col-md-6 mb-3'>{errorsModal.show === true && <div className='text-danger mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errorsModal.message}</div>}</div>
         <Modal.Footer>
-          <Cancel onClick={handleClose} title='Cancelar' />
+          <Cancel onClick={() => handleClose('adaptInformation')} title='Cancelar' />
           <Submit onClick={handleSubmit} title='Subir' />
         </Modal.Footer>
       </Modal.Body>
