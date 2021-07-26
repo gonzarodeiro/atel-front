@@ -11,7 +11,6 @@ import Pictogram from './tools/Pictogram';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../utils/socketManager';
 import ActivityWizard from '../../../components/ActivityWizard';
 import wizardVideo from '../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
-import { useHistory } from 'react-router-dom';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -25,7 +24,6 @@ const StudentSession = (props) => {
   const [session, setSession] = useState({ generalComments: '' });
   const [wizardVisible, showWizard] = useState(false);
   let { roomId } = useParams();
-  let history = useHistory();
 
   useEffect(() => {
     connect(roomId);
@@ -67,9 +65,8 @@ const StudentSession = (props) => {
     const filters = { roomName: fields[0], sessionId: fields[1] };
     let result = await getResponseByFilters('https://atel-back-stg.herokuapp.com/session/ask-to-join', filters);
     if (result.data.status !== status.Created) {
-      // await showAlert('Error en la sesión', result.data.message, 'error');
+      await showAlert('Error en la sesión', result.data.message, 'error');
       setShowJitsi(false);
-      history.push({ pathname: 'home' });
     } else setShowJitsi(true);
   }
 

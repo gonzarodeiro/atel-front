@@ -40,11 +40,10 @@ const End = ({ handleChange, session, props }) => {
       </div>
       <div data-test='container' className='container-fluid section mb-3 border p-2'>
         <div className='text-center' style={{ marginTop: '2px', marginBottom: '-5px' }}>
-          <label> Razón social: </label>
-          <label className='ml-2 mr-2'> - </label>Moneda:
-          <label className='ml-2 mr-2'> - </label> Capital:
-          <label className='ml-2 mr-2'> - </label> Intereses:
-          <label className='ml-2 mr-2'> - </label> Saldo:
+          <label>Duración: </label> 15 minutos
+          <label className='ml-2 mr-2'> - </label>H. alfabética: 8 minutos
+          <label className='ml-2 mr-2'> - </label>H. numérica: 3 minutos
+          <label className='ml-2 mr-2'> - </label>Pictogramas: 4 minutos
         </div>
       </div>
       <div className='row'>
