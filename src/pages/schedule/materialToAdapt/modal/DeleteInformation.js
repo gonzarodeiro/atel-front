@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import Cancel from '../../../../components/html/button/Cancel';
 import Table from '../../../../components/html/Table';
 
-const AdaptInformation = ({ showModal, handleClose, tableDelete, errorDelete }) => {
+const DeleteInformation = ({ showModal, handleClose, tableDelete, errorDelete }) => {
   return (
     <Modal show={showModal.deleteInformation} onHide={() => handleClose('deleteInformation')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
@@ -20,4 +20,4 @@ const AdaptInformation = ({ showModal, handleClose, tableDelete, errorDelete }) 
   );
 };
 
-export default AdaptInformation;
+export default DeleteInformation;

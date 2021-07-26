@@ -11,7 +11,6 @@ import Loading from '../../../../components/Loading';
 import patchApi from '../../../../utils/services/patch/patchApi';
 import addDays from '../../../../utils/commons/addDays';
 import showAlert from '../../../../utils/commons/showAlert';
-
 registerLocale('es', datepicker);
 
 const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, sessionDate }) => {
@@ -38,7 +37,7 @@ const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, ses
   }
 
   return (
-    <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
+    <Modal show={showModal.details} onHide={() => handleClose('details')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
         <Modal.Title style={{ fontSize: '19px' }}>Detalle de la sesión</Modal.Title>
       </Modal.Header>
@@ -55,7 +54,7 @@ const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, ses
           </div>
         </div>
         <Modal.Footer>
-          <Cancel onClick={handleClose} title='Cancelar' />
+          <Cancel onClick={() => handleClose('details')} title='Cancelar' />
           <Submit onClick={handleSubmit} title='Modificar' />
         </Modal.Footer>
       </Modal.Body>

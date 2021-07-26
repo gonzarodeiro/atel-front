@@ -19,13 +19,16 @@ import getParametry from '../../../utils/services/get/getByFilters/index';
 import patchApi from '../../../utils/services/patch/patchApi';
 import status from '../../../utils/enums/sessionStatus';
 import showAlert from '../../../utils/commons/showAlert';
+import MaterialToAdapt from './modal/MaterialToAdapt';
 registerLocale('es', datepicker);
 
 const Index = () => {
   const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', diagnostic: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [tableMaterial, setTableMaterial] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
-  const [showModal, setShowModal] = useState({ details: false });
+  const [errorMaterial, setErrorsMaterial] = useState({ show: false, message: '' });
+  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false });
   const [idSession, setIdSession] = useState();
   const [userName, setUserName] = useState();
   const [sessionDate, setSessionDate] = useState();
@@ -70,8 +73,9 @@ const Index = () => {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
-          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: 'rgb(25 106 185)' }} aria-hidden='true'></i>
+          <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-download mt-1 mr-2' title='Material a adaptar' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#ec3143' }} aria-hidden='true'></i>
         </div>
       );
     }
@@ -84,8 +88,65 @@ const Index = () => {
     setSessionDate(obj.start_datetime);
   }
 
-  function handleCloseDetails() {
-    setShowModal({ details: false });
+  function handleMaterialToAdapt() {
+    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    const result = [
+      {
+        full_name: 'German',
+        diagnostic: 'Tea',
+        document: 'Material a adaptar 1',
+        date: 'asdad'
+      },
+      {
+        full_name: 'Lucas',
+        diagnostic: 'TDA',
+        document: 'Material a adaptar 2',
+        date: 'asdad'
+      }
+    ];
+    createActionsMaterial(result);
+    fillTableMaterial(result);
+    setShowModal({ materialToAdapt: true });
+  }
+
+  function createActionsMaterial(result) {
+    for (let i = 0; i < result.length; i++) {
+      result[i].date = convertDateTime(new Date(result[i].start_datetime));
+      result[i].actions = (
+        <div>
+          <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+        </div>
+      );
+    }
+  }
+
+  function fillTableMaterial(result) {
+    if (result.length > 0) {
+      setTableMaterial({
+        columns: [
+          { label: '', field: 'actions' },
+          { label: 'Nombre', field: 'full_name' },
+          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Material', field: 'document' },
+          { label: 'Fecha sesión', field: 'date' }
+        ],
+        rows: result,
+        show: true
+      });
+      setErrorsMaterial({ show: false });
+    } else {
+      setTableMaterial({ show: false });
+      setErrorsMaterial({ show: true, message: 'No se ha subido material a adaptar' });
+    }
+    setLoading(false);
+  }
+
+  function handleDownloadMaterial(obj) {
+    // Descargar PDF
+  }
+
+  function handleClose(modal) {
+    setShowModal({ [modal]: false });
   }
 
   function handleDelete(obj) {
@@ -172,7 +233,8 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleCloseDetails} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
+              {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleClose} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
+              {showModal.materialToAdapt && <MaterialToAdapt showModal={showModal} handleClose={handleClose} tableToAdapt={tableMaterial} errorAdapt={errorMaterial} />}
               {table.show && <Table data={table} />}
             </form>
           </div>

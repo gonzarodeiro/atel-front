@@ -51,7 +51,7 @@ const Index = () => {
         setShowValidation(true);
         return;
       }
-      if (session.type === '1' || !session.zoom) {
+      if (session.type === '1' && !session.zoom) {
         setErrors({ show: true, message: 'Debe ingresar el link de zoom' });
         setShowValidation(true);
         return;
