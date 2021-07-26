@@ -5,6 +5,7 @@ const VIDEO_WIDTH = 460;
 const VIDEO_HEIGHT = 360;
 const RATIO = VIDEO_HEIGHT / VIDEO_WIDTH;
 const CUSTOM_SIZE = 500;
+
 const ActivityWizard = ({ src, steps, title, message, closeButtonText, onCloseClick }) => {
   return (
     <div className='w-container' onClick={onCloseClick}>

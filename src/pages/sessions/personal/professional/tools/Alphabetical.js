@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../components/Jitsi';
-import Activity from '../../../../components/Activity/Alphabetical/professionalLogic';
+import Jitsi from '../../../../../components/Jitsi';
+import Activity from '../../../../../components/Activity/Alphabetical/professionalLogic';
 import finishSession from '../finishSession';
-import tools from '../../../../utils/enums/tools';
-import Notification from '../../../../components/html/Notification';
-import { clientEvents, sendMessage } from '../../../../utils/socketManager';
+import tools from '../../../../../utils/enums/tools';
+import Notification from '../../../../../components/html/Notification';
+import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard }) => {
   useEffect(() => {

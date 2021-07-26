@@ -42,18 +42,21 @@ const Index = () => {
         name: 'German Perez',
         difficulty: 'TEA',
         status: 'Finalizada',
+        type: 'Personal',
         date: '01/06/2021 14:00 hs'
       },
       {
         name: 'Augusto Gomez',
         difficulty: 'Dislexia',
         status: 'Finalizada',
+        type: 'Inclusión',
         date: '05/06/2021 16:00 hs'
       },
       {
         name: 'Lucas Gomez',
         difficulty: 'TDA',
         status: 'Cancelada',
+        type: 'Inclusión',
         date: '12/06/2021 16:00 hs'
       }
     ];

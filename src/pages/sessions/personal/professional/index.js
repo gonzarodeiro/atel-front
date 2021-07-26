@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Layout from '../../../utils/layout/index';
+import Layout from '../../../../utils/layout/index';
 import { useHistory } from 'react-router-dom';
 import Begin from './meeting/Begin';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { clientEvents, connect, registerEvent, sendMessage } from '../../../utils/socketManager';
-import ActivityWizard from '../../../components/ActivityWizard';
-import wizardVideo from '../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
+import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
+import ActivityWizard from '../../../../components/ActivityWizard';
+import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 
 const wizardTitle = 'Esperando al alumno';
 const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';

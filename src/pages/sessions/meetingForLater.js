@@ -15,6 +15,7 @@ import status from '../../utils/enums/sessionStatus';
 import postResponseApi from '../../utils/services/post/postResponseApi';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import Dropdownlist from '../../components/html/Dropdownlist';
+import cleanObject from '../../utils/commons/cleanObject';
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -60,7 +61,7 @@ const Index = () => {
     }
 
     function createFilters() {
-      return {
+      const values = {
         id_student: parseInt(student.id),
         id_professional: 1, // levantar de sessionStorage
         status: status.Pending,
@@ -70,6 +71,8 @@ const Index = () => {
         zoom: session.zoom,
         password: session.password
       };
+      cleanObject(values);
+      return values;
     }
 
     async function showMessage() {

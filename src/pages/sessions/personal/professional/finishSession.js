@@ -1,6 +1,6 @@
 import React from 'react';
 import swal from '@sweetalert/with-react';
-import { clientEvents, sendMessage } from '../../../utils/socketManager';
+import { clientEvents, sendMessage } from '../../../../utils/socketManager';
 
 export default function finishSession(redirectEnd) {
   swal(

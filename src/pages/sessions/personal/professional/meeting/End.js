@@ -1,12 +1,12 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import Submit from '../../../../components/html/button/Submit';
-import Dropdownlist from '../../../../components/html/Dropdownlist';
-import { dlEvaluationSession } from '../../../../utils/dropdownlists';
-import showAlert from '../../../../utils/commons/showAlert';
-import status from '../../../../utils/enums/sessionStatus';
-import postResponseApi from '../../../../utils/services/post/postResponseApi';
-import cleanObject from '../../../../utils/commons/cleanObject';
+import Submit from '../../../../../components/html/button/Submit';
+import Dropdownlist from '../../../../../components/html/Dropdownlist';
+import { dlEvaluationSession } from '../../../../../utils/dropdownlists';
+import showAlert from '../../../../../utils/commons/showAlert';
+import status from '../../../../../utils/enums/sessionStatus';
+import postResponseApi from '../../../../../utils/services/post/postResponseApi';
+import cleanObject from '../../../../../utils/commons/cleanObject';
 
 const End = ({ handleChange, session, props }) => {
   let history = useHistory();
@@ -36,7 +36,7 @@ const End = ({ handleChange, session, props }) => {
   return (
     <React.Fragment>
       <div className='mt-3' data-test='col'>
-        <label className='mb-2'>Datos de la operación</label>
+        <label className='mb-2'>Datos de la sesión</label>
       </div>
       <div data-test='container' className='container-fluid section mb-3 border p-2'>
         <div className='text-center' style={{ marginTop: '2px', marginBottom: '-5px' }}>

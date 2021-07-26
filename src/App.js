@@ -4,8 +4,10 @@ import Header from './components/header/index';
 import Home from './pages/home/index';
 import User from './pages/user/index';
 import Login from './pages/login/index';
-import ProfessionalSession from './pages/sessions/professional/index';
-import StudentSession from './pages/sessions/student/index';
+import ProfessionalSession from './pages/sessions/personal/professional/index';
+import StudentSession from './pages/sessions/personal/student/index';
+import ZoomProfessionalSession from './pages/sessions/zoom/professional/index';
+import ZoomStudentSession from './pages/sessions/zoom/student/index';
 import Students from './pages/students/operation/index';
 import NewStudent from './pages/students/request/index';
 import MeetingInstanly from './pages/sessions/meetingInstanly';
@@ -67,12 +69,14 @@ class App extends Component {
             debounce={250}
           />
         )}
-        <Route path='/(home|user|professionalSession|students|historical-session|pending-session|new-student|meeting-instantly|meeting-for-later|share-session)/' component={Header} />
+        <Route path='/(home|user|professionalSession|students|historical-session|pending-session|new-student|meeting-instantly|meeting-for-later|share-session|zoom-session)/' component={Header} />
         <Switch>
           <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
           <Route exact path='/home' component={Home} />
           <Route exact path='/professionalSession' component={ProfessionalSession} />
           <Route exact path='/studentSession/:roomId' component={StudentSession} />
+          <Route exact path='/zoom-session' component={ZoomProfessionalSession} />
+          <Route exact path='/student-zoom-session/:roomId' component={ZoomStudentSession} />
           <Route exact path='/user' component={User} />
           <Route exact path='/students' component={Students} />
           <Route exact path='/new-student' component={NewStudent} />

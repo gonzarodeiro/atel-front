@@ -11,6 +11,7 @@ import postResponseApi from '../../utils/services/post/postResponseApi';
 import status from '../../utils/enums/sessionStatus';
 import convertDate from '../../utils/commons/convertDate';
 import Dropdownlist from '../../components/html/Dropdownlist';
+import cleanObject from '../../utils/commons/cleanObject';
 
 const Index = () => {
   const [session, setSession] = useState({ type: '', userName: '', zoom: '', password: '' });
@@ -57,7 +58,7 @@ const Index = () => {
     }
 
     function createFilters() {
-      return {
+      const values = {
         id_student: parseInt(student.id),
         id_professional: 1, // levantar de sessionStorage
         status: status.Created,
@@ -67,16 +68,25 @@ const Index = () => {
         zoom: session.zoom,
         password: session.password
       };
+      cleanObject(values);
+      return values;
     }
 
     async function showMessage(response) {
       setLoading(false);
       await showAlert('Sesión generada', `Se ha generado la sesión con ${student.name} `, 'success');
       const date = convertDate(new Date());
-      history.push({
-        pathname: 'professionalSession',
-        state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session }
-      });
+      if (session.type === '1') {
+        history.push({
+          pathname: 'zoom-session',
+          state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session }
+        });
+      } else {
+        history.push({
+          pathname: 'professionalSession',
+          state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session }
+        });
+      }
     }
   };
 

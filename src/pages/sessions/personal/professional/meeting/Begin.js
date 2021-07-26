@@ -1,10 +1,11 @@
 import React from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../components/Jitsi';
-import Notification from '../../../../components/html/Notification';
+import Jitsi from '../../../../../components/Jitsi';
+import Notification from '../../../../../components/html/Notification';
+import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
+import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
-import { clientEvents, sendMessage } from '../../../../utils/socketManager';
-import tools from '../../../../utils/enums/tools';
+
 const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard }) => {
   function getMessageByTool(tool) {
     let mapToolToEvent = {
