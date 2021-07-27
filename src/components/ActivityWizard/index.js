@@ -29,7 +29,7 @@ const ActivityWizard = ({ src, steps, title, message, closeButtonText, onCloseCl
             ))}
           </div>
         )}
-        <button className='w-btn w-btn-close' onClick={onCloseClick}>
+        <button className='w-btn w-btn-close mt-2' onClick={onCloseClick}>
           {closeButtonText ? closeButtonText : 'CERRAR'}
         </button>
       </div>

@@ -63,12 +63,11 @@ const Index = () => {
         id_professional: 1, // levantar de sessionStorage
         status: status.Created,
         start_datetime: new Date(),
-        room_name: student.name,
-        type: parseInt(session.type),
-        zoom: session.zoom,
-        password: session.password
+        room_name: student.name
+        // type: parseInt(session.type),
+        // zoom: session.zoom,
+        // password: session.password
       };
-      cleanObject(values);
       return values;
     }
 
