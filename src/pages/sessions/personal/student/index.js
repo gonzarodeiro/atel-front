@@ -11,7 +11,7 @@ import Pictogram from './tools/Pictogram';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
-
+import Celebration, { celebrationType } from '../../../../components/Celebration';
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
 const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
@@ -104,6 +104,7 @@ const StudentSession = (props) => {
           </div>
         </div>
       </div>
+      <Celebration type={celebrationType.RECEIVER} />
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
     </>
   );

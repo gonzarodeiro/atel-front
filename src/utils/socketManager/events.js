@@ -12,7 +12,9 @@ const clientEvents = {
   playAudio: 'playAudio',
   studentPointer: 'studentPointer',
   showActivityWizard: 'show-activity-wizard',
-  closeActivityWizard: 'close-activity-wizard'
+  closeActivityWizard: 'close-activity-wizard',
+  showCelebration: 'show-celebration',
+  closeCelebration: 'close-celebration'
 };
 
 const serverEvents = {

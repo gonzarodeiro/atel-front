@@ -9,6 +9,7 @@ import Pictogram from './tools/Pictogram';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
+import Celebration, { celebrationType } from '../../../../components/Celebration';
 
 const wizardTitle = 'Esperando al alumno';
 const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';
@@ -70,6 +71,7 @@ const ProfessionalSession = (props) => {
           </div>
         </div>
       </div>
+      <Celebration type={celebrationType.SENDER} />
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
     </Layout>
   );
