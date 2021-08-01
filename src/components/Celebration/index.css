@@ -1,0 +1,82 @@
+.clb-container {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.clb-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: rgb(236, 64, 122);
+  cursor: pointer;
+}
+
+.clb-btn:hover {
+  background-color: rgb(236, 64, 122, 0.8);
+}
+
+.clb-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 400px;
+  left: 80px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 4px 4px 10px rgba(32, 32, 32, 0.3);
+  margin-bottom: 8px;
+  padding: 4px;
+}
+
+.clb-img {
+  height: 120px;
+  margin: 4px;
+}
+
+.clb-img:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.clb-img:active {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.clb-selected-img {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.clb-selected-img-out {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeInFromNone {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: block;
+    opacity: 0;
+  }
+
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
