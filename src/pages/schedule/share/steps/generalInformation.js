@@ -5,17 +5,17 @@ import Cancel from '../../../../components/html/button/Cancel';
 import Submit from '../../../../components/html/button/Submit';
 import { dlStudents } from '../../../../utils/dropdownlists/index';
 
-const GeneralInformation = ({ session, handleSubmit, showValidation, handleChange, errors }) => {
+const GeneralInformation = ({ session, handleSubmit, showValidation, handleChange, errors, handleChangeStudent }) => {
   let history = useHistory();
 
   return (
     <React.Fragment>
       <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
         <div className='row'>
-          <div className='col-md-6 my-1'>
+          <div className='col-md-4 my-1'>
             <Form.Group>
-              <Form.Label> Nombre del alumno </Form.Label>
-              <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
+              <Form.Label> Alumno </Form.Label>
+              <Form.Control id='studentName' onChange={handleChangeStudent} className={'form-control ' + (!session.studentName && showValidation ? 'borderRed' : '')} value={session.studentName} style={{ cursor: 'pointer' }} as='select'>
                 {dlStudents.map((file) => (
                   <option key={file.id} value={`${file.id}-${file.code}`}>
                     {file.description}
@@ -24,7 +24,11 @@ const GeneralInformation = ({ session, handleSubmit, showValidation, handleChang
               </Form.Control>
             </Form.Group>
           </div>
-          <div className='col-md-6 my-1'>
+          <div className='col-md-4 my-1'>
+            <label>Nombre del profesional</label>
+            <input id='name' onChange={handleChange} value={session.name} type='text' className={'form-control ' + (!session.name && showValidation ? 'borderRed' : '')} />
+          </div>
+          <div className='col-md-4 my-1'>
             <label>Contraseña del profesional</label>
             <input id='password' onChange={handleChange} value={session.password} type='text' className={'form-control ' + (!session.password && showValidation ? 'borderRed' : '')} />
           </div>

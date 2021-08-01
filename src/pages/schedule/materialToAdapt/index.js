@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import convertDate from '../../../utils/commons/convertDate';
 import convertDateTime from '../../../utils/commons/convertDateTime';
@@ -22,27 +23,37 @@ const Index = () => {
   const [showValidation, setShowValidation] = useState(false);
   const [showModal, setShowModal] = useState({ adaptInformation: false, deleteInformation: false });
   const [loading, setLoading] = useState(false);
+  let { roomId } = useParams();
 
   const handleChange = (event) => {
     const { id, value } = event.target;
     setParams({ ...params, [id]: value });
   };
 
-  function handleSubmitPassword() {
+  async function handleSubmitPassword() {
     if (!params.password) {
       setErrorsPassword({ show: true, message: 'Debe ingresar la contraseña' });
       setShowValidation(true);
       return;
     }
-
-    // chequear si la contraseña que ingreso es valida
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
-    if (params.password !== 'Gonza') {
+    const values = createFilters();
+    const result = await getParametry('https://atel-back-stg.herokuapp.com/student/shared/verification', values);
+    if (!result) {
       setErrorsPassword({ show: true, message: 'La contraseña ingresada no es válida' });
       setShowValidation(true);
       return;
     }
     setSteps({ password: false, generalInformation: true });
+  }
+
+  function createFilters() {
+    const fields = roomId.split('-');
+    return {
+      idStudent: fields[2],
+      idProfessional: fields[1],
+      name: fields[0],
+      password: params.password
+    };
   }
 
   function handleSubmit() {
@@ -155,7 +166,7 @@ const Index = () => {
   async function patchSchedule(obj) {
     setLoading(true);
     const values = { status: status.Canceled };
-    // await patchApi('https://atel-back-stg.herokuapp.com/session', values, obj.id);
+    // await patchApi('https://atel-back-stg.herokuapp.com/student/shared/verification', values, obj.id);
     setLoading(false);
     await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
     handleClose('deleteInformation');
