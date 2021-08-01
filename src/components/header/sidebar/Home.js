@@ -19,8 +19,8 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Alumnos</span>
       </div> */}
       <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => showItemMenu('schedule', 'home')}>
-        <i className='far fa-calendar-alt' style={{ fontSize: '20px', marginRight: '16px' }}></i>
-        <span style={{ fontWeight: '600', marginTop: '3px' }}>Agenda</span>
+        <i className='far fa-calendar-alt' style={{ fontSize: '20px', marginRight: '23px' }}></i>
+        <span style={{ fontWeight: '600' }}>Agenda</span>
       </div>
       <Footer redirectPage={redirectPage} />
     </div>
