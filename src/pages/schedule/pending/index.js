@@ -10,16 +10,28 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../../utils/commons/datepicker';
-import showAlert from '../../../utils/commons/showAlert';
+import convertDate from '../../../utils/commons/convertDate';
+import convertDateTime from '../../../utils/commons/convertDateTime';
+import cleanObject from '../../../utils/commons/cleanObject';
 import swal from '@sweetalert/with-react';
 import SessionPendingDetail from './modal/SessionPendingDetail';
+import getParametry from '../../../utils/services/get/getByFilters/index';
+import patchApi from '../../../utils/services/patch/patchApi';
+import status from '../../../utils/enums/sessionStatus';
+import showAlert from '../../../utils/commons/showAlert';
+import MaterialToAdapt from './modal/MaterialToAdapt';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', difficulty: '', message: '' });
+  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', diagnostic: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [tableMaterial, setTableMaterial] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
-  const [showModal, setShowModal] = useState({ details: false });
+  const [errorMaterial, setErrorsMaterial] = useState({ show: false, message: '' });
+  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false });
+  const [idSession, setIdSession] = useState();
+  const [userName, setUserName] = useState();
+  const [sessionDate, setSessionDate] = useState();
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
@@ -32,66 +44,121 @@ const Index = () => {
     setParams({ ...params, [id]: value });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  function handleSubmit() {
     setLoading(true);
     getSchedule();
-  };
+  }
 
   async function getSchedule() {
-    const result = [
-      {
-        name: 'German Perez',
-        difficulty: 'Dislexia',
-        status: 'Pendiente',
-        date: '12/07/2021 14:00 hs'
-      },
-      {
-        name: 'Augusto Gomez',
-        difficulty: 'TDA',
-        status: 'Pendiente',
-        date: '16/07/2021 15:00 hs'
-      },
-      {
-        name: 'Lucas Gomez',
-        difficulty: 'TEA',
-        status: 'Pendiente',
-        date: '22/07/2021 16:00 hs'
-      }
-    ];
+    const values = getParameters();
+    cleanObject(values);
+    const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
     createActions(result);
     fillTable(result);
   }
 
+  function getParameters() {
+    return {
+      id_professional: 1, // agarrar id de sessionStorage cuando se registren
+      status: status.Pending,
+      studentName: params.studentName,
+      diagnostic: params.diagnostic,
+      dateTo: convertDate(params.dateTo),
+      dateFrom: convertDate(params.dateFrom)
+    };
+  }
+
   function createActions(result) {
     for (let i = 0; i < result.length; i++) {
+      result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
-          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: 'rgb(25 106 185)' }} aria-hidden='true'></i>
+          <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-download mt-1 mr-2' title='Material a adaptar' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#ec3143' }} aria-hidden='true'></i>
         </div>
       );
     }
   }
 
-  function handleEdit() {
+  function handleEdit(obj) {
     setShowModal({ details: true });
+    setIdSession(obj.id);
+    setUserName(obj.full_name);
+    setSessionDate(obj.start_datetime);
   }
 
-  function handleCloseDetails() {
-    setShowModal({ details: false });
+  function handleMaterialToAdapt() {
+    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    const result = [
+      {
+        full_name: 'German',
+        diagnostic: 'Tea',
+        document: 'Material a adaptar 1',
+        date: 'asdad'
+      },
+      {
+        full_name: 'Lucas',
+        diagnostic: 'TDA',
+        document: 'Material a adaptar 2',
+        date: 'asdad'
+      }
+    ];
+    createActionsMaterial(result);
+    fillTableMaterial(result);
+    setShowModal({ materialToAdapt: true });
+  }
+
+  function createActionsMaterial(result) {
+    for (let i = 0; i < result.length; i++) {
+      result[i].date = convertDateTime(new Date(result[i].start_datetime));
+      result[i].actions = (
+        <div>
+          <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+        </div>
+      );
+    }
+  }
+
+  function fillTableMaterial(result) {
+    if (result.length > 0) {
+      setTableMaterial({
+        columns: [
+          { label: '', field: 'actions' },
+          { label: 'Nombre', field: 'full_name' },
+          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Material', field: 'document' },
+          { label: 'Fecha sesión', field: 'date' }
+        ],
+        rows: result,
+        show: true
+      });
+      setErrorsMaterial({ show: false });
+    } else {
+      setTableMaterial({ show: false });
+      setErrorsMaterial({ show: true, message: 'No se ha subido material a adaptar' });
+    }
+    setLoading(false);
+  }
+
+  function handleDownloadMaterial(obj) {
+    // Descargar PDF
+  }
+
+  function handleClose(modal) {
+    setShowModal({ [modal]: false });
   }
 
   function handleDelete(obj) {
     swal(
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
-        <span>Alumno: {obj.name}</span>
+        <span>Alumno: {obj.full_name}</span>
         <p>Fecha: {obj.date}</p>
-        <input id='message' placeholder='Comentario' onChange={handleChange} value={params.comments} type='text' className='form-control mt-4' />
       </div>,
       {
         icon: 'warning',
+        input: 'text',
         buttons: {
           cancel: 'No',
           catch: {
@@ -107,8 +174,8 @@ const Index = () => {
 
   async function patchSchedule(obj) {
     setLoading(true);
-    // const data = { status: obj.id, comments: params.comments };
-    // await patchApi("endpoint", data);
+    const values = { status: status.Canceled };
+    await patchApi('https://atel-back-stg.herokuapp.com/session', values, obj.id);
     setLoading(false);
     await showAlert('Sesión eliminada', `La sesión: ${obj.date} ha sido dada de baja`, 'success');
     history.push(`/home`);
@@ -119,9 +186,9 @@ const Index = () => {
       setTable({
         columns: [
           { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'name' },
-          { label: 'Dificultad', field: 'difficulty' },
-          { label: 'Estado', field: 'status' },
+          { label: 'Nombre', field: 'full_name' },
+          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Tipo', field: 'type' },
           { label: 'Fecha sesión', field: 'date' }
         ],
         rows: result,
@@ -152,21 +219,22 @@ const Index = () => {
               <div className='row pb-1'>
                 <div className='col-md-3 my-2'>
                   <label>Fecha Desde</label>
-                  <DatePicker id='dateFrom' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateFrom} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateFrom: date })} value={params.dateFrom} className='form-control' locale='es' />
+                  <DatePicker id='dateFrom' minDate={new Date()} showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateFrom} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateFrom: date })} value={params.dateFrom} className='form-control' locale='es' />
                 </div>
                 <div className='col-md-3 my-2'>
                   <label>Fecha Hasta</label>
-                  <DatePicker id='dateTo' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateTo} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateTo: date })} value={params.dateTo} className='form-control' locale='es' />
+                  <DatePicker id='dateTo' minDate={new Date()} showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateTo} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateTo: date })} value={params.dateTo} className='form-control' locale='es' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={params.name} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
+                  <Dropdownlist title='Nombre del alumno' id='studentName' handleChange={handleChange} value={params.studentName} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={params.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className='form-control' />
+                  <Dropdownlist title='Dificultad' id='diagnostic' handleChange={handleChange} value={params.diagnostic} dropdownlist={dlDifficulty} disabledValue={false} className='form-control' />
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleCloseDetails} />}
+              {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleClose} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
+              {showModal.materialToAdapt && <MaterialToAdapt showModal={showModal} handleClose={handleClose} tableToAdapt={tableMaterial} errorAdapt={errorMaterial} />}
               {table.show && <Table data={table} />}
             </form>
           </div>

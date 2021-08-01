@@ -21,8 +21,12 @@ const Index = () => {
   function handleSubmit(event) {
     event.preventDefault();
     setErrors({ message: '', show: false });
-    if (!values.user && !values.password) setErrors({ message: 'Debe ingresar usuario y contraseña', show: true });
-    else loginUser();
+    if (!values.user && !values.password) {
+      setErrors({ message: 'Debe ingresar usuario y contraseña', show: true });
+      setTimeout(() => {
+        setErrors({ message: '', show: false });
+      }, 3000);
+    } else loginUser();
   }
 
   async function loginUser() {

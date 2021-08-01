@@ -1,24 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import Layout from '../../../utils/layout/index';
+import React, { useCallback, useEffect, useState } from 'react';
+import Layout from '../../../../utils/layout/index';
 import { useHistory } from 'react-router-dom';
 import Begin from './meeting/Begin';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Pictogram from './tools/Pictogram';
-import { connect } from '../../../utils/socketManager';
+import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
+import ActivityWizard from '../../../../components/ActivityWizard';
+import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
+import Celebration, { celebrationType } from '../../../../components/Celebration';
+
+const wizardTitle = 'Esperando al alumno';
+const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';
+const wizardButtonText = 'CONTINUAR';
 
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
   const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', pictogramComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
+  const [wizardVisible, showWizard] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
     else if (!props.location.state) history.push(`/home`);
     else connect(props.location.state.roomId + '-' + props.location.state.sessionId);
+
+    registerEvent(() => {
+      showWizard(false);
+    }, clientEvents.closeActivityWizard);
   }, []);
 
   const handleChange = (event) => {
@@ -31,6 +43,11 @@ const ProfessionalSession = (props) => {
     navigator.clipboard.writeText(sharedLink);
     showModal({ notification: true });
   }
+
+  const handleCloseWizardClick = useCallback(() => {
+    sendMessage(clientEvents.closeActivityWizard);
+    showWizard(false);
+  }, []);
 
   return (
     <Layout>
@@ -46,14 +63,16 @@ const ProfessionalSession = (props) => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} />}
-              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} />}
+              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} />}
               {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
               {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
-              {meeting.end && <End handleChange={handleChange} session={session} />}
+              {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
         </div>
       </div>
+      <Celebration type={celebrationType.SENDER} />
+      {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
     </Layout>
   );
 };

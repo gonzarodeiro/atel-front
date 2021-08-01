@@ -1,9 +1,9 @@
 import React from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../components/Jitsi';
+import Jitsi from '../../../../../components/Jitsi';
 import { Stage, Layer, Rect, Circle } from 'react-konva';
 import finishSession from '../finishSession';
-import tools from '../../../../utils/enums/tools';
+import tools from '../../../../../utils/enums/tools';
 
 const Pictogram = ({ props, handleChange, session, showTools, showMeeting }) => {
   function redirectTool(tool) {

@@ -2,9 +2,12 @@ import Konva from 'konva';
 
 let finalyConfites, animConfites;
 
-function startAnimationConfites(stageRef, layerRef) {
-  let confites = generateConfites(100);
-  let confitesTemp = stageRef.current.find('#circle');
+function startAnimationConfites(stage, layer) {
+  if (!stage || !stage) {
+    return;
+  }
+  let confites = generateConfites();
+  let confitesTemp = stage.find('#circle');
   finalyConfites = confitesTemp.map((element, index) => ({
     circle: element,
     ...confites[index]
@@ -17,8 +20,8 @@ function startAnimationConfites(stageRef, layerRef) {
   });
   animConfites = new Konva.Animation(function (frame) {
     updateConfites(frame);
-  }, layerRef.current);
-  animConfites.start();
+  }, layer);
+  return animConfites.start();
 }
 
 function updateConfites(frame) {
@@ -29,10 +32,18 @@ function updateConfites(frame) {
     x = element.amplitude * Math.sin(frame.time / element.period) + element.centerX;
     element.circle.position({ x: x, y: y });
   });
-  if (frame.time > 6000) animConfites.stop();
+  if (frame.time > 6000) {
+    // Freno la animación
+    animConfites.stop();
+    // Limpio los elementos
+    finalyConfites.forEach((element) => {
+      element.circle.destroy();
+    });
+  }
 }
 
-function generateConfites(num) {
+function generateConfites() {
+  const num = 100;
   const radius = 15,
     colours = ['#fde132', '#009bde', '#ff6b00'],
     width = 679,
@@ -65,18 +76,4 @@ function generateConfites(num) {
   return confites;
 }
 
-function getRandomItems(elements) {
-  const COUNT = 5;
-  const randomWords = randomizeArray(elements);
-  return randomWords.slice(0, COUNT);
-}
-
-function randomizeArray(array) {
-  if (Array.isArray(array)) {
-    const items = [...array];
-    items.sort(() => (Math.random() > 0.5 ? 1 : -1));
-    return items;
-  }
-}
-
-export { startAnimationConfites, generateConfites, getRandomItems };
+export { startAnimationConfites, generateConfites };

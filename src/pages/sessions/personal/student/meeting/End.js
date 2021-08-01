@@ -1,5 +1,5 @@
 import React from 'react';
-import Submit from '../../../../components/html/button/Submit';
+import Submit from '../../../../../components/html/button/Submit';
 import Body from './Body';
 import { useHistory } from 'react-router-dom';
 

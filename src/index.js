@@ -15,7 +15,7 @@ import 'typeface-open-sans';
 
 WebFont.load({
   google: {
-    families: ['Open Sans', 'Roboto']
+    families: ['Open Sans', 'Roboto', 'Poppins']
   }
 });
 

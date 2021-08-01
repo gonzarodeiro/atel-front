@@ -1,10 +1,11 @@
 import React from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../components/Jitsi';
-import Notification from '../../../../components/html/Notification';
+import Jitsi from '../../../../../components/Jitsi';
+import Notification from '../../../../../components/html/Notification';
+import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
+import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
-import { clientEvents, sendMessage } from '../../../../utils/socketManager';
-import tools from '../../../../utils/enums/tools';
+
 const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard }) => {
   function getMessageByTool(tool) {
     let mapToolToEvent = {
@@ -28,7 +29,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
   return (
     <React.Fragment>
       <div className='row'>
-        <div className='pb-3 mt-2 col-md-8'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='450px' />}</div>
+        <div className='pb-3 mt-2 col-md-8'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='460px' />}</div>
         <div className='col-md-4' style={{ marginTop: '4.5px' }}>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>

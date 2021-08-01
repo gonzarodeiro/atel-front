@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Circle, Shape } from 'react-konva';
-import { startAnimationConfites, generateConfites } from './commons/confites';
+import { Stage, Layer, Image as KonvaImage, Text, Group, Arrow, Shape } from 'react-konva';
 import banner from './images/others/banner.png';
 import correctBanner from './images/others/correctBanner.png';
 import { registerEvent, clientEvents } from '../../../utils/socketManager';
 import { imageFactory, oposedColor, playAudio } from './commons/index';
+import Confites from '../../Confites';
 
 const Alphabetical = () => {
   const defaultColor = '#DE8971';
@@ -22,7 +22,6 @@ const Alphabetical = () => {
     arrowRef = useRef(null),
     audioRef = useRef(null);
 
-  const confites = generateConfites(100, divRef);
   const [itemGroupLeft, setItemGroupLeft] = useState([]);
   const [itemGroupRight, setItemGroupRight] = useState([]);
   const [color, setColor] = useState(defaultColor);
@@ -63,7 +62,7 @@ const Alphabetical = () => {
 
   function registerEvents() {
     registerEvent((obj) => {
-      //setShowConfites(false);
+      // setShowConfites(false);
       setArrowEnable(true);
       setArrowPoints(obj.coords);
     }, clientEvents.onLeftItemClick);
@@ -73,9 +72,8 @@ const Alphabetical = () => {
     }, clientEvents.onMouseMove);
 
     registerEvent((obj) => {
-      //setShowConfites(true);
+      // setShowConfites(true);
       setItemGroupRight(obj.itemGroupRight);
-      startAnimationConfites(stageRef, layerRef);
       playAudio(obj.voice, setPlaying, audioRef);
     }, clientEvents.targetMatch);
 
@@ -105,9 +103,9 @@ const Alphabetical = () => {
                 <Text id={'text'} text={element.name} height={element.height} width={BANNER_SIZE} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
               </Group>
             ))}
-          <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length || arrowEnable} />
+          <Arrow ref={arrowRef} points={arrowPoints} fill={oposedColor(color)} stroke={oposedColor(color)} strokeWidth={8} lineJoin='round' lineCap='round' visible={arrowPoints.length > 0 || arrowEnable} />
         </Layer>
-        {showConfites && <Layer>{confites && confites.map((element) => <Circle id={'circle'} x={element.confite.x} y={element.confite.y} radius={element.confite.radius} fill={element.confite.fill} />)}</Layer>}
+        {showConfites && <Confites stageRef={stageRef} />}
         <Layer>
           <Shape
             sceneFunc={(context, shape) => {

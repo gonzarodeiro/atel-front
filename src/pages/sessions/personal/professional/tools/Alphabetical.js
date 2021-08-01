@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../components/Jitsi';
-import Activity from '../../../../components/Activity/Alphabetical/professionalLogic';
+import Jitsi from '../../../../../components/Jitsi';
+import Activity from '../../../../../components/Activity/Alphabetical/professionalLogic';
 import finishSession from '../finishSession';
-import tools from '../../../../utils/enums/tools';
-import Notification from '../../../../components/html/Notification';
-import { clientEvents, sendMessage } from '../../../../utils/socketManager';
+import tools from '../../../../../utils/enums/tools';
+import Notification from '../../../../../components/html/Notification';
+import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 
-const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal }) => {
+const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard }) => {
   useEffect(() => {
     showModal({ notification: false });
+    showWizard(true);
   }, []);
 
   function redirectTool(tool) {
@@ -23,6 +24,12 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
 
   function restart() {
     sendMessage(clientEvents.resetActivity);
+  }
+
+  function beginSession() {
+    sendMessage(clientEvents.beginSession);
+    showTools({ alphabetical: false });
+    showMeeting({ begin: true });
   }
 
   return (
@@ -64,14 +71,21 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
           </div>
           <div data-test='col'>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
-              Fin de la sesión
+              Información de la sesión
             </label>
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
-            <div className='col-md-12 mb-1'>
-              <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
-                <span>Finalizar</span>
-              </MDBBtn>
+            <div className='row'>
+              <div className='col-md-6 mb-1'>
+                <MDBBtn onClick={beginSession} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
+                  <span>Comienzo</span>
+                </MDBBtn>
+              </div>
+              <div className='col-md-6 mb-1'>
+                <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
+                  <span>Finalizar</span>
+                </MDBBtn>
+              </div>
             </div>
           </div>
         </div>

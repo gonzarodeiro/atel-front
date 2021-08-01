@@ -18,10 +18,10 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
         <i className='fas fa-user-friends' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Alumnos</span>
       </div> */}
-      {/* <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => showItemMenu('schedule', 'home')}>
-        <i className='fas fa-list' style={{ fontSize: '20px', marginRight: '16px' }}></i>
-        <span style={{ fontWeight: '600', marginTop: '3px' }}>Agenda</span>
-      </div> */}
+      <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => showItemMenu('schedule', 'home')}>
+        <i className='far fa-calendar-alt' style={{ fontSize: '20px', marginRight: '23px' }}></i>
+        <span style={{ fontWeight: '600' }}>Agenda</span>
+      </div>
       <Footer redirectPage={redirectPage} />
     </div>
   );
