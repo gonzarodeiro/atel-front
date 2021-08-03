@@ -59,7 +59,6 @@ const Index = () => {
   }
 
   function createFilters() {
-    console.log(student);
     return {
       idStudent: parseInt(student.id),
       idProfessional: 1, // levantar de sessionStorage

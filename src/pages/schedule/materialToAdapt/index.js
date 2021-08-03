@@ -37,8 +37,8 @@ const Index = () => {
       return;
     }
     const values = createFilters();
-    const result = await getParametry('https://atel-back-stg.herokuapp.com/student/shared/verification', values);
-    if (!result) {
+    const response = await getParametry('https://atel-back-stg.herokuapp.com/student/shared/verification', values);
+    if (!response.result) {
       setErrorsPassword({ show: true, message: 'La contraseña ingresada no es válida' });
       setShowValidation(true);
       return;
@@ -64,29 +64,17 @@ const Index = () => {
   async function getSchedule() {
     const values = getParameters();
     cleanObject(values);
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
-    const result = [
-      {
-        full_name: 'German',
-        diagnostic: 'Tea',
-        date: 'asdad'
-      },
-      {
-        full_name: 'Lucas',
-        diagnostic: 'TDA',
-        date: 'asdad'
-      }
-    ];
+    const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
     createActions(result);
     fillTable(result);
   }
 
   function getParameters() {
+    const fields = roomId.split('-');
     return {
-      id_professional: 1, // agarrar id de sessionStorage cuando se registren
+      id_professional: fields[1],
       status: status.Pending,
-      studentName: params.studentName,
-      diagnostic: params.diagnostic,
+      studentName: fields[2],
       dateTo: convertDate(params.dateTo),
       dateFrom: convertDate(params.dateFrom)
     };
