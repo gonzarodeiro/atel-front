@@ -71,7 +71,6 @@ const Index = () => {
         zoom: session.zoom,
         password: session.password
       };
-      cleanObject(values);
       return values;
     }
 

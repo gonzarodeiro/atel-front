@@ -74,7 +74,7 @@ const Index = () => {
     return {
       id_professional: fields[1],
       status: status.Pending,
-      studentName: fields[2],
+      studentId: fields[2],
       dateTo: convertDate(params.dateTo),
       dateFrom: convertDate(params.dateFrom)
     };
