@@ -1,11 +1,11 @@
 .clb-container {
   position: fixed;
-  left: 20px;
+  right: 28px;
   bottom: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 
 .clb-btn {
@@ -23,7 +23,7 @@
   background-color: rgb(236, 64, 122, 0.8);
 }
 
-.clb-menu {
+.clb-list {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -58,25 +58,4 @@
   top: 40px;
   right: 40px;
   animation: fadeIn 0.5s ease-out;
-}
-
-.clb-selected-img-out {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeInFromNone {
-  0% {
-    display: none;
-    opacity: 0;
-  }
-
-  1% {
-    display: block;
-    opacity: 0;
-  }
-
-  100% {
-    display: block;
-    opacity: 1;
-  }
 }
