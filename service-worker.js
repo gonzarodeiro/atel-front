@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/atel-front/precache-manifest.4851254ac5ec5628938bba7e3a4d1131.js"
+  "/atel-front/precache-manifest.1c65826e611f14ce9577c2de044da781.js"
 );
 
 self.addEventListener('message', (event) => {
