@@ -4,6 +4,6 @@ const dlStudents = [chooseAnOption, { id: 1, code: 'LucasGomez', description: 'L
 const dlStatus = [chooseAnOption, { id: 1, code: 'Finalizada', description: 'Finalizada' }, { id: 2, code: 'Cancelada', description: 'Cancelada' }];
 const dlProfession = [chooseAnOption, { id: 1, code: 'Asistente terapéutico', description: 'Asistente Terapéutico' }, { id: 2, code: 'Asistente social', description: 'Asistente Social' }, { id: 3, code: 'Fonoaudiólogo', description: 'Fonoaudiólogo' }, { id: 4, code: 'Psiquiatra', description: 'Psiquiatra' }, { id: 5, code: 'Pediatra', description: 'Pediatra' }, { id: 6, code: 'Psicólogo', description: 'Psicólogo' }, { id: 7, code: 'Psicopedagogo', description: 'Psicopedagogo' }, { id: 8, code: 'T.O', description: 'T.O' }, { id: 9, code: 'Otra', description: 'Otra' }];
 const dlEvaluationSession = [chooseAnOption, { id: 1, code: 1, description: 'Muy buena' }, { id: 2, code: 2, description: 'Buena' }, { id: 3, code: 3, description: 'Regular' }, { id: 4, code: 4, description: 'Mala' }];
-const dlSessionType = [chooseAnOption, { id: 1, code: 1, description: 'Sesión de inclusión' }, { id: 2, code: 2, description: 'Sesión individual' }];
+const dlSessionType = [chooseAnOption, { id: 1, code: 'Sesión de inclusión', description: 'Sesión de inclusión' }, { id: 2, code: 'Sesión individual', description: 'Sesión individual' }];
 
 export { dlDifficulty, dlSessionType, dlStudents, dlStatus, dlProfession, dlEvaluationSession };

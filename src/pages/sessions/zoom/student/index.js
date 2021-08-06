@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Jitsi from '../../../../components/Jitsi';
+import Begin from './Begin';
 import getResponseByFilters from '../../../../utils/services/get/getByFilters/getResponseByFilters';
 import showAlert from '../../../../utils/commons/showAlert';
 import status from '../../../../utils/enums/sessionStatus';
@@ -9,6 +9,7 @@ import { clientEvents, connect, registerEvent } from '../../../../utils/socketMa
 import { BASE_URL } from '../../../../config/environment';
 
 const ZoomStudentSession = () => {
+  const [roomZoom, setRoomZoom] = useState();
   const [student, setStudent] = useState();
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [showJitsi, setShowJitsi] = useState();
@@ -30,14 +31,16 @@ const ZoomStudentSession = () => {
 
   function loadSessionStatus() {
     const fields = roomId.split('-');
-    setStudent(fields[0]);
+    const room = fields[0] + '-' + fields[1];
+    setStudent(fields[2]);
     checkSessionCreated(fields);
+    setRoomZoom(room);
     showMeeting({ begin: true });
     setShowJitsi(true);
   }
 
   async function checkSessionCreated(fields) {
-    const filters = { roomName: fields[0], sessionId: fields[1] };
+    const filters = { roomName: fields[2], sessionId: fields[3] };
     let result = await getResponseByFilters(`${BASE_URL}/session/ask-to-join`, filters);
     if (result.data.status !== status.Created) {
       await showAlert('Error en la sesión', result.data.message, 'error');
@@ -56,13 +59,13 @@ const ZoomStudentSession = () => {
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              ¡ Hola, Bienvenido {student} !
+              ¡ Hola, Bienvenido {student}!
             </div>
             {showJitsi && (
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>}
+                    {meeting.begin && <Begin roomId={roomId} roomZoom={roomZoom} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>

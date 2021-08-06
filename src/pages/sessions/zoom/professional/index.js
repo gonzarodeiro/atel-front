@@ -23,14 +23,14 @@ const ZoomProfessionalSession = (props) => {
   };
 
   function copyClipboard() {
-    const sharedLink = window.location.href.replace('zoom-session', 'student-zoom-session/' + props.location.state.userName + '-' + props.location.state.sessionId);
+    const sharedLink = window.location.href.replace('zoom-session', 'student-zoom-session/' + props.location.state.roomZoom + '-' + props.location.state.userName + '-' + props.location.state.sessionId);
     navigator.clipboard.writeText(sharedLink);
     showModal({ notification: true });
   }
 
   return (
     <Layout>
-      <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           <div className='card-body'>
             <div className='card-title pb-1 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>

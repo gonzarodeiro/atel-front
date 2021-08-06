@@ -31,11 +31,16 @@ const Index = () => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
   }, []);
 
-  const handleChange = (event) => {
+  const handleChangeStudent = (event) => {
     const { id, value } = event.target;
     const fields = value.split('-');
     setSession({ ...session, [id]: value });
     setStudent({ id: fields[0], name: fields[1] });
+  };
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setSession({ ...session, [id]: value });
   };
 
   const handleSubmit = async (event) => {
@@ -53,7 +58,7 @@ const Index = () => {
         setShowValidation(true);
         return;
       }
-      if (session.type === '1' && !session.zoom) {
+      if (session.type === 'Sesión de inclusión' && !session.zoom) {
         setErrors({ show: true, message: 'Debe ingresar el link de zoom' });
         setShowValidation(true);
         return;
@@ -68,7 +73,7 @@ const Index = () => {
         status: status.Pending,
         start_datetime: session.date,
         room_name: student.name,
-        type: parseInt(session.type),
+        type: session.type,
         zoom: session.zoom,
         password: session.password
       };
@@ -104,10 +109,10 @@ const Index = () => {
               </div>
               {session.type && (
                 <div className='row'>
-                  <div className={session.type === '1' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
+                  <div className={session.type === 'Sesión de inclusión' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
                     <Form.Group>
                       <Form.Label> Nombre del alumno </Form.Label>
-                      <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
+                      <Form.Control id='userName' onChange={handleChangeStudent} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
                         {dlStudents.map((file) => (
                           <option key={file.id} value={`${file.id}-${file.code}`}>
                             {file.description}
@@ -116,11 +121,11 @@ const Index = () => {
                       </Form.Control>
                     </Form.Group>
                   </div>
-                  <div className={session.type === '1' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
+                  <div className={session.type === 'Sesión de inclusión' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
                     <label>Fecha y hora</label>
                     <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm aa' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' timeCaption='Hora' />
                   </div>
-                  {session.type === '1' && (
+                  {session.type === 'Sesión de inclusión' && (
                     <>
                       <div className='col-md-3 my-1'>
                         <label>Link de zoom</label>

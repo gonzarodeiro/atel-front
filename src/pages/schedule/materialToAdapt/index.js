@@ -77,7 +77,8 @@ const Index = () => {
       status: status.Pending,
       studentId: fields[2],
       dateTo: convertDate(params.dateTo),
-      dateFrom: convertDate(params.dateFrom)
+      dateFrom: convertDate(params.dateFrom),
+      type: 'Sesión de inclusión'
     };
   }
 
