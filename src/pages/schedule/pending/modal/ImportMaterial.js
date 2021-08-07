@@ -7,7 +7,7 @@ import postFileApi from '../../../../utils/services/post/postFileApi';
 import showAlert from '../../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../../config/environment';
 
-const AdaptedInformation = ({ showModal, handleClose, setShowModal,modalData }) => {
+const ImportMaterial = ({ showModal, handleClose, setShowModal, modalData }) => {
   const [params, setParams] = useState({ file: '', comments: '' });
   const [loading, setLoading] = useState(false);
   const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
@@ -16,13 +16,13 @@ const AdaptedInformation = ({ showModal, handleClose, setShowModal,modalData }) 
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      setErrorsModal({ show: false });            
+      setErrorsModal({ show: false });
       const sessionID = modalData.id;
-      const values = { sessionID: sessionID, comments: params.comments, file: params.file, author: sessionStorage.getItem("name") };
+      const values = { sessionID: sessionID, comments: params.comments, file: params.file, author: sessionStorage.getItem('name') };
       await postFileApi(`${BASE_URL}/document/session`, values);
       setLoading(false);
       await showAlert('Material importado', `Se ha subido el material adaptado`, 'success');
-      handleClose('adaptedInformation');
+      handleClose('importMaterial');
     }
   };
 
@@ -44,12 +44,12 @@ const AdaptedInformation = ({ showModal, handleClose, setShowModal,modalData }) 
   }
 
   function closeAdapt() {
-    if (showModal.materialToAdapt) setShowModal({ materialToAdapt: true, adaptInformation: false });
-    else setShowModal({ adaptInformation: false });
+    if (showModal.downloadMaterial) setShowModal({ downloadMaterial: true, importMaterial: false });
+    else setShowModal({ importMaterial: false });
   }
 
   return (
-    <Modal show={showModal.adaptInformation} onHide={() => handleClose('adaptInformation')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
+    <Modal show={showModal.importMaterial} onHide={() => handleClose('importMaterial')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
         <Modal.Title style={{ fontSize: '19px' }}>Importar material adaptado</Modal.Title>
       </Modal.Header>
@@ -81,4 +81,4 @@ const AdaptedInformation = ({ showModal, handleClose, setShowModal,modalData }) 
   );
 };
 
-export default AdaptedInformation;
+export default ImportMaterial;

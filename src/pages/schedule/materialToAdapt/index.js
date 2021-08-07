@@ -103,11 +103,11 @@ const Index = () => {
   async function showDelete(sessionData) {
     const result = await getParametry(`${BASE_URL}/content`, {
       sessionID: sessionData.id
-    });   
+    });
 
     const materialList = result.map((material) => ({
       ...material,
-      materialId : material.id,
+      materialId: material.id,
       ...sessionData,
       start_date: convertDateTime(new Date(sessionData.start_datetime))
     }));
@@ -118,7 +118,7 @@ const Index = () => {
   }
 
   function createActionsDelete(result) {
-    for (let i = 0; i < result.length; i++) {      
+    for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actionsMaterials = (
         <div>
@@ -160,15 +160,14 @@ const Index = () => {
   }
 
   function fillTableDelete(materialList) {
-
     if (materialList.length > 0) {
       setTableDelete({
         columns: [
           { label: '', field: 'actionsMaterials' },
           { label: 'Alumno', field: 'full_name' },
           { label: 'Material', field: 'original_name' },
-          { label: 'Subido por', field: 'author' },        
-          { label: 'Comentarios', field: 'comment' },        
+          { label: 'Subido por', field: 'author' },
+          { label: 'Comentarios', field: 'comment' },
           { label: 'Fecha sesión', field: 'start_date' }
         ],
         rows: materialList,
@@ -221,7 +220,7 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {steps.password && <Password params={params} handleChange={handleChange} showValidation={showValidation} errors={errorsPassword} handleSubmit={handleSubmitPassword} />}
-              {steps.generalInformation && <GeneralInformation author={roomId.split("-")[0]} params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
+              {steps.generalInformation && <GeneralInformation author={roomId.split('-')[0]} params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
             </form>
           </div>
         </div>
