@@ -7,7 +7,7 @@ import postFileApi from '../../../../utils/services/post/postFileApi';
 import showAlert from '../../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../../config/environment';
 
-const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrorsModal, errorsModal }) => {
+const AdaptInformation = ({ author, showModal, handleClose, setShowValidation, setErrorsModal, errorsModal }) => {
   const [params, setParams] = useState({ file: '', comments: '' });
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,7 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
       setLoading(true);
       setErrorsModal({ show: false });
       const sessionID = showModal.modalData ? showModal.modalData.id : '';
-      const values = { sessionID: sessionID, comments: params.comments, file: params.file };
+      const values = { sessionID: sessionID, comments: params.comments, file: params.file, author: author  };
       await postFileApi(`${BASE_URL}/document/session`, values);
       setLoading(false);
       await showAlert('Material compartido', `Se ha subido el material a adaptar`, 'success');

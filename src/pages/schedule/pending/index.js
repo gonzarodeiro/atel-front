@@ -22,6 +22,7 @@ import showAlert from '../../../utils/commons/showAlert';
 import MaterialToAdapt from './modal/MaterialToAdapt';
 import { BASE_URL } from '../../../config/environment';
 import AdaptedInformation from './modal/AdaptedInformation';
+import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi';
 
 registerLocale('es', datepicker);
 
@@ -31,7 +32,8 @@ const Index = () => {
   const [tableMaterial, setTableMaterial] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [errorMaterial, setErrorsMaterial] = useState({ show: false, message: '' });
-  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false, adaptInformation: false, modalData: {} });
+  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false, adaptInformation: false });
+  const [modalData, setModalData] = useState();
   const [idSession, setIdSession] = useState();
   const [userName, setUserName] = useState();
   const [sessionDate, setSessionDate] = useState();
@@ -80,7 +82,7 @@ const Index = () => {
           <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: '#1976d2' }} aria-hidden='true'></i>
           {result[i].type === 'Sesión de inclusión' && (
             <>
-              <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-file mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+              <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-file mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>              
             </>
           )}
           <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#dc3545' }} aria-hidden='true'></i>
@@ -100,9 +102,18 @@ const Index = () => {
     const result = await getParametry(`${BASE_URL}/content`, {
       sessionID: sessionData.id
     });
-    createMaterialActions(result);
-    fillTableMaterial(sessionData, result);
-    setShowModal({ materialToAdapt: true, modalData: sessionData });
+
+    const materialList = result.map((material) => ({
+      ...material,
+      materialId : material.id,
+      ...sessionData,
+      start_date: convertDateTime(new Date(sessionData.start_datetime))
+    }));
+
+    createMaterialActions(materialList);
+    fillTableMaterial(materialList);
+    setModalData(sessionData);
+    setShowModal({ materialToAdapt: true});
   }
 
   function createMaterialActions(result) {
@@ -112,26 +123,53 @@ const Index = () => {
       result[i].actionsMaterials = (
         <div>
           <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1 ml-2' title='Eliminar Material' style={{ cursor: 'pointer'}} aria-hidden='true'></i>
         </div>
       );
     }
   }
 
-  function fillTableMaterial(session, materials) {
-    const materialList = materials.map((material) => ({
-      ...material,
-      ...session,
-      start_date: convertDateTime(new Date(session.start_datetime))
-    }));
+  function handleDeleteMaterial(obj) {
+    swal(
+      <div>
+        <p className='h4 mt-4 mb-4'>¿Querés eliminar el material?</p>
+        <span>Alumno: {obj.full_name}</span>
+        <p>Documento: {obj.original_name}</p>
+      </div>,
+      {
+        icon: 'warning',
+        input: 'text',
+        buttons: {
+          cancel: 'No',
+          catch: {
+            text: 'Si',
+            value: 'delete'
+          }
+        }
+      }
+    ).then((value) => {
+      if (value === 'delete') deleteMaterial(obj);
+    });
+  }
+
+  async function deleteMaterial(obj) {
+    setLoading(true);
+    await deleteResponseApi(`${BASE_URL}/document/${obj.materialId}`);
+    setLoading(false);
+    await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
+    handleClose('deleteInformation');
+  }
+
+  function fillTableMaterial(materialList) {
 
     if (materialList.length > 0) {
       setTableMaterial({
         columns: [
           { label: '', field: 'actionsMaterials' },
-          { label: 'Alumno', field: 'full_name' },
-          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Alumno', field: 'full_name' },          
           { label: 'Material', field: 'original_name' },
-          { label: 'Comentario', field: 'comment' },
+          { label: 'Subido por', field: 'author' },        
+          { label: 'Comentarios', field: 'comment' },
           { label: 'Fecha sesión', field: 'start_date' }
         ],
         rows: materialList,
@@ -239,7 +277,7 @@ const Index = () => {
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
               {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleClose} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
               {showModal.materialToAdapt && <MaterialToAdapt showModal={showModal} handleClose={handleClose} tableToAdapt={tableMaterial} errorAdapt={errorMaterial} setShowModal={setShowModal} />}
-              {showModal.adaptInformation && <AdaptedInformation showModal={showModal} handleClose={handleClose} setShowModal={setShowModal} />}
+              {showModal.adaptInformation && <AdaptedInformation modalData={modalData} showModal={showModal} handleClose={handleClose} setShowModal={setShowModal} />}
               {table.show && <Table data={table} />}
             </form>
           </div>
