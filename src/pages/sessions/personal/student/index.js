@@ -12,6 +12,8 @@ import { clientEvents, connect, registerEvent, sendMessage } from '../../../../u
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 import Celebration, { celebrationType } from '../../../../components/Celebration';
+import { BASE_URL } from '../../../../config/environment';
+
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
 const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
@@ -63,7 +65,7 @@ const StudentSession = (props) => {
 
   async function checkSessionCreated(fields) {
     const filters = { roomName: fields[0], sessionId: fields[1] };
-    let result = await getResponseByFilters('https://atel-back-stg.herokuapp.com/session/ask-to-join', filters);
+    let result = await getResponseByFilters(`${BASE_URL}/session/ask-to-join`, filters);
     if (result.data.status !== status.Created) {
       await showAlert('Error en la sesión', result.data.message, 'error');
       setShowJitsi(false);

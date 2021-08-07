@@ -15,7 +15,8 @@ import status from '../../utils/enums/sessionStatus';
 import postResponseApi from '../../utils/services/post/postResponseApi';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import Dropdownlist from '../../components/html/Dropdownlist';
-import cleanObject from '../../utils/commons/cleanObject';
+import { BASE_URL } from '../../config/environment';
+
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -42,7 +43,7 @@ const Index = () => {
     if (validateFields()) {
       setLoading(true);
       const filters = createFilters();
-      await postResponseApi('https://atel-back-stg.herokuapp.com/session', filters);
+      await postResponseApi(`${BASE_URL}/session`, filters);
       showMessage();
     }
 

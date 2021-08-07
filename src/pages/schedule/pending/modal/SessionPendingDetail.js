@@ -11,6 +11,8 @@ import Loading from '../../../../components/Loading';
 import patchApi from '../../../../utils/services/patch/patchApi';
 import addDays from '../../../../utils/commons/addDays';
 import showAlert from '../../../../utils/commons/showAlert';
+import { BASE_URL } from '../../../../config/environment';
+
 registerLocale('es', datepicker);
 
 const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, sessionDate }) => {
@@ -26,7 +28,7 @@ const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, ses
     event.preventDefault();
     setLoading(true);
     const values = { start_datetime: session.date };
-    await patchApi('https://atel-back-stg.herokuapp.com/session', values, idSession);
+    await patchApi(`${BASE_URL}/session`, values, idSession);
     setLoading(false);
     await showAlert('Sesión modificada', `Se ha modificado la sesión con ${userName}`, 'success');
     history.push({ pathname: 'home' });

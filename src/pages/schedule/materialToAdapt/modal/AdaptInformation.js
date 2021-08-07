@@ -5,6 +5,7 @@ import Submit from '../../../../components/html/button/Submit';
 import Loading from '../../../../components/Loading';
 import postResponseApi from '../../../../utils/services/post/postResponseApi';
 import showAlert from '../../../../utils/commons/showAlert';
+import { BASE_URL } from '../../../../config/environment';
 
 const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrorsModal, errorsModal }) => {
   const [params, setParams] = useState({ file: '', comments: '' });
@@ -16,7 +17,7 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
       setLoading(true);
       setErrorsModal({ show: false });
       const values = { comments: params.comments, file: params.file };
-      // await postResponseApi('https://atel-back-stg.herokuapp.com/session', values);
+      // await postResponseApi(`${BASE_URL}/session`, values);
       console.log(values);
       setLoading(false);
       await showAlert('Material compartido', `Se ha subido el material a adaptar`, 'success');

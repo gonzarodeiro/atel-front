@@ -20,6 +20,8 @@ import patchApi from '../../../utils/services/patch/patchApi';
 import status from '../../../utils/enums/sessionStatus';
 import showAlert from '../../../utils/commons/showAlert';
 import MaterialToAdapt from './modal/MaterialToAdapt';
+import { BASE_URL } from '../../../config/environment';
+
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -52,7 +54,7 @@ const Index = () => {
   async function getSchedule() {
     const values = getParameters();
     cleanObject(values);
-    const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    const result = await getParametry(`${BASE_URL}/session`, values);
     createActions(result);
     fillTable(result);
   }
@@ -89,7 +91,7 @@ const Index = () => {
   }
 
   function handleMaterialToAdapt() {
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    // const result = await getParametry(`${BASE_URL}/session`, values);
     const result = [
       {
         full_name: 'German',
@@ -175,7 +177,7 @@ const Index = () => {
   async function patchSchedule(obj) {
     setLoading(true);
     const values = { status: status.Canceled };
-    await patchApi('https://atel-back-stg.herokuapp.com/session', values, obj.id);
+    await patchApi(`${BASE_URL}/session`, values, obj.id);
     setLoading(false);
     await showAlert('Sesión eliminada', `La sesión: ${obj.date} ha sido dada de baja`, 'success');
     history.push(`/home`);
