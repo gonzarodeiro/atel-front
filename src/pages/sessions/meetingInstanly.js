@@ -11,7 +11,7 @@ import postResponseApi from '../../utils/services/post/postResponseApi';
 import status from '../../utils/enums/sessionStatus';
 import convertDate from '../../utils/commons/convertDate';
 import Dropdownlist from '../../components/html/Dropdownlist';
-import cleanObject from '../../utils/commons/cleanObject';
+import { BASE_URL } from '../../config/environment';
 
 const Index = () => {
   const [session, setSession] = useState({ type: '', userName: '', zoom: '', password: '' });
@@ -37,7 +37,7 @@ const Index = () => {
     if (validateFields()) {
       setLoading(true);
       const filters = createFilters();
-      const response = await postResponseApi('https://atel-back-stg.herokuapp.com/session', filters);
+      const response = await postResponseApi(`${BASE_URL}/session`, filters);
       showMessage(response);
     }
 

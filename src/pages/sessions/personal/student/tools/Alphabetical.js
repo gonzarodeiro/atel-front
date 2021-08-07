@@ -22,6 +22,7 @@ import voiceCat from '../../../../../components/Activity/Alphabetical/audio/anim
 import voiceGiraffe from '../../../../../components/Activity/Alphabetical/audio/animals/voice-giraffe.mp3';
 import voiceLion from '../../../../../components/Activity/Alphabetical/audio/animals/voice-lion.mp3';
 import voiceElephant from '../../../../../components/Activity/Alphabetical/audio/animals/voice-elephant.mp3';
+// import { BASE_URL } from '../../../../../config/environment';
 // TODO: Completar cuando este corregido el el endpoint de imagenes
 /*
 import getByFilters from '../../../../utils/services/get/getByFilters';
@@ -152,7 +153,7 @@ const Alphabetical = () => {
     async function fetchImages() {
       console.log('Buscando imagenes');
       const filters = { category: 'animales' };
-      const images = await getByFilters('https://atel-back-stg.herokuapp.com/literacy-resources', filters);
+      const images = await getByFilters(`${BASE_URL}/literacy-resources`, filters);
       console.log('images', images);
       setImages(images);
     }

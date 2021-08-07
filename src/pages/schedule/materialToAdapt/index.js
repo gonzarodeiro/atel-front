@@ -10,6 +10,7 @@ import Password from './steps/password';
 import GeneralInformation from './steps/generalInformation';
 import swal from '@sweetalert/with-react';
 import showAlert from '../../../utils/commons/showAlert';
+import { BASE_URL } from '../../../config/environment';
 
 const Index = () => {
   const [params, setParams] = useState({ password: '', dateFrom: new Date(), dateTo: new Date() });
@@ -37,7 +38,7 @@ const Index = () => {
       return;
     }
     const values = createFilters();
-    const response = await getParametry('https://atel-back-stg.herokuapp.com/student/shared/verification', values);
+    const response = await getParametry(`${BASE_URL}/student/shared/verification`, values);
     if (!response.result) {
       setErrorsPassword({ show: true, message: 'La contraseña ingresada no es válida' });
       setShowValidation(true);
@@ -64,7 +65,7 @@ const Index = () => {
   async function getSchedule() {
     const values = getParameters();
     cleanObject(values);
-    const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    const result = await getParametry(`${BASE_URL}/session`, values);
     createActions(result);
     fillTable(result);
   }
@@ -97,7 +98,7 @@ const Index = () => {
   }
 
   function showDelete() {
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
+    // const result = await getParametry(`${BASE_URL}/session`, values);
     const result = [
       {
         full_name: 'German',
@@ -154,7 +155,7 @@ const Index = () => {
   async function patchSchedule(obj) {
     setLoading(true);
     const values = { status: status.Canceled };
-    // await patchApi('https://atel-back-stg.herokuapp.com/student/shared/verification', values, obj.id);
+    // await patchApi(`${BASE_URL}/student/shared/verification`, values, obj.id);
     setLoading(false);
     await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
     handleClose('deleteInformation');

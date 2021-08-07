@@ -4,6 +4,7 @@ import Layout from '../../../utils/layout/index';
 import postResponseApi from '../../../utils/services/post/postResponseApi';
 import GeneralInformation from './steps/generalInformation';
 import SharedLink from './steps/sharedLink';
+import { BASE_URL } from '../../../config/environment';
 
 const Index = () => {
   const [session, setSession] = useState({ studentName: '', name: '', password: '' });
@@ -35,7 +36,7 @@ const Index = () => {
     event.preventDefault();
     if (validateFields()) {
       const filters = createFilters();
-      await postResponseApi('https://atel-back-stg.herokuapp.com/student/shared', filters);
+      await postResponseApi(`${BASE_URL}/student/shared`, filters);
       setSteps({ generalInformation: false, sharedLink: true });
       setErrors({ show: false, message: '' });
       const id_professional = 1; // levantar de sessionStorage

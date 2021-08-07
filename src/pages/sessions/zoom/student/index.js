@@ -6,6 +6,7 @@ import showAlert from '../../../../utils/commons/showAlert';
 import status from '../../../../utils/enums/sessionStatus';
 import End from '../../personal/student/meeting/End';
 import { clientEvents, connect, registerEvent } from '../../../../utils/socketManager';
+import { BASE_URL } from '../../../../config/environment';
 
 const ZoomStudentSession = () => {
   const [student, setStudent] = useState();
@@ -37,7 +38,7 @@ const ZoomStudentSession = () => {
 
   async function checkSessionCreated(fields) {
     const filters = { roomName: fields[0], sessionId: fields[1] };
-    let result = await getResponseByFilters('https://atel-back-stg.herokuapp.com/session/ask-to-join', filters);
+    let result = await getResponseByFilters(`${BASE_URL}/session/ask-to-join`, filters);
     if (result.data.status !== status.Created) {
       await showAlert('Error en la sesión', result.data.message, 'error');
       setShowJitsi(false);
