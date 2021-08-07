@@ -25,11 +25,16 @@ const Index = () => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
   }, []);
 
-  const handleChange = (event) => {
+  const handleChangeStudent = (event) => {
     const { id, value } = event.target;
     const fields = value.split('-');
     setSession({ ...session, [id]: value });
     setStudent({ id: fields[0], name: fields[1] });
+  };
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setSession({ ...session, [id]: value });
   };
 
   const handleSubmit = async (event) => {
@@ -48,7 +53,7 @@ const Index = () => {
         return;
       }
 
-      if (session.type === '1' && !session.zoom) {
+      if (session.type === 'Sesión de inclusión' && !session.zoom) {
         setErrors({ show: true, message: 'Debe ingresar el link de zoom' });
         setShowValidation(true);
         return;
@@ -64,9 +69,8 @@ const Index = () => {
         status: status.Created,
         start_datetime: new Date(),
         room_name: student.name,
-        type: parseInt(session.type)
-        // zoom: session.zoom,
-        // password: session.password
+        type: session.type,
+        room_zoom_name: session.zoom + '-' + session.password
       };
       return values;
     }
@@ -75,10 +79,10 @@ const Index = () => {
       setLoading(false);
       await showAlert('Sesión generada', `Se ha generado la sesión con ${student.name} `, 'success');
       const date = convertDate(new Date());
-      if (session.type === '1') {
+      if (session.type === 'Sesión de inclusión') {
         history.push({
           pathname: 'zoom-session',
-          state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session }
+          state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session, roomZoom: session.zoom + '-' + session.password }
         });
       } else {
         history.push({
@@ -110,10 +114,10 @@ const Index = () => {
               </div>
               {session.type && (
                 <div className='row'>
-                  <div className={session.type === '1' ? 'col-md-4 my-1' : 'col-md-12 my-1'}>
+                  <div className={session.type === 'Sesión de inclusión' ? 'col-md-4 my-1' : 'col-md-12 my-1'}>
                     <Form.Group>
                       <Form.Label> Nombre del alumno </Form.Label>
-                      <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
+                      <Form.Control id='userName' onChange={handleChangeStudent} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
                         {dlStudents.map((file) => (
                           <option key={file.id} value={`${file.id}-${file.code}`}>
                             {file.description}
@@ -122,11 +126,11 @@ const Index = () => {
                       </Form.Control>
                     </Form.Group>
                   </div>
-                  {session.type === '1' && (
+                  {session.type === 'Sesión de inclusión' && (
                     <>
                       <div className='col-md-4 my-1'>
                         <label>Link de zoom</label>
-                        <input id='zoom' onChange={handleChange} value={session.zoom} type='text' className={'form-control ' + (!session.Zoom && showValidation ? 'borderRed' : '')} />
+                        <input id='zoom' onChange={handleChange} value={session.zoom} type='text' className={'form-control ' + (!session.zoom && showValidation ? 'borderRed' : '')} />
                       </div>
                       <div className='col-md-4 my-1'>
                         <label>Contraseña</label>

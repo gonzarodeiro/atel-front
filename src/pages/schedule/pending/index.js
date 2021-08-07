@@ -5,7 +5,7 @@ import Table from '../../../components/html/Table';
 import Loading from '../../../components/Loading';
 import Footer from '../../../components/html/Footer';
 import Dropdownlist from '../../../components/html/Dropdownlist';
-import { dlStudents, dlDifficulty } from '../../../utils/dropdownlists/index';
+import { dlStudents, dlSessionType } from '../../../utils/dropdownlists/index';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
@@ -26,7 +26,7 @@ import AdaptedInformation from './modal/AdaptedInformation';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', diagnostic: '' });
+  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', type: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [tableMaterial, setTableMaterial] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
@@ -65,7 +65,7 @@ const Index = () => {
       id_professional: 1, // agarrar id de sessionStorage cuando se registren
       status: status.Pending,
       studentName: params.studentName,
-      diagnostic: params.diagnostic,
+      type: params.type,
       dateTo: convertDate(params.dateTo),
       dateFrom: convertDate(params.dateFrom)
     };
@@ -239,7 +239,7 @@ const Index = () => {
                   <Dropdownlist title='Nombre del alumno' id='studentName' handleChange={handleChange} value={params.studentName} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Dificultad' id='diagnostic' handleChange={handleChange} value={params.diagnostic} dropdownlist={dlDifficulty} disabledValue={false} className='form-control' />
+                  <Dropdownlist title='Tipo de sesiones' id='type' handleChange={handleChange} value={params.type} dropdownlist={dlSessionType} disabledValue={false} className='form-control' />
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
