@@ -18,7 +18,7 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
       setErrorsModal({ show: false });
       const sessionID = showModal.modalData ? showModal.modalData.id : '';
       const values = { sessionID: sessionID, comments: params.comments, file: params.file };
-      await postFileApi(`${BASE_URL}/content`, values);
+      await postFileApi(`${BASE_URL}/document/session`, values);
       setLoading(false);
       await showAlert('Material compartido', `Se ha subido el material a adaptar`, 'success');
       handleClose();
