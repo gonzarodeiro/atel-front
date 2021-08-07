@@ -7,7 +7,7 @@ import postFileApi from '../../../../utils/services/post/postFileApi';
 import showAlert from '../../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../../config/environment';
 
-const AdaptedInformation = ({ showModal, handleClose }) => {
+const AdaptedInformation = ({ showModal, handleClose, setShowModal }) => {
   const [params, setParams] = useState({ file: '', comments: '' });
   const [loading, setLoading] = useState(false);
   const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
@@ -21,14 +21,14 @@ const AdaptedInformation = ({ showModal, handleClose }) => {
       const values = { sessionID: sessionID, comments: params.comments, file: params.file };
       await postFileApi(`${BASE_URL}/content`, values);
       setLoading(false);
-      await showAlert('Material compartido', `Se ha subido el material a adaptar`, 'success');
+      await showAlert('Material importado', `Se ha subido el material adaptado`, 'success');
       handleClose('adaptedInformation');
     }
   };
 
   function validateFields() {
     if (!params.file) {
-      setErrorsModal({ show: true, message: 'Debe ingresar el material a adaptar' });
+      setErrorsModal({ show: true, message: 'Debe ingresar el material adaptado' });
       return;
     }
     return true;
@@ -40,14 +40,18 @@ const AdaptedInformation = ({ showModal, handleClose }) => {
 
   function handleChangeInputFile(event) {
     const { id } = event.target;
-    // Debemos usar el elemento de tipo File en lugar de target.value
-    setParams({ ...params, [id]: event.target.files[0] });
+    setParams({ ...params, [id]: event.target.files[0] }); // Utilizamos el elemento de tipo File en lugar de target.value
+  }
+
+  function closeAdapt() {
+    if (showModal.materialToAdapt) setShowModal({ materialToAdapt: true, adaptInformation: false });
+    else setShowModal({ adaptInformation: false });
   }
 
   return (
     <Modal show={showModal.adaptInformation} onHide={() => handleClose('adaptInformation')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
-        <Modal.Title style={{ fontSize: '19px' }}>Material a adaptar</Modal.Title>
+        <Modal.Title style={{ fontSize: '19px' }}>Importar material adaptado</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ fontSize: '13.2px', fontWeight: 'bold', color: '#66696b' }}>
         {loading && (
@@ -57,7 +61,7 @@ const AdaptedInformation = ({ showModal, handleClose }) => {
         )}
         <div className='row mb-1'>
           <div className='col-md-12'>
-            <label>Ingrese contenido a adaptar</label>
+            <label>Ingrese material adaptado</label>
             <input id='file' name='content' onChange={handleChangeInputFile} type='file' className='form-control mb-2' style={{ height: '60px', padding: '14.5px' }} />
           </div>
         </div>
@@ -69,7 +73,7 @@ const AdaptedInformation = ({ showModal, handleClose }) => {
         </div>
         <div className='col-md-6 mb-3'>{errorsModal.show === true && <div className='text-danger mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errorsModal.message}</div>}</div>
         <Modal.Footer>
-          <Cancel onClick={() => handleClose('adaptInformation')} title='Cancelar' />
+          <Cancel onClick={closeAdapt} title='Cancelar' />
           <Submit onClick={handleSubmit} title='Subir' />
         </Modal.Footer>
       </Modal.Body>

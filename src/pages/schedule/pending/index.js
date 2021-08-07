@@ -77,14 +77,13 @@ const Index = () => {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
-          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: '#1976d2' }} aria-hidden='true'></i>
           {result[i].type === 'Sesión de inclusión' && (
             <>
-              <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-download mt-1 mr-2' title='Material a adaptar' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-              <i onClick={() => handleAdaptedMaterial(result[i])} className='fas fa-plus mt-1 mr-2' title='Material adaptado' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+              <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-file mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
             </>
           )}
-          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#dc3545' }} aria-hidden='true'></i>
         </div>
       );
     }
@@ -106,17 +105,13 @@ const Index = () => {
     setShowModal({ materialToAdapt: true, modalData: sessionData });
   }
 
-  const handleAdaptedMaterial = (sessionData) => {
-    setShowModal({ adaptInformation: true, modalData: sessionData });
-  };
-
   function createMaterialActions(result) {
     if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actionsMaterials = (
         <div>
-          <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+          <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
       );
     }
@@ -133,7 +128,7 @@ const Index = () => {
       setTableMaterial({
         columns: [
           { label: '', field: 'actionsMaterials' },
-          { label: 'Nombre', field: 'full_name' },
+          { label: 'Alumno', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Material', field: 'original_name' },
           { label: 'Fecha sesión', field: 'start_date' }
@@ -194,7 +189,7 @@ const Index = () => {
       setTable({
         columns: [
           { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'full_name' },
+          { label: 'Alumno', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Tipo', field: 'type' },
           { label: 'Fecha sesión', field: 'date' }
@@ -242,8 +237,8 @@ const Index = () => {
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
               {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleClose} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
-              {showModal.materialToAdapt && <MaterialToAdapt showModal={showModal} handleClose={handleClose} tableToAdapt={tableMaterial} errorAdapt={errorMaterial} />}
-              {showModal.adaptInformation && <AdaptedInformation showModal={showModal} handleClose={handleClose} />}
+              {showModal.materialToAdapt && <MaterialToAdapt showModal={showModal} handleClose={handleClose} tableToAdapt={tableMaterial} errorAdapt={errorMaterial} setShowModal={setShowModal} />}
+              {showModal.adaptInformation && <AdaptedInformation showModal={showModal} handleClose={handleClose} setShowModal={setShowModal} />}
               {table.show && <Table data={table} />}
             </form>
           </div>

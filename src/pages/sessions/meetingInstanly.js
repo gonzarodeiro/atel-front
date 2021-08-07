@@ -54,7 +54,7 @@ const Index = () => {
       }
 
       if (session.type === 'Sesión de inclusión' && !session.zoom) {
-        setErrors({ show: true, message: 'Debe ingresar el link de zoom' });
+        setErrors({ show: true, message: 'Debe ingresar el id de zoom' });
         setShowValidation(true);
         return;
       }
@@ -129,11 +129,11 @@ const Index = () => {
                   {session.type === 'Sesión de inclusión' && (
                     <>
                       <div className='col-md-4 my-1'>
-                        <label>Link de zoom</label>
+                        <label>Id de zoom</label>
                         <input id='zoom' onChange={handleChange} value={session.zoom} type='text' className={'form-control ' + (!session.zoom && showValidation ? 'borderRed' : '')} />
                       </div>
                       <div className='col-md-4 my-1'>
-                        <label>Contraseña</label>
+                        <label>Código de acceso</label>
                         <input id='password' onChange={handleChange} value={session.password} type='text' className='form-control' />
                       </div>
                     </>
