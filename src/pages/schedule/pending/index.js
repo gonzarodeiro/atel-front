@@ -21,6 +21,7 @@ import status from '../../../utils/enums/sessionStatus';
 import showAlert from '../../../utils/commons/showAlert';
 import MaterialToAdapt from './modal/MaterialToAdapt';
 import { BASE_URL } from '../../../config/environment';
+import AdaptedInformation from './modal/AdaptedInformation';
 
 registerLocale('es', datepicker);
 
@@ -30,7 +31,7 @@ const Index = () => {
   const [tableMaterial, setTableMaterial] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [errorMaterial, setErrorsMaterial] = useState({ show: false, message: '' });
-  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false });
+  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false, adaptInformation: false });
   const [idSession, setIdSession] = useState();
   const [userName, setUserName] = useState();
   const [sessionDate, setSessionDate] = useState();
@@ -78,6 +79,7 @@ const Index = () => {
         <div>
           <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: 'rgb(25 106 185)' }} aria-hidden='true'></i>
           <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-download mt-1 mr-2' title='Material a adaptar' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
+          <i onClick={() => handleAdaptedMaterial(result[i])} className='fas fa-plus mt-1 mr-2' title='Material adaptado' style={{ cursor: 'pointer', color: '#ec3143' }} aria-hidden='true'></i>
           <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#ec3143' }} aria-hidden='true'></i>
         </div>
       );
@@ -111,6 +113,10 @@ const Index = () => {
     fillTableMaterial(result);
     setShowModal({ materialToAdapt: true });
   }
+
+  const handleAdaptedMaterial = () => {
+    setShowModal({ adaptInformation: true });
+  };
 
   function createActionsMaterial(result) {
     if (!result) return;
@@ -239,6 +245,7 @@ const Index = () => {
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
               {showModal.details && <SessionPendingDetail showModal={showModal} handleClose={handleClose} idSession={idSession} userName={userName} sessionDate={sessionDate} />}
               {showModal.materialToAdapt && <MaterialToAdapt showModal={showModal} handleClose={handleClose} tableToAdapt={tableMaterial} errorAdapt={errorMaterial} />}
+              {showModal.adaptInformation && <AdaptedInformation showModal={showModal} handleClose={handleClose} />}
               {table.show && <Table data={table} />}
             </form>
           </div>
