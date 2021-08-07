@@ -13,6 +13,7 @@ import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 import Celebration, { celebrationType } from '../../../../components/Celebration';
 import { BASE_URL } from '../../../../config/environment';
+import Loading from '../../../../components/Loading';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -25,9 +26,13 @@ const StudentSession = (props) => {
   const [showJitsi, setShowJitsi] = useState();
   const [session, setSession] = useState({ generalComments: '' });
   const [wizardVisible, showWizard] = useState(false);
+  const [loading, setShowLoading] = useState(true);
   let { roomId } = useParams();
 
   useEffect(() => {
+    setTimeout(() => {
+      setShowLoading(false);
+    }, 3000);
     connect(roomId);
     registerEvent(() => {
       showMeeting({ begin: false });
@@ -85,6 +90,11 @@ const StudentSession = (props) => {
   return (
     <>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
+        {loading && (
+          <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
+            <Loading />
+          </div>
+        )}
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>

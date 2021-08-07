@@ -82,7 +82,7 @@ const Index = () => {
       if (session.type === 'Sesión de inclusión') {
         history.push({
           pathname: 'zoom-session',
-          state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session, roomZoom: session.zoom + '-' + session.password }
+          state: { roomId: student.name, userName: student.name, date: date, sessionId: response.data.id_session, roomZoom: session.zoom + '-' + session.password + '-' + sessionStorage.getItem('name') }
         });
       } else {
         history.push({

@@ -9,7 +9,7 @@ const Zoom = ({ roomZoom }) => {
 
   return (
     <div>
-      <iframe id='inlineFrameExample' title='Inline Frame Example' width='500' height='460' allow='camera *;microphone *' class='responsive-iframe' src={room}></iframe>
+      <iframe id='inlineFrameExample' title='Inline Frame Example' width='520' height='460' allow='camera *;microphone *' class='responsive-iframe' src={room}></iframe>
     </div>
   );
 };
