@@ -56,7 +56,7 @@ const Index = () => {
     const values = getParameters();
     cleanObject(values);
     const result = await getParametry(`${BASE_URL}/session`, values);
-    createActions(result);
+    createScheduleActions(result);
     fillTable(result);
   }
 
@@ -71,16 +71,20 @@ const Index = () => {
     };
   }
 
-  function createActions(result) {
+  function createScheduleActions(result) {
     if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
-          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: 'rgb(25 106 185)' }} aria-hidden='true'></i>
-          <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-download mt-1 mr-2' title='Material a adaptar' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
-          <i onClick={() => handleAdaptedMaterial(result[i])} className='fas fa-plus mt-1 mr-2' title='Material adaptado' style={{ cursor: 'pointer', color: '#ec3143' }} aria-hidden='true'></i>
-          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#ec3143' }} aria-hidden='true'></i>
+          <i onClick={() => handleEdit(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          {result[i].type === 'Sesión de inclusión' && (
+            <>
+              <i onClick={() => handleMaterialToAdapt(result[i])} className='fas fa-download mt-1 mr-2' title='Material a adaptar' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+              <i onClick={() => handleAdaptedMaterial(result[i])} className='fas fa-plus mt-1 mr-2' title='Material adaptado' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+            </>
+          )}
+          <i onClick={() => handleDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
       );
     }
@@ -97,7 +101,7 @@ const Index = () => {
     const result = await getParametry(`${BASE_URL}/content`, {
       sessionID: sessionData.id
     });
-    createActionsMaterial(result);
+    createMaterialActions(result);
     fillTableMaterial(sessionData, result);
     setShowModal({ materialToAdapt: true, modalData: sessionData });
   }
@@ -106,11 +110,11 @@ const Index = () => {
     setShowModal({ adaptInformation: true, modalData: sessionData });
   };
 
-  function createActionsMaterial(result) {
+  function createMaterialActions(result) {
     if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actions = (
+      result[i].actionsMaterials = (
         <div>
           <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>
         </div>
@@ -128,7 +132,7 @@ const Index = () => {
     if (materialList.length > 0) {
       setTableMaterial({
         columns: [
-          { label: '', field: 'actions' },
+          { label: '', field: 'actionsMaterials' },
           { label: 'Nombre', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Material', field: 'original_name' },

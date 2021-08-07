@@ -11,6 +11,7 @@ import GeneralInformation from './steps/generalInformation';
 import swal from '@sweetalert/with-react';
 import showAlert from '../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../config/environment';
+import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi';
 
 const Index = () => {
   const [params, setParams] = useState({ password: '', dateFrom: new Date(), dateTo: new Date() });
@@ -150,14 +151,13 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') patchSchedule(obj);
+      if (value === 'delete') deleteMaterial(obj);
     });
   }
 
-  async function patchSchedule(obj) {
+  async function deleteMaterial(obj) {
     setLoading(true);
-    const values = { status: status.Canceled };
-    // await patchApi(`${BASE_URL}/student/shared/verification`, values, obj.id);
+    await deleteResponseApi(`${BASE_URL}/document/session/${obj.id}`);
     setLoading(false);
     await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
     handleClose('deleteInformation');
