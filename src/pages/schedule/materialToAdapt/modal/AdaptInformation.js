@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import Cancel from '../../../../components/html/button/Cancel';
 import Submit from '../../../../components/html/button/Submit';
 import Loading from '../../../../components/Loading';
-import postResponseApi from '../../../../utils/services/post/postResponseApi';
+import postFileApi from '../../../../utils/services/post/postFileApi';
 import showAlert from '../../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../../config/environment';
 
@@ -16,9 +16,8 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
     if (validateFields()) {
       setLoading(true);
       setErrorsModal({ show: false });
-      const values = { comments: params.comments, file: params.file };
-      // await postResponseApi(`${BASE_URL}/session`, values);
-      console.log(values);
+      const values = { sessionID: '000111222', comments: params.comments, file: params.file };
+      await postFileApi(`${BASE_URL}/content`, values);
       setLoading(false);
       await showAlert('Material compartido', `Se ha subido el material a adaptar`, 'success');
       handleClose();
@@ -33,10 +32,15 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
     }
     return true;
   }
-
-  function handleChange(event) {
+  function handleChangeInputText(event) {
     const { id, value } = event.target;
     setParams({ ...params, [id]: value });
+  }
+
+  function handleChangeInputFile(event) {
+    const { id } = event.target;
+    // Debemos usar el elemento de tipo File en lugar de target.value
+    setParams({ ...params, [id]: event.target.files[0] });
   }
 
   return (
@@ -53,13 +57,13 @@ const AdaptInformation = ({ showModal, handleClose, setShowValidation, setErrors
         <div className='row mb-1'>
           <div className='col-md-12'>
             <label>Ingrese contenido a adaptar</label>
-            <input id='file' onChange={handleChange} value={params.file} type='file' className='form-control mb-2' style={{ height: '60px', padding: '14.5px' }} />
+            <input id='file' name='content' onChange={handleChangeInputFile} type='file' className='form-control mb-2' style={{ height: '60px', padding: '14.5px' }} />
           </div>
         </div>
         <div className='row mb-4'>
           <div className='col-md-12 my-1'>
             <label>Comentarios</label>
-            <textarea id='comments' rows='3' onChange={handleChange} value={params.comments} type='text' className='form-control' />
+            <textarea id='comments' rows='3' onChange={handleChangeInputText} value={params.comments} type='text' className='form-control' />
           </div>
         </div>
         <div className='col-md-6 mb-3'>{errorsModal.show === true && <div className='text-danger mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errorsModal.message}</div>}</div>

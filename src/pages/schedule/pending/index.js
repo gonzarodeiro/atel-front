@@ -71,6 +71,7 @@ const Index = () => {
   }
 
   function createActions(result) {
+    if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
@@ -112,6 +113,7 @@ const Index = () => {
   }
 
   function createActionsMaterial(result) {
+    if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
@@ -184,7 +186,7 @@ const Index = () => {
   }
 
   function fillTable(result) {
-    if (result.length > 0) {
+    if (result && result.length > 0) {
       setTable({
         columns: [
           { label: '', field: 'actions' },
