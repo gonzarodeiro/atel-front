@@ -100,31 +100,27 @@ const Index = () => {
     setShowModal({ adaptInformation: true, modalData: sessionData });
   }
 
-  function showDelete() {
-    // const result = await getParametry(`${BASE_URL}/session`, values);
-    const result = [
-      {
-        full_name: 'German',
-        diagnostic: 'Tea',
-        document: 'Material a adaptar 1',
-        date: 'asdad'
-      },
-      {
-        full_name: 'Lucas',
-        diagnostic: 'TDA',
-        document: 'Material a adaptar 2',
-        date: 'asdad'
-      }
-    ];
-    createActionsDelete(result);
-    fillTableDelete(result);
+  async function showDelete(sessionData) {
+    const result = await getParametry(`${BASE_URL}/content`, {
+      sessionID: sessionData.id
+    });   
+
+    const materialList = result.map((material) => ({
+      ...material,
+      materialId : material.id,
+      ...sessionData,
+      start_date: convertDateTime(new Date(sessionData.start_datetime))
+    }));
+
+    createActionsDelete(materialList);
+    fillTableDelete(materialList);
     setShowModal({ deleteInformation: true });
   }
 
   function createActionsDelete(result) {
-    for (let i = 0; i < result.length; i++) {
+    for (let i = 0; i < result.length; i++) {      
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actions = (
+      result[i].actionsMaterials = (
         <div>
           <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
@@ -137,7 +133,7 @@ const Index = () => {
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés eliminar el material a adaptar?</p>
         <span>Alumno: {obj.full_name}</span>
-        <p>Documento: {obj.document}</p>
+        <p>Documento: {obj.original_name}</p>
       </div>,
       {
         icon: 'warning',
@@ -157,23 +153,24 @@ const Index = () => {
 
   async function deleteMaterial(obj) {
     setLoading(true);
-    await deleteResponseApi(`${BASE_URL}/document/session/${obj.id}`);
+    await deleteResponseApi(`${BASE_URL}/document/${obj.materialId}`);
     setLoading(false);
     await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
     handleClose('deleteInformation');
   }
 
-  function fillTableDelete(result) {
-    if (result.length > 0) {
+  function fillTableDelete(materialList) {
+
+    if (materialList.length > 0) {
       setTableDelete({
         columns: [
-          { label: '', field: 'actions' },
+          { label: '', field: 'actionsMaterials' },
           { label: 'Nombre', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
-          { label: 'Material', field: 'document' },
-          { label: 'Fecha sesión', field: 'date' }
+          { label: 'Material', field: 'original_name' },
+          { label: 'Fecha sesión', field: 'start_date' }
         ],
-        rows: result,
+        rows: materialList,
         show: true
       });
       setErrorsDelete({ show: false });
