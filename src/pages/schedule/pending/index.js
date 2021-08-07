@@ -131,6 +131,7 @@ const Index = () => {
           { label: 'Alumno', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Material', field: 'original_name' },
+          { label: 'Comentario', field: 'comment' },
           { label: 'Fecha sesión', field: 'start_date' }
         ],
         rows: materialList,

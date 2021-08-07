@@ -165,7 +165,7 @@ const Index = () => {
       setTableDelete({
         columns: [
           { label: '', field: 'actionsMaterials' },
-          { label: 'Nombre', field: 'full_name' },
+          { label: 'Alumno', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Material', field: 'original_name' },
           { label: 'Fecha sesión', field: 'start_date' }
@@ -190,7 +190,7 @@ const Index = () => {
       setTable({
         columns: [
           { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'full_name' },
+          { label: 'Alumno', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Fecha sesión', field: 'date' }
         ],
