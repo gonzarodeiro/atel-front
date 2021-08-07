@@ -31,7 +31,7 @@ const Index = () => {
   const [tableMaterial, setTableMaterial] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [errorMaterial, setErrorsMaterial] = useState({ show: false, message: '' });
-  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false, adaptInformation: false });
+  const [showModal, setShowModal] = useState({ details: false, materialToAdapt: false, adaptInformation: false, modalData: {} });
   const [idSession, setIdSession] = useState();
   const [userName, setUserName] = useState();
   const [sessionDate, setSessionDate] = useState();
@@ -93,29 +93,17 @@ const Index = () => {
     setSessionDate(obj.start_datetime);
   }
 
-  function handleMaterialToAdapt() {
-    // const result = await getParametry(`${BASE_URL}/session`, values);
-    const result = [
-      {
-        full_name: 'German',
-        diagnostic: 'Tea',
-        document: 'Material a adaptar 1',
-        date: 'asdad'
-      },
-      {
-        full_name: 'Lucas',
-        diagnostic: 'TDA',
-        document: 'Material a adaptar 2',
-        date: 'asdad'
-      }
-    ];
+  async function handleMaterialToAdapt(sessionData) {
+    const result = await getParametry(`${BASE_URL}/content`, {
+      sessionID: sessionData.id
+    });
     createActionsMaterial(result);
-    fillTableMaterial(result);
-    setShowModal({ materialToAdapt: true });
+    fillTableMaterial(sessionData, result);
+    setShowModal({ materialToAdapt: true, modalData: sessionData });
   }
 
-  const handleAdaptedMaterial = () => {
-    setShowModal({ adaptInformation: true });
+  const handleAdaptedMaterial = (sessionData) => {
+    setShowModal({ adaptInformation: true, modalData: sessionData });
   };
 
   function createActionsMaterial(result) {
@@ -130,17 +118,23 @@ const Index = () => {
     }
   }
 
-  function fillTableMaterial(result) {
-    if (result.length > 0) {
+  function fillTableMaterial(session, materials) {
+    const materialList = materials.map((material) => ({
+      ...material,
+      ...session,
+      start_date: convertDateTime(new Date(session.start_datetime))
+    }));
+
+    if (materialList.length > 0) {
       setTableMaterial({
         columns: [
           { label: '', field: 'actions' },
           { label: 'Nombre', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
-          { label: 'Material', field: 'document' },
-          { label: 'Fecha sesión', field: 'date' }
+          { label: 'Material', field: 'original_name' },
+          { label: 'Fecha sesión', field: 'start_date' }
         ],
-        rows: result,
+        rows: materialList,
         show: true
       });
       setErrorsMaterial({ show: false });

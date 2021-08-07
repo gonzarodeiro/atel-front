@@ -22,7 +22,7 @@ const Index = () => {
   const [errorDelete, setErrorsDelete] = useState({ show: false, message: '' });
   const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
   const [showValidation, setShowValidation] = useState(false);
-  const [showModal, setShowModal] = useState({ adaptInformation: false, deleteInformation: false });
+  const [showModal, setShowModal] = useState({ adaptInformation: false, deleteInformation: false, modalData: {} });
   const [loading, setLoading] = useState(false);
   let { roomId } = useParams();
 
@@ -83,6 +83,7 @@ const Index = () => {
   }
 
   function createActions(result) {
+    if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
@@ -94,8 +95,8 @@ const Index = () => {
     }
   }
 
-  function handleAdapt() {
-    setShowModal({ adaptInformation: true });
+  function handleAdapt(sessionData) {
+    setShowModal({ adaptInformation: true, modalData: sessionData });
   }
 
   function showDelete() {
