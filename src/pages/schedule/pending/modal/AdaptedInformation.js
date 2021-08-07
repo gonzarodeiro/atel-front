@@ -7,7 +7,7 @@ import postFileApi from '../../../../utils/services/post/postFileApi';
 import showAlert from '../../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../../config/environment';
 
-const AdaptedInformation = ({ showModal, handleClose, setShowModal }) => {
+const AdaptedInformation = ({ showModal, handleClose, setShowModal,modalData }) => {
   const [params, setParams] = useState({ file: '', comments: '' });
   const [loading, setLoading] = useState(false);
   const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
@@ -16,10 +16,10 @@ const AdaptedInformation = ({ showModal, handleClose, setShowModal }) => {
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      setErrorsModal({ show: false });
-      const sessionID = showModal.modalData ? showModal.modalData.id : '';
-      const values = { sessionID: sessionID, comments: params.comments, file: params.file };
-      await postFileApi(`${BASE_URL}/content`, values);
+      setErrorsModal({ show: false });            
+      const sessionID = modalData.id;
+      const values = { sessionID: sessionID, comments: params.comments, file: params.file, author: sessionStorage.getItem("name") };
+      await postFileApi(`${BASE_URL}/document/session`, values);
       setLoading(false);
       await showAlert('Material importado', `Se ha subido el material adaptado`, 'success');
       handleClose('adaptedInformation');

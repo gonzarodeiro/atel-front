@@ -166,8 +166,9 @@ const Index = () => {
         columns: [
           { label: '', field: 'actionsMaterials' },
           { label: 'Alumno', field: 'full_name' },
-          { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Material', field: 'original_name' },
+          { label: 'Subido por', field: 'author' },        
+          { label: 'Comentarios', field: 'comment' },        
           { label: 'Fecha sesión', field: 'start_date' }
         ],
         rows: materialList,
@@ -220,7 +221,7 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {steps.password && <Password params={params} handleChange={handleChange} showValidation={showValidation} errors={errorsPassword} handleSubmit={handleSubmitPassword} />}
-              {steps.generalInformation && <GeneralInformation params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
+              {steps.generalInformation && <GeneralInformation author={roomId.split("-")[0]} params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
             </form>
           </div>
         </div>
