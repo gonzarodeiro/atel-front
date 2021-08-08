@@ -65,7 +65,7 @@ const Index = () => {
     function createFilters() {
       const values = {
         id_student: parseInt(student.id),
-        id_professional: 1, // levantar de sessionStorage
+        id_professional: parseInt(sessionStorage.getItem('idProfessional')),
         status: status.Created,
         start_datetime: new Date(),
         room_name: student.name,

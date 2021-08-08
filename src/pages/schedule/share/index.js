@@ -39,8 +39,7 @@ const Index = () => {
       await postResponseApi(`${BASE_URL}/student/shared`, filters);
       setSteps({ generalInformation: false, sharedLink: true });
       setErrors({ show: false, message: '' });
-      const id_professional = 1; // levantar de sessionStorage
-      const sharedLink = window.location.href.replace('share-session', 'material-to-be-adapted/' + session.name + '-' + id_professional + '-' + parseInt(student.id));
+      const sharedLink = window.location.href.replace('share-session', 'material-to-be-adapted/' + session.name + '-' + parseInt(sessionStorage.getItem('idProfessional')) + '-' + parseInt(student.id));
       setLink(sharedLink);
     }
   };
@@ -62,7 +61,7 @@ const Index = () => {
   function createFilters() {
     return {
       idStudent: parseInt(student.id),
-      idProfessional: 1, // levantar de sessionStorage
+      idProfessional: parseInt(sessionStorage.getItem('idProfessional')),
       name: session.name,
       password: session.password
     };

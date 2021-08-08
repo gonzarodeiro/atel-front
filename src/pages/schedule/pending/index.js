@@ -64,7 +64,7 @@ const Index = () => {
 
   function getParameters() {
     return {
-      id_professional: 1, // agarrar id de sessionStorage cuando se registren
+      id_professional: parseInt(sessionStorage.getItem('idProfessional')),
       status: status.Pending,
       studentName: params.studentName,
       type: params.type,
@@ -80,7 +80,7 @@ const Index = () => {
       result[i].actions = (
         <div>
           <i onClick={() => handleEditSchedule(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: '#1976d2' }} aria-hidden='true'></i>
-          {result[i].type === 'Sesión de inclusión' && <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-file mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>}
+          {result[i].type === 'Sesión de inclusión' && <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-file-alt mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>}
           <i onClick={() => handleDeleteSchedule(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#dc3545' }} aria-hidden='true'></i>
         </div>
       );

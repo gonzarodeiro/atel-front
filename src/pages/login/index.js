@@ -41,10 +41,11 @@ const Index = () => {
   async function checkUser() {
     setLoading(true);
     // const params = { user: values.user.toUpperCase(), password: values.password };
-    // await postApi(process.env.REACT_APP_API_LOGIN, params);
+    // await postApi("login", params);
+
     const name = 'Gonzalo Rodeiro';
     sessionStorage.setItem('name', name);
-    sessionStorage.setItem('professionalId', '02');
+    sessionStorage.setItem('idProfessional', 1);
     setLoading(false);
     history.push(`/home`);
   }
