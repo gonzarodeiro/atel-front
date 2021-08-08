@@ -170,7 +170,7 @@ const Index = () => {
         <div>
           <i onClick={() => handleDownload(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
           <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1 ml-2' title='Eliminar Material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          {result[i].author === sessionStorage.getItem('name') ? <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i> : <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
+          {result[i].author === sessionStorage.getItem('name') ? <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i> : <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i>}
         </div>
       );
     }
