@@ -83,7 +83,7 @@ const Index = () => {
     async function showMessage() {
       const date = convertDateTime(session.date);
       setLoading(false);
-      await showAlert('Sesión programada', `Se ha programado la sesión con ${student.name} para el día ${date} `, 'success');
+      await showAlert('Sesión programada', `Se ha programado la sesión para el día ${date} `, 'success');
       history.push({ pathname: 'home' });
     }
   };

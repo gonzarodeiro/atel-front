@@ -149,7 +149,6 @@ const Index = () => {
 
   async function handleDownloadMaterial(sessionData) {
     const result = await getParametry(`${BASE_URL}/content`, { sessionID: sessionData.id });
-
     const materialList = result.map((material) => ({
       ...material,
       materialId: material.id,
@@ -171,6 +170,7 @@ const Index = () => {
         <div>
           <i onClick={() => handleDownload(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
           <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1 ml-2' title='Eliminar Material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          {result[i].author === sessionStorage.getItem('name') ? <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i> : <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
         </div>
       );
     }
@@ -217,10 +217,10 @@ const Index = () => {
         columns: [
           { label: '', field: 'actionsMaterials' },
           { label: 'Alumno', field: 'full_name' },
-          { label: 'Material', field: 'original_name' },
           { label: 'Subido por', field: 'author' },
+          { label: 'Material', field: 'original_name' },
           { label: 'Comentarios', field: 'comment' },
-          { label: 'Fecha sesión', field: 'start_date' }
+          { label: 'Fecha sesión', field: 'date' }
         ],
         rows: materialList,
         show: true
@@ -228,7 +228,7 @@ const Index = () => {
       setErrorsMaterial({ show: false });
     } else {
       setTableMaterial({ show: false });
-      setErrorsMaterial({ show: true, message: 'No se ha subido material' });
+      setErrorsMaterial({ show: true, message: 'Por el momento no se ha subido material para esta sesión' });
     }
     setLoading(false);
   }

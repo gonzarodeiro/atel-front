@@ -27,8 +27,18 @@ const DownloadMaterial = ({ showModal, handleClose, tableToAdapt, errorAdapt, se
             <span className='ml-2'>Importar material</span>
           </MDBBtn>
         </div>
-        {tableToAdapt.show && <Table data={tableToAdapt} />}
-        <div className='col-md-6 mt-2 mb-4'>{errorAdapt.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errorAdapt.message}</div>}</div>
+        {tableToAdapt.show && (
+          <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
+            <span>
+              <i className='fas fa-square ml-2' style={{ color: 'orange', marginBottom: '13px', marginLeft: '2px' }}></i> = Material a adaptar
+            </span>
+            <span>
+              <i className='fas fa-square ml-2' style={{ color: '#388e3c' }}></i> = Material ya adaptado
+            </span>
+            <Table data={tableToAdapt} />
+          </div>
+        )}
+        <div className='col-md-12 mt-2 mb-4 text-center'>{errorAdapt.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errorAdapt.message}</div>}</div>
         <Modal.Footer>
           <Cancel onClick={() => handleClose('downloadMaterial')} title='Cancelar' />
         </Modal.Footer>
