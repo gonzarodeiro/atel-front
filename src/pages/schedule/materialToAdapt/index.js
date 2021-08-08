@@ -101,9 +101,7 @@ const Index = () => {
   }
 
   async function showDelete(sessionData) {
-    const result = await getParametry(`${BASE_URL}/content`, {
-      sessionID: sessionData.id
-    });
+    const result = await getParametry(`${BASE_URL}/content`, { sessionID: sessionData.id, author: roomId.split('-')[0] });
 
     const materialList = result.map((material) => ({
       ...material,
