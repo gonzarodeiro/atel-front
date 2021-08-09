@@ -1,10 +1,8 @@
 import io from 'socket.io-client';
 import { clientEvents, serverEvents } from './events';
+import { BASE_URL } from '../../config/environment';
 
-const ENDPOINT = 'https://atel-back-stg.herokuapp.com/';
-// const ENDPOINT = 'http://localhost:4000';
-
-let _socket = io(ENDPOINT),
+let _socket = io(BASE_URL),
   _room;
 
 function connect(room) {

@@ -13,29 +13,38 @@ export const celebrationType = {
   SENDER: 0,
   RECEIVER: 1
 };
+const MAX_TIME = 4000;
+let timer;
 
 const Celebration = ({ type }) => {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showList, setShowList] = useState(false);
   const [{ image, showImage }, setShowImage] = useState({ image: null, visible: false });
 
   useEffect(() => {
     if (type === celebrationType.RECEIVER) {
       registerEvent((selected) => {
-        console.log('received');
         setShowImage({
           image: selected,
           showImage: true
         });
       }, clientEvents.showCelebration);
       registerEvent(() => {
-        console.log('received');
         setShowImage({
           image: '',
           showImage: false
         });
       }, clientEvents.closeCelebration);
     }
-  });
+
+    // control the animation time
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      setShowImage({
+        image: '',
+        showImage: false
+      });
+    }, MAX_TIME);
+  }, [showImage, image]);
 
   const handleItemClick = (selected) => {
     if (type === celebrationType.SENDER) {
@@ -44,7 +53,6 @@ const Celebration = ({ type }) => {
         showImage: true
       });
       sendMessage(clientEvents.showCelebration, selected);
-      setShowMenu(false);
     }
   };
 
@@ -58,18 +66,26 @@ const Celebration = ({ type }) => {
     }
   };
 
+  // hide list when div loses focus
+  const handleBlur = (e) => {
+    setShowList(false);
+  };
+
+  // hide list when click on it
+  const handleToggleList = () => setShowList(!showList);
+
   return (
     <>
       {type === celebrationType.SENDER && (
-        <div className='clb-container'>
-          {showMenu && items && items.length && (
-            <div className='clb-menu'>
+        <div className='clb-container' tabIndex='1' onBlur={handleBlur} onClick={handleToggleList}>
+          {showList && items && items.length && (
+            <div className='clb-list'>
               {items.map((image, index) => (
                 <img key={`item-${index}`} className='clb-img' src={image} onClick={() => handleItemClick(image)} alt='miniatura' />
               ))}
             </div>
           )}
-          <div className='clb-btn' onClick={() => setShowMenu(!showMenu)}>
+          <div className='clb-btn' onClick={handleToggleList}>
             <i className='fas fa-heart' style={{ fontSize: '28px', color: 'white' }} />
           </div>
         </div>

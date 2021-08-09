@@ -423,6 +423,16 @@ const global = createGlobalStyle`
         width: 85%;
     }
 
+    .tittle-registration{
+      font-size: 27px;
+      font-weight: 600;
+      letter-spacing: -0.39px;
+      margin-top: 18px;
+      margin-bottom: 23px;
+      color: #1b252e;
+      width: 85%;
+    }
+
 `;
 
 export default global;

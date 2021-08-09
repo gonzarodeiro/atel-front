@@ -1,51 +1,85 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { MDBInput, MDBBtn, MDBMask, MDBView } from 'mdbreact';
+import { MDBMask, MDBView } from 'mdbreact';
 import './../../styles/css/login.css';
 import Loading from '../../components/Loading';
-import Registration from './registration';
+import Login from './steps/Login';
+import Registration from './steps/Registration';
 import postApi from '../../utils/services/post/postApi';
+import showAlert from '../../utils/commons/showAlert';
 
 const Index = () => {
-  const [values, setValues] = useState({ user: '', password: '' });
-  const [errors, setErrors] = useState({ message: '', show: false });
-  const [showModal, setShowModal] = useState({ registration: false });
+  const [user, setUser] = useState({ name: '', password: '' });
+  const [registration, setRegistration] = useState({ name: '', user: '', email: '', password: '', profession: '' });
+  const [steps, setSteps] = useState({ login: true, registration: false });
+  const [errorsLogin, setErrorsLogin] = useState({ message: '', show: false });
+  const [errorsRegistration, setErrorsRegistration] = useState({ message: '', show: false });
   const [isLoading, setLoading] = useState(false);
   let history = useHistory();
 
-  function handleChange(event) {
+  function handleChangeLogin(event) {
     const { id, value } = event.target;
-    setValues({ ...values, [id]: value });
+    setUser({ ...user, [id]: value });
   }
 
-  function handleSubmit(event) {
+  function handleChangeRegistration(event) {
+    const { id, value } = event.target;
+    setRegistration({ ...registration, [id]: value });
+  }
+
+  function handleLogin(event) {
     event.preventDefault();
-    setErrors({ message: '', show: false });
-    if (!values.user && !values.password) {
-      setErrors({ message: 'Debe ingresar usuario y contraseña', show: true });
+    setErrorsLogin({ message: '', show: false });
+    if (!user.name && !user.password) {
+      setErrorsLogin({ message: 'Debe ingresar usuario y contraseña', show: true });
       setTimeout(() => {
-        setErrors({ message: '', show: false });
+        setErrorsLogin({ message: '', show: false });
       }, 3000);
-    } else loginUser();
+    } else checkUser();
   }
 
-  async function loginUser() {
+  async function checkUser() {
     setLoading(true);
     // const params = { user: values.user.toUpperCase(), password: values.password };
-    // await postApi(process.env.REACT_APP_API_LOGIN, params);
+    // await postApi("login", params);
+
     const name = 'Gonzalo Rodeiro';
     sessionStorage.setItem('name', name);
-    sessionStorage.setItem('professionalId', '02');
+    sessionStorage.setItem('idProfessional', 1);
     setLoading(false);
     history.push(`/home`);
   }
 
-  function registration() {
-    setShowModal({ registration: true });
+  async function handleRegistration() {
+    setLoading(true);
+    if (validateFields()) {
+      setLoading(false);
+      await showAlert('Profesional registrado', 'Ha sido registrado con éxito en el sistema', 'success');
+      setSteps({ login: true, registration: false });
+      setRegistration({ name: '', user: '', email: '', password: '', profession: '' });
+    }
+    setLoading(false);
   }
 
-  function handleClose() {
-    setShowModal({ registration: false });
+  function validateFields() {
+    if (!registration.name || !registration.user || !registration.email || !registration.password || !registration.profession) {
+      setErrorsRegistration({ show: true, message: 'Complete los campos obligatorios' });
+      setTimeout(() => {
+        setErrorsRegistration({ message: '', show: false });
+      }, 3000);
+      return;
+    }
+
+    const validEmail = /\S+@\S+\.\S+/;
+    if (!validEmail.test(registration.email)) {
+      setErrorsRegistration({ show: true, message: 'Ingrese un email válido' });
+      setTimeout(() => {
+        setErrorsRegistration({ message: '', show: false });
+      }, 3000);
+      return;
+    }
+
+    return true;
   }
 
   return (
@@ -61,32 +95,8 @@ const Index = () => {
                 </div>
               )}
               <div className='title-header'>ATEL - Asistente terapéutico en línea</div>
-              <div className='tittle'>¡Hola! Bienvenido</div>
-              <div className='d-block mt-3' style={{ fontSize: '16px !important' }}>
-                <MDBInput label='Usuario' id='user' onChange={handleChange} value={values.user} group type='text' validate success='right' style={{ marginBottom: '25px' }} />
-                <MDBInput label='Contraseña' id='password' onChange={handleChange} value={values.password} group type='password' validate='container' className='mb-4' />
-              </div>
-              <div className='text-center mt-3 black-text'>
-                <MDBBtn onClick={handleSubmit} rounded style={{ fontSize: '14px', padding: '11px 12px', marginTop: '37px', marginBottom: '35px' }} className={'btn-block rounded shadow-none blue darken-3 text-white'}>
-                  Iniciar Sesión
-                  <div className='position-absolute' style={{ right: 13, top: 17 }}></div>
-                </MDBBtn>
-                <hr className='hr-light mb-3 mt-4' />
-                <div className='text-center d-flex justify-content-center white-label' style={{ color: 'rgb(152, 152, 152)', fontSize: '15px', fontWeight: '500' }}>
-                  ¿No tienes una cuenta?
-                  <b className='ml-2' onClick={registration} style={{ cursor: 'pointer' }}>
-                    Registrate
-                  </b>
-                </div>
-              </div>
-              {errors.show && (
-                <div className='w-100 animated fadeInUp faster shadow' style={{ left: 0, bottom: -40, marginTop: '45px' }}>
-                  <span className='d-block small text-white text-center py-3 mx-auto rounded w-100' style={{ backgroundColor: '#e53935' }}>
-                    {errors.message}
-                  </span>
-                </div>
-              )}
-              {showModal.registration && <Registration showModal={showModal} handleClose={handleClose} />}
+              {steps.login && <Login handleChange={handleChangeLogin} user={user} handleLogin={handleLogin} setSteps={setSteps} errorsLogin={errorsLogin} setErrorsLogin={setErrorsLogin} />}
+              {steps.registration && <Registration handleChange={handleChangeRegistration} registration={registration} handleRegistration={handleRegistration} setSteps={setSteps} errorsRegistration={errorsRegistration} setErrorsRegistration={setErrorsRegistration} />}
             </div>
           </div>
         </form>

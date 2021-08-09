@@ -7,13 +7,14 @@ import showAlert from '../../../../../utils/commons/showAlert';
 import status from '../../../../../utils/enums/sessionStatus';
 import postResponseApi from '../../../../../utils/services/post/postResponseApi';
 import cleanObject from '../../../../../utils/commons/cleanObject';
+import { BASE_URL } from '../../../../../config/environment';
 
 const End = ({ handleChange, session, props }) => {
   let history = useHistory();
 
   async function handleSubmit() {
     const filters = createFilters();
-    await postResponseApi('https://atel-back-stg.herokuapp.com/session/finish', filters);
+    await postResponseApi(`${BASE_URL}/session/finish`, filters);
     await showAlert('Sesión Finalizada', `Se ha finalizado la sesión con ${props.location.state.userName} `, 'success');
     history.push(`/home`);
   }

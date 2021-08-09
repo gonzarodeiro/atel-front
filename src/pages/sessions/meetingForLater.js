@@ -15,7 +15,8 @@ import status from '../../utils/enums/sessionStatus';
 import postResponseApi from '../../utils/services/post/postResponseApi';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import Dropdownlist from '../../components/html/Dropdownlist';
-import cleanObject from '../../utils/commons/cleanObject';
+import { BASE_URL } from '../../config/environment';
+
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -30,11 +31,16 @@ const Index = () => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
   }, []);
 
-  const handleChange = (event) => {
+  const handleChangeStudent = (event) => {
     const { id, value } = event.target;
     const fields = value.split('-');
     setSession({ ...session, [id]: value });
     setStudent({ id: fields[0], name: fields[1] });
+  };
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setSession({ ...session, [id]: value });
   };
 
   const handleSubmit = async (event) => {
@@ -42,7 +48,7 @@ const Index = () => {
     if (validateFields()) {
       setLoading(true);
       const filters = createFilters();
-      await postResponseApi('https://atel-back-stg.herokuapp.com/session', filters);
+      await postResponseApi(`${BASE_URL}/session`, filters);
       showMessage();
     }
 
@@ -52,8 +58,8 @@ const Index = () => {
         setShowValidation(true);
         return;
       }
-      if (session.type === '1' && !session.zoom) {
-        setErrors({ show: true, message: 'Debe ingresar el link de zoom' });
+      if (session.type === 'Sesión de inclusión' && !session.zoom) {
+        setErrors({ show: true, message: 'Debe ingresar el id de zoom' });
         setShowValidation(true);
         return;
       }
@@ -63,22 +69,21 @@ const Index = () => {
     function createFilters() {
       const values = {
         id_student: parseInt(student.id),
-        id_professional: 1, // levantar de sessionStorage
+        id_professional: parseInt(sessionStorage.getItem('idProfessional')),
         status: status.Pending,
         start_datetime: session.date,
         room_name: student.name,
-        type: parseInt(session.type),
+        type: session.type,
         zoom: session.zoom,
         password: session.password
       };
-      cleanObject(values);
       return values;
     }
 
     async function showMessage() {
       const date = convertDateTime(session.date);
       setLoading(false);
-      await showAlert('Sesión programada', `Se ha programado la sesión con ${student.name} para el día ${date} `, 'success');
+      await showAlert('Sesión programada', `Se ha programado la sesión para el día ${date} `, 'success');
       history.push({ pathname: 'home' });
     }
   };
@@ -104,10 +109,10 @@ const Index = () => {
               </div>
               {session.type && (
                 <div className='row'>
-                  <div className={session.type === '1' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
+                  <div className={session.type === 'Sesión de inclusión' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
                     <Form.Group>
                       <Form.Label> Nombre del alumno </Form.Label>
-                      <Form.Control id='userName' onChange={handleChange} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
+                      <Form.Control id='userName' onChange={handleChangeStudent} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
                         {dlStudents.map((file) => (
                           <option key={file.id} value={`${file.id}-${file.code}`}>
                             {file.description}
@@ -116,18 +121,18 @@ const Index = () => {
                       </Form.Control>
                     </Form.Group>
                   </div>
-                  <div className={session.type === '1' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
+                  <div className={session.type === 'Sesión de inclusión' ? 'col-md-3 my-1' : 'col-md-6 my-1'}>
                     <label>Fecha y hora</label>
                     <DatePicker id='date' showTimeSelect timeFormat='HH:mm' timeIntervals={30} minDate={new Date()} dateFormat='dd/MM/yyyy - hh:mm aa' selected={session.date} todayButton='Hoy' onChange={(date) => setSession({ ...session, date: date })} value={session.date} className='form-control' timeCaption='Hora' />
                   </div>
-                  {session.type === '1' && (
+                  {session.type === 'Sesión de inclusión' && (
                     <>
                       <div className='col-md-3 my-1'>
-                        <label>Link de zoom</label>
+                        <label>ID de zoom</label>
                         <input id='zoom' onChange={handleChange} value={session.zoom} type='text' className={'form-control ' + (!session.Zoom && showValidation ? 'borderRed' : '')} />
                       </div>
                       <div className='col-md-3 my-1'>
-                        <label>Contraseña</label>
+                        <label>Código de acceso</label>
                         <input id='password' onChange={handleChange} value={session.password} type='text' className='form-control' />
                       </div>
                     </>

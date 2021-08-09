@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import convertDate from '../../../utils/commons/convertDate';
 import convertDateTime from '../../../utils/commons/convertDateTime';
@@ -9,6 +10,8 @@ import Password from './steps/password';
 import GeneralInformation from './steps/generalInformation';
 import swal from '@sweetalert/with-react';
 import showAlert from '../../../utils/commons/showAlert';
+import { BASE_URL } from '../../../config/environment';
+import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi';
 
 const Index = () => {
   const [params, setParams] = useState({ password: '', dateFrom: new Date(), dateTo: new Date() });
@@ -20,29 +23,39 @@ const Index = () => {
   const [errorDelete, setErrorsDelete] = useState({ show: false, message: '' });
   const [errorsModal, setErrorsModal] = useState({ show: false, message: '' });
   const [showValidation, setShowValidation] = useState(false);
-  const [showModal, setShowModal] = useState({ adaptInformation: false, deleteInformation: false });
+  const [showModal, setShowModal] = useState({ adaptInformation: false, deleteInformation: false, modalData: {} });
   const [loading, setLoading] = useState(false);
+  let { roomId } = useParams();
 
   const handleChange = (event) => {
     const { id, value } = event.target;
     setParams({ ...params, [id]: value });
   };
 
-  function handleSubmitPassword() {
+  async function handleSubmitPassword() {
     if (!params.password) {
       setErrorsPassword({ show: true, message: 'Debe ingresar la contraseña' });
       setShowValidation(true);
       return;
     }
-
-    // chequear si la contraseña que ingreso es valida
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
-    if (params.password !== 'Gonza') {
+    const values = createFilters();
+    const response = await getParametry(`${BASE_URL}/student/shared/verification`, values);
+    if (!response.result) {
       setErrorsPassword({ show: true, message: 'La contraseña ingresada no es válida' });
       setShowValidation(true);
       return;
     }
     setSteps({ password: false, generalInformation: true });
+  }
+
+  function createFilters() {
+    const fields = roomId.split('-');
+    return {
+      idStudent: fields[2],
+      idProfessional: fields[1],
+      name: fields[0],
+      password: params.password
+    };
   }
 
   function handleSubmit() {
@@ -53,35 +66,25 @@ const Index = () => {
   async function getSchedule() {
     const values = getParameters();
     cleanObject(values);
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
-    const result = [
-      {
-        full_name: 'German',
-        diagnostic: 'Tea',
-        date: 'asdad'
-      },
-      {
-        full_name: 'Lucas',
-        diagnostic: 'TDA',
-        date: 'asdad'
-      }
-    ];
+    const result = await getParametry(`${BASE_URL}/session`, values);
     createActions(result);
     fillTable(result);
   }
 
   function getParameters() {
+    const fields = roomId.split('-');
     return {
-      id_professional: 1, // agarrar id de sessionStorage cuando se registren
+      id_professional: fields[1],
       status: status.Pending,
-      studentName: params.studentName,
-      diagnostic: params.diagnostic,
+      studentId: fields[2],
       dateTo: convertDate(params.dateTo),
-      dateFrom: convertDate(params.dateFrom)
+      dateFrom: convertDate(params.dateFrom),
+      type: 'Sesión de inclusión'
     };
   }
 
   function createActions(result) {
+    if (!result) return;
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
@@ -93,35 +96,29 @@ const Index = () => {
     }
   }
 
-  function handleAdapt() {
-    setShowModal({ adaptInformation: true });
+  function handleAdapt(sessionData) {
+    setShowModal({ adaptInformation: true, modalData: sessionData });
   }
 
-  function showDelete() {
-    // const result = await getParametry('https://atel-back-stg.herokuapp.com/session', values);
-    const result = [
-      {
-        full_name: 'German',
-        diagnostic: 'Tea',
-        document: 'Material a adaptar 1',
-        date: 'asdad'
-      },
-      {
-        full_name: 'Lucas',
-        diagnostic: 'TDA',
-        document: 'Material a adaptar 2',
-        date: 'asdad'
-      }
-    ];
-    createActionsDelete(result);
-    fillTableDelete(result);
+  async function showDelete(sessionData) {
+    const result = await getParametry(`${BASE_URL}/content`, { sessionID: sessionData.id, author: roomId.split('-')[0] });
+
+    const materialList = result.map((material) => ({
+      ...material,
+      materialId: material.id,
+      ...sessionData,
+      start_date: convertDateTime(new Date(sessionData.start_datetime))
+    }));
+
+    createActionsDelete(materialList);
+    fillTableDelete(materialList);
     setShowModal({ deleteInformation: true });
   }
 
   function createActionsDelete(result) {
     for (let i = 0; i < result.length; i++) {
       result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actions = (
+      result[i].actionsMaterials = (
         <div>
           <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
@@ -134,7 +131,7 @@ const Index = () => {
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés eliminar el material a adaptar?</p>
         <span>Alumno: {obj.full_name}</span>
-        <p>Documento: {obj.document}</p>
+        <p>Documento: {obj.original_name}</p>
       </div>,
       {
         icon: 'warning',
@@ -148,30 +145,30 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') patchSchedule(obj);
+      if (value === 'delete') deleteMaterial(obj);
     });
   }
 
-  async function patchSchedule(obj) {
+  async function deleteMaterial(obj) {
     setLoading(true);
-    const values = { status: status.Canceled };
-    // await patchApi('https://atel-back-stg.herokuapp.com/session', values, obj.id);
+    await deleteResponseApi(`${BASE_URL}/document/${obj.materialId}`);
     setLoading(false);
     await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
     handleClose('deleteInformation');
   }
 
-  function fillTableDelete(result) {
-    if (result.length > 0) {
+  function fillTableDelete(materialList) {
+    if (materialList.length > 0) {
       setTableDelete({
         columns: [
-          { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'full_name' },
-          { label: 'Dificultad', field: 'diagnostic' },
-          { label: 'Material', field: 'document' },
-          { label: 'Fecha sesión', field: 'date' }
+          { label: '', field: 'actionsMaterials' },
+          { label: 'Alumno', field: 'full_name' },
+          { label: 'Material', field: 'original_name' },
+          { label: 'Subido por', field: 'author' },
+          { label: 'Comentarios', field: 'comment' },
+          { label: 'Fecha sesión', field: 'start_date' }
         ],
-        rows: result,
+        rows: materialList,
         show: true
       });
       setErrorsDelete({ show: false });
@@ -191,7 +188,7 @@ const Index = () => {
       setTable({
         columns: [
           { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'full_name' },
+          { label: 'Alumno', field: 'full_name' },
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Fecha sesión', field: 'date' }
         ],
@@ -221,7 +218,7 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {steps.password && <Password params={params} handleChange={handleChange} showValidation={showValidation} errors={errorsPassword} handleSubmit={handleSubmitPassword} />}
-              {steps.generalInformation && <GeneralInformation params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
+              {steps.generalInformation && <GeneralInformation author={roomId.split('-')[0]} params={params} error={error} table={table} setParams={setParams} handleSubmit={handleSubmit} showModal={showModal} handleClose={handleClose} setShowValidation={setShowValidation} setErrorsModal={setErrorsModal} errorsModal={errorsModal} tableDelete={tableDelete} errorDelete={errorDelete} />}
             </form>
           </div>
         </div>

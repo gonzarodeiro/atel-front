@@ -4,17 +4,24 @@ import { useHistory } from 'react-router-dom';
 import Begin from './meeting/Begin';
 import End from './meeting/End';
 import { connect } from '../../../../utils/socketManager';
+import Loading from '../../../../components/Loading';
 
 const ZoomProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
   const [session, setSession] = useState({ generalComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
+  const [loading, setShowLoading] = useState(true);
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
     else if (!props.location.state) history.push(`/home`);
-    else connect(props.location.state.roomId + '-' + props.location.state.sessionId);
+    else {
+      setTimeout(() => {
+        setShowLoading(false);
+      }, 3000);
+      connect(props.location.state.roomId + '-' + props.location.state.sessionId);
+    }
   }, []);
 
   const handleChange = (event) => {
@@ -23,14 +30,20 @@ const ZoomProfessionalSession = (props) => {
   };
 
   function copyClipboard() {
-    const sharedLink = window.location.href.replace('zoom-session', 'student-zoom-session/' + props.location.state.userName + '-' + props.location.state.sessionId);
+    const roomZoomSplit = props.location.state.roomZoom.split('-');
+    const sharedLink = window.location.href.replace('zoom-session', 'student-zoom-session/' + roomZoomSplit[0] + '-' + roomZoomSplit[1] + '-' + props.location.state.userName + '-' + props.location.state.sessionId);
     navigator.clipboard.writeText(sharedLink);
     showModal({ notification: true });
   }
 
   return (
     <Layout>
-      <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
+        {loading && (
+          <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
+            <Loading />
+          </div>
+        )}
         <div className='container'>
           <div className='card-body'>
             <div className='card-title pb-1 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
