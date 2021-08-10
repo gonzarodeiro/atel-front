@@ -94,7 +94,7 @@ const Index = () => {
                   <Loading />
                 </div>
               )}
-              <div className='title-header'>ATEL - Asistente terapéutico en línea</div>
+              <div className='title-header'>ATEL - Asistente terapéutico en assad</div>
               {steps.login && <Login handleChange={handleChangeLogin} user={user} handleLogin={handleLogin} setSteps={setSteps} errorsLogin={errorsLogin} setErrorsLogin={setErrorsLogin} />}
               {steps.registration && <Registration handleChange={handleChangeRegistration} registration={registration} handleRegistration={handleRegistration} setSteps={setSteps} errorsRegistration={errorsRegistration} setErrorsRegistration={setErrorsRegistration} />}
             </div>
