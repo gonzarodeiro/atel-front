@@ -42,6 +42,15 @@ const global = createGlobalStyle`
     width: 100%;
     font-weight: 400 !important;
   }
+  
+  .react-datepicker__time-container--with-today-button {
+    display: inline;
+    border: 1px solid #aeaeae;
+    border-radius: 0.3rem;
+    position: absolute;
+    right: -85px !important;
+    top: 0;
+  }
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -412,6 +421,16 @@ const global = createGlobalStyle`
         margin-bottom: 40px;
         color: #1b252e;
         width: 85%;
+    }
+
+    .tittle-registration{
+      font-size: 27px;
+      font-weight: 600;
+      letter-spacing: -0.39px;
+      margin-top: 18px;
+      margin-bottom: 23px;
+      color: #1b252e;
+      width: 85%;
     }
 
 `;
