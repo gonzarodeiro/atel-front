@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Pictograms = () => {
+const Logical = () => {
   return <div>Lógica</div>;
 };
 
-export default Pictograms;
+export default Logical;
