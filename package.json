@@ -39,6 +39,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-loc": "env-cmd --verbose -f .env.local react-scripts start",
+    "start-dev": "env-cmd --verbose -f .env.development react-scripts start",
+    "start-stg": "env-cmd --verbose -f .env.staging react-scripts start",
+    "start-prd": "env-cmd --verbose -f .env.production react-scripts start",
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

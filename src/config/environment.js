@@ -1,29 +1,26 @@
-const DEV = 'develop';
+const LOC = 'local';
+const DEV = 'development';
 const STG = 'staging';
 const PRD = 'prduction';
 
 const envs = {
+  [LOC]: LOC,
   [DEV]: DEV,
   [STG]: STG,
   [PRD]: PRD
 };
 
-const urls = {
-  [DEV]: 'http://localhost:4000',
-  [STG]: 'https://atel-back-stg.herokuapp.com',
-  [PRD]: 'https://atel-back-prd.herokuapp.com'
-};
-
-const [ENV, BASE_URL] = (function (opt) {
-  const validEnv = envs[opt];
+function validateEnv(env) {
+  const validEnv = envs[env];
   if (!validEnv) throw Error('invalid environment');
-  return [validEnv, urls[validEnv]];
-})(
-  /**
-   * Setear [DEV | STG | PRD]
-   * manualmente por ahora
-   * */
-  STG
-);
+  return [validEnv, process.env.REACT_APP_BASE_URL];
+}
+
+// log enviroment variables for debug
+if (process.env.REACT_APP_LOG_ENV_VARS) {
+  console.log(process.env);
+}
+
+const [ENV, BASE_URL] = validateEnv(process.env.REACT_APP_ENV);
 
 export { ENV, BASE_URL };
