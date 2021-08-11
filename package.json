@@ -1,5 +1,5 @@
 {
-  "homepage": "https://gonzarodeiro.github.io/atel-front",
+  "homepage": ".",
   "name": "atel-front",
   "version": "0.1.0",
   "private": true,
@@ -34,6 +34,7 @@
     "typeface-open-sans": "0.0.75",
     "typeface-roboto": "0.0.75",
     "use-image": "^1.0.7",
+    "vercel": "^23.1.2",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
@@ -42,7 +43,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "vercel": "vercel --prod"
   },
   "eslintConfig": {
     "extends": [
