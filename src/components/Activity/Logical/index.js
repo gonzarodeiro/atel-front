@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import { Stage,Layer,Group, Image as KonvaImage } from 'react-konva';
 import { generateTrays } from './commons/tray';
+import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 
 const Logical = () => {
@@ -12,6 +13,7 @@ const Logical = () => {
   
   const [{ width, height }, setDimensions] = useState({});
   const [trays,setTrays] = useState();
+  const [elements,setElements] = useState();
 
   useEffect(() =>{
     setResolution();
@@ -27,6 +29,7 @@ const Logical = () => {
 
   function setConfiguration(){
     setTrays(generateTrays());
+    setElements(generateElements());
   }
   
   function getAllingX(elementWidth, index, arrayLenght){  
@@ -48,6 +51,14 @@ const Logical = () => {
             trays.map((element, index, array) => (
               <Group>
                 <KonvaImage key={element.id} x={getAllingX(element.width, index, array.length)} y={150} width={element.width} height={element.height} image={imageFactory(element.src)} />
+              </Group>
+              )
+            )
+          }
+          {elements &&
+            elements.map((element, index) => (
+              <Group>
+                <KonvaImage key={element.id} x={Math.round(Math.random()* (width/2) + 20)} y={350} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />
               </Group>
               )
             )
