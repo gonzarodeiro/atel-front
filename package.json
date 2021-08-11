@@ -48,7 +48,8 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "vercel": "vercel --prod"
+    "vercel": "vercel --prod",
+    "create-vercel-env": "vercel env pull"
   },
   "eslintConfig": {
     "extends": [
