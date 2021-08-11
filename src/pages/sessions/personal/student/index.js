@@ -104,10 +104,10 @@ const StudentSession = (props) => {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>}
-                    {tools.alphabetical && <Alphabetical props={props} />}
-                    {tools.numerical && <Numerical props={props} />}
-                    {tools.pictogram && <Pictogram props={props} />}
+                    {meeting.begin && <Jitsi roomId={roomId} userName={student} height='580px'></Jitsi>}
+                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} />}
+                    {tools.numerical && <Numerical roomId={roomId} userName={student} />}
+                    {tools.pictogram && <Pictogram roomId={roomId} userName={student} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>

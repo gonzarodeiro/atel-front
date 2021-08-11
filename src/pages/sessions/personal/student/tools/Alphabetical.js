@@ -28,7 +28,7 @@ import voiceElephant from '../../../../../components/Activity/Alphabetical/audio
 import getByFilters from '../../../../utils/services/get/getByFilters';
 */
 
-const Alphabetical = () => {
+const Alphabetical = (props) => {
   // TODO: Completar cuando este corregido el el endpoint de imagenes
   /*
   const [images, setImages] = useState([]);
@@ -173,7 +173,7 @@ const Alphabetical = () => {
               Cámara del profesional
             </label>
           </div>
-          <Jitsi roomId={'LucasGomez-123'} userName={'qweqweq'} height='200px' />
+          <Jitsi roomId={props.roomId} userName={props.userName} height='200px' />
         </div>
       </div>
     </React.Fragment>
