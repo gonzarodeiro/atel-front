@@ -41,6 +41,12 @@ const StudentSession = (props) => {
     }, clientEvents.initAlphabetical);
 
     registerEvent(() => {
+      showMeeting({ begin: false });
+      showTools({ numerical: true });
+      showWizard(true);
+    }, clientEvents.initNumerical);
+
+    registerEvent(() => {
       showMeeting({ begin: false, end: true });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);

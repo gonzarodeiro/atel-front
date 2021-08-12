@@ -31,7 +31,7 @@ const Logical = () => {
   }
 
 
-  function updateTrayQuantity(index,element){
+  function updateTrayQuantity(index){
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);        
     const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
