@@ -8,8 +8,7 @@ const Logical = () => {
   const defaultColor = '#8896AB'; 
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
-  const stageRef = useRef(null);
-  const MARGIN_TOP = 200;
+  const stageRef = useRef(null);  
   
   const [{ width, height }, setDimensions] = useState({});
   const [trays,setTrays] = useState();
