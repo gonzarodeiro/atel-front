@@ -9,6 +9,8 @@ const generateTrays = () => {
       src: tray,
       width: 160,
       height: 100,
+      expectedQuantity : 4,
+      quantity:0,
       draggable: false,
         
     },
@@ -18,6 +20,8 @@ const generateTrays = () => {
       src: tray,
       width: 160,
       height: 100,
+      expectedQuantity : 3,
+      quantity:0,
       draggable: false,
     }
   ];
