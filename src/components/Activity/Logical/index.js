@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import { Stage,Layer,Group, Image as KonvaImage } from 'react-konva';
+import { Stage,Layer,Group, Image as KonvaImage, Text } from 'react-konva';
 import { generateTrays } from './commons/tray';
 import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
@@ -51,6 +51,9 @@ const Logical = () => {
             trays.map((element, index, array) => (
               <Group>
                 <KonvaImage key={element.id} x={getAllingX(element.width, index, array.length)} y={150} width={element.width} height={element.height} image={imageFactory(element.src)} />
+                <Text id={'quantity' + element.id} text={element.quantity} x={getAllingX(element.width, index, array.length) - 20} y={240}  height={20} width={20} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
+                <Text id={'expectedQuantity' + element.id} text={element.expectedQuantity} x={getAllingX(element.width, index, array.length) + element.width} y={240}  height={20} width={20} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
+                
               </Group>
               )
             )
