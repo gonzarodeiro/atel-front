@@ -1,8 +1,9 @@
 import React, {useRef, useEffect, useState} from 'react';
-import { Stage,Layer,Group, Image as KonvaImage, Text } from 'react-konva';
+import { Stage,Layer, Image as KonvaImage } from 'react-konva';
 import { generateTrays } from './commons/tray';
 import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
+import TrayGroup from './components/TrayGroup'
 
 const Logical = () => {
   const defaultColor = '#8896AB'; 
@@ -14,54 +15,71 @@ const Logical = () => {
   const [trays,setTrays] = useState();
   const [elements,setElements] = useState();
 
-  useEffect(() =>{
-    setResolution();
+  useEffect(() =>{    
     setConfiguration(); // will be register in socket event listener
   },[]);
+  
 
-  function setResolution() {
+  function setConfiguration(){
     let rect = divRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
     setDimensions({ width, height });  
-  }
-
-  function setConfiguration(){
     setTrays(generateTrays());
-    setElements(generateElements());
-  }
-  
-  function getAllingX(elementWidth, index, arrayLenght){  
-    var stageWidth = width;    
-    var relativeStageWidth = stageWidth / arrayLenght;
-    var middleRelative = relativeStageWidth / 2;
-    var offset = relativeStageWidth * (index);
-    var x = (middleRelative) - (elementWidth/2) + offset;    
-    return Math.round(x);
+    setElements(generateElements(width));
   }
 
+
+  function updateTrayQuantity(index,element){
+    const point = stageRef.current.getPointerPosition();
+    const intersections = stageRef.current.getAllIntersections(point);        
+    const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
+    updateElementsPositions(currentElement);
+    const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));    
+    if(!tray) {
+      let group = currentElement.getParent();
+      stageRef.current.add(currentElement);      
+      return      
+    }
+
+    let group = tray.getParent();    
+    if(group){
+      group.add(currentElement);                  
+      var elementsOfType = group.find("." + element.type);
+      var newQuantity = elementsOfType.length;
+      var copyofTrays = trays.map( x => {        
+        if(x.id == tray.attrs.name)
+          return {...x, quantity: newQuantity}
+        return x;
+      });
+      setTrays(copyofTrays);
+    }
+  }
+
+  function updateElementsPositions(currentElement){
+    var copyOfElements = [...elements];
+    copyOfElements.map(element => {      
+        if(element.id == currentElement.attrs.id)
+          return {...element, x:element.x(), y:element.y()}
+        return element;
+      });
+      setElements(copyOfElements);
+  }
+
+  // banana-suelta > tray
+  // bannana-suelta > suelta
+  // banana-tray > suelta
+  // banana-tray > otro-tray
 
 
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE,backgroundColor: defaultColor }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>
         <Layer>
-          {trays &&
-            trays.map((element, index, array) => (
-              <Group>
-                <KonvaImage key={element.id} x={getAllingX(element.width, index, array.length)} y={150} width={element.width} height={element.height} image={imageFactory(element.src)} />
-                <Text id={'quantity' + element.id} text={element.quantity} x={getAllingX(element.width, index, array.length) - 20} y={240}  height={20} width={20} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
-                <Text id={'expectedQuantity' + element.id} text={element.expectedQuantity} x={getAllingX(element.width, index, array.length) + element.width} y={240}  height={20} width={20} fontVariant='bold' fontSize={24} align='center' verticalAlign='middle' strokeWidth={1} fill='white' shadowColor='black' shadowBlur={10} />
-                
-              </Group>
-              )
-            )
-          }
+          <TrayGroup trays={trays} width={width}/>
           {elements &&
-            elements.map((element, index) => (
-              <Group>
-                <KonvaImage key={element.id} x={Math.round(Math.random()* (width/2) + 20)} y={350} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />
-              </Group>
+            elements.map((element, index) => (              
+                <KonvaImage id={"element-" + index} name={element.type} onDragEnd={(e) => updateTrayQuantity(index,element)} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />              
               )
             )
           }

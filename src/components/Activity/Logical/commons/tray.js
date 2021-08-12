@@ -11,8 +11,7 @@ const generateTrays = () => {
       height: 100,
       expectedQuantity : 4,
       quantity:0,
-      draggable: false,
-        
+      draggable: false,      
     },
     {
       id: uuidv4(),
