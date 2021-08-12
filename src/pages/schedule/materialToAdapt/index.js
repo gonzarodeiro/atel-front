@@ -83,31 +83,31 @@ const Index = () => {
     };
   }
 
-  function createActions(result) {
-    if (!result) return;
-    for (let i = 0; i < result.length; i++) {
-      result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actions = (
+  function createActions(sessions) {
+    if (!sessions) return;
+    for (let i = 0; i < sessions.length; i++) {
+      sessions[i].date = convertDateTime(new Date(sessions[i].start_datetime));
+      sessions[i].actions = (
         <div>
-          <i onClick={() => handleAdapt(result[i])} className='fas fa-plus mt-1 mr-2' title='Agregar material a adaptar' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          <i onClick={() => showDelete(result[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => handleAdapt(sessions[i])} className='fas fa-plus mt-1 mr-2' title='Agregar material a adaptar' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <i onClick={() => showDelete(sessions[i])} className='fas fa-file-alt mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
       );
     }
   }
 
-  function handleAdapt(sessionData) {
-    setShowModal({ adaptInformation: true, modalData: sessionData });
+  function handleAdapt(session) {
+    setShowModal({ adaptInformation: true, modalData: session });
   }
 
-  async function showDelete(sessionData) {
-    const result = await getParametry(`${BASE_URL}/content`, { sessionID: sessionData.id, author: roomId.split('-')[0] });
+  async function showDelete(session) {
+    const result = await getParametry(`${BASE_URL}/content`, { sessionID: session.id, author: roomId.split('-')[0] });
 
     const materialList = result.map((material) => ({
       ...material,
       materialId: material.id,
-      ...sessionData,
-      start_date: convertDateTime(new Date(sessionData.start_datetime))
+      ...session,
+      start_date: convertDateTime(new Date(session.start_datetime))
     }));
 
     createActionsDelete(materialList);
@@ -115,23 +115,31 @@ const Index = () => {
     setShowModal({ deleteInformation: true });
   }
 
-  function createActionsDelete(result) {
-    for (let i = 0; i < result.length; i++) {
-      result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actionsMaterials = (
+  function createActionsDelete(materials) {
+    for (let i = 0; i < materials.length; i++) {
+      materials[i].date = convertDateTime(new Date(materials[i].start_datetime));
+      materials[i].actionsMaterials = (
         <div>
-          <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          <a href={materials[i].url} target='_blank' rel='noopener noreferrer' download>
+            <i onClick={() => handleDownload(materials[i])} className='fas fa-download mt-1 mr-2' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          </a>
+          <i onClick={() => handleDeleteMaterial(materials[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
       );
     }
   }
 
-  function handleDeleteMaterial(obj) {
+  function handleDownload(material) {
+    // Si fuese necesario descargar el material
+    // a traves de nu endpoint, implementarlo aquí
+  }
+
+  function handleDeleteMaterial(material) {
     swal(
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés eliminar el material a adaptar?</p>
-        <span>Alumno: {obj.full_name}</span>
-        <p>Documento: {obj.original_name}</p>
+        <span>Alumno: {material.full_name}</span>
+        <p>Documento: {material.original_name}</p>
       </div>,
       {
         icon: 'warning',
@@ -145,20 +153,20 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') deleteMaterial(obj);
+      if (value === 'delete') deleteMaterial(material);
     });
   }
 
-  async function deleteMaterial(obj) {
+  async function deleteMaterial(material) {
     setLoading(true);
-    await deleteResponseApi(`${BASE_URL}/document/${obj.materialId}`);
+    await deleteResponseApi(`${BASE_URL}/document/${material.materialId}`);
     setLoading(false);
-    await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
+    await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${material.date}`, 'success');
     handleClose('deleteInformation');
   }
 
-  function fillTableDelete(materialList) {
-    if (materialList.length > 0) {
+  function fillTableDelete(materials) {
+    if (materials.length > 0) {
       setTableDelete({
         columns: [
           { label: '', field: 'actionsMaterials' },
@@ -168,7 +176,7 @@ const Index = () => {
           { label: 'Comentarios', field: 'comment' },
           { label: 'Fecha sesión', field: 'start_date' }
         ],
-        rows: materialList,
+        rows: materials,
         show: true
       });
       setErrorsDelete({ show: false });
@@ -183,8 +191,8 @@ const Index = () => {
     setShowModal({ [modal]: false });
   }
 
-  function fillTable(result) {
-    if (result.length > 0) {
+  function fillTable(sessions) {
+    if (sessions.length > 0) {
       setTable({
         columns: [
           { label: '', field: 'actions' },
@@ -192,7 +200,7 @@ const Index = () => {
           { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Fecha sesión', field: 'date' }
         ],
-        rows: result,
+        rows: sessions,
         show: true
       });
       setErrors({ show: false });
