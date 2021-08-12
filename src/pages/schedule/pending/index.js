@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Layout from '../../../utils/layout/index';
 import Table from '../../../components/html/Table';
 import Loading from '../../../components/Loading';
@@ -168,9 +168,9 @@ const Index = () => {
       materials[i].date = convertDateTime(new Date(materials[i].start_datetime));
       materials[i].actionsMaterials = (
         <div>
-          <a href={materials[i].url} target='_blank' rel='noopener noreferrer' download>
+          <Link href={materials[i].url} target='_blank' rel='noopener noreferrer' download>
             <i onClick={() => handleDownload(materials[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          </a>
+          </Link>
           <i onClick={() => handleDeleteMaterial(materials[i])} className='fas fa-trash mt-1 ml-2' title='Eliminar Material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
           {materials[i].author === sessionStorage.getItem('name') ? <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i> : <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i>}
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import convertDate from '../../../utils/commons/convertDate';
 import convertDateTime from '../../../utils/commons/convertDateTime';
@@ -120,9 +120,9 @@ const Index = () => {
       materials[i].date = convertDateTime(new Date(materials[i].start_datetime));
       materials[i].actionsMaterials = (
         <div>
-          <a href={materials[i].url} target='_blank' rel='noopener noreferrer' download>
+          <Link href={materials[i].url} target='_blank' rel='noopener noreferrer' download>
             <i onClick={() => handleDownload(materials[i])} className='fas fa-download mt-1 mr-2' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          </a>
+          </Link>
           <i onClick={() => handleDeleteMaterial(materials[i])} className='fas fa-trash mt-1' title='Eliminar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
         </div>
       );
