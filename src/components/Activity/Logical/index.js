@@ -10,6 +10,7 @@ const Logical = () => {
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
   const stageRef = useRef(null);  
+  const layerRef = useRef(null);  
   
   const [{ width, height }, setDimensions] = useState({});
   const [trays,setTrays] = useState();
@@ -34,27 +35,31 @@ const Logical = () => {
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);        
     const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
-    updateElementsPositions(currentElement);
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));    
-    if(!tray) {
-      let group = currentElement.getParent();
-      stageRef.current.add(currentElement);      
-      return      
+    let group;
+    updateElementsPositions(currentElement);
+    if(tray){  
+      group = tray.getParent();   
+      group.add(currentElement);             
+    }else{
+      group = currentElement.getParent();
+      currentElement.moveTo(layerRef.current);     
     }
+    updateGroup(group); 
+  }
 
-    let group = tray.getParent();    
-    if(group){
-      group.add(currentElement);                  
-      var elementsOfType = group.find("." + element.type);
+  function updateGroup(group){
+    
+    var elementsOfType = group.find("." + group.attrs.type);
       var newQuantity = elementsOfType.length;
       var copyofTrays = trays.map( x => {        
-        if(x.id == tray.attrs.name)
+        if(x.type == group.attrs.type)
           return {...x, quantity: newQuantity}
         return x;
       });
       setTrays(copyofTrays);
-    }
   }
+
 
   function updateElementsPositions(currentElement){
     var copyOfElements = [...elements];
@@ -66,16 +71,10 @@ const Logical = () => {
       setElements(copyOfElements);
   }
 
-  // banana-suelta > tray
-  // bannana-suelta > suelta
-  // banana-tray > suelta
-  // banana-tray > otro-tray
-
-
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE,backgroundColor: defaultColor }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>
-        <Layer>
+        <Layer ref={layerRef}>
           <TrayGroup trays={trays} width={width}/>
           {elements &&
             elements.map((element, index) => (              
