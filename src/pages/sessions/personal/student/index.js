@@ -123,7 +123,7 @@ const StudentSession = (props) => {
         </div>
       </div>
       <Celebration type={celebrationType.RECEIVER} />
-      {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
     </>
   );
 };

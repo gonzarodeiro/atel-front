@@ -23,8 +23,8 @@ const Logical = () => {
 
   function setConfiguration(){
     let rect = divRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
+    const width = 700;
+    const height = 500;
     setDimensions({ width, height });  
     setTrays(generateTrays());
     setElements(generateElements(width));
