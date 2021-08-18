@@ -1,13 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from './menu/route';
+import { BASE_URL } from '../../config/environment';
+import getResponseById from '../../utils/services/get/getById/index';
+import showAlert from '../../utils/commons/showAlert';
+import convertDate from '../../utils/commons/convertDate';
+import convertDateTime from '../../utils/commons/convertDateTime';
 
 const Index = () => {
+  const [nextSession, setNextSession] = useState();
+  const [session, setSession] = useState();
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else getNextSessions();
   }, []);
+
+  async function getNextSessions() {
+    let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, sessionStorage.getItem('idProfessional'));
+    if (result[0].length > 0) {
+      const date = convertDateTime(new Date(result[0][0].startDatetime));
+      setSession(result[0][0]);
+      setNextSession('Próxima sesión: ' + date + ' hs');
+    } else setNextSession('No hay próximas sesiones');
+  }
+
+  function loadSession() {
+    console.log(session);
+    if (session.allowEnterRoom) {
+      const date = convertDate(new Date());
+      if (session.type === 'Sesión de inclusión') {
+        history.push({
+          pathname: 'zoom-session',
+          state: { roomId: session.roomName, userName: session.roomName, date: date, sessionId: session.id, roomZoom: session.zoom + '-' + session.password + '-' + sessionStorage.getItem('name') }
+        });
+      } else {
+        history.push({
+          pathname: 'professionalSession',
+          state: { roomId: session.roomName, userName: session.roomName, date: date, sessionId: session.id }
+        });
+      }
+    } else showAlert('Error', 'La sesión aún no ha comenzado', 'error');
+  }
 
   return (
     <div className='dashboard'>
@@ -15,7 +50,9 @@ const Index = () => {
         <div className='section-title'>
           <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>Hola, {sessionStorage.getItem('name')}</h1>
           <div className='dates' style={{ fontSize: '17.2px', marginTop: '2px', marginRight: '3px', marginBottom: '30px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
-            <div className='actual-date'>Próxima sesión: 08/08/2021 16:00 hs</div>
+            <div className='actual-date' style={{ cursor: 'pointer' }} onClick={loadSession}>
+              {nextSession}
+            </div>
           </div>
         </div>
         <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid rgb(206, 203, 203)' }}>

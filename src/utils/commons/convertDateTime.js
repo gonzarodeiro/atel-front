@@ -10,5 +10,5 @@ export default function convertDateTime(date) {
   if (hh < 10) hh = '0' + hh;
   if (min < 10) min = '0' + min;
 
-  return dd + '-' + mm + '-' + yy + ' ' + hh + ':' + min;
+  return dd + '/' + mm + '/' + yy + ' ' + hh + ':' + min;
 }
