@@ -31,7 +31,7 @@ const Logical = () => {
   }
 
 
-  function updateTrayQuantity(index){
+  function updateTrayQuantity(index){    
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);        
     const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
@@ -61,7 +61,7 @@ const Logical = () => {
   }
 
 
-  function updateElementsPositions(currentElement){
+  function updateElementsPositions(currentElement){    
     var copyOfElements = [...elements];
     copyOfElements.map(element => {      
         if(element.id == currentElement.attrs.id)
@@ -71,6 +71,28 @@ const Logical = () => {
       setElements(copyOfElements);
   }
 
+  const handleOnMouseOver = (i) => {    
+    setElements(
+      elements.map((element,index) => {
+        return {
+          ...element,
+          isOnMouseUp: i === index,
+        };
+      })
+    );
+  }
+
+  const handleOnMouseOut = (e) => {
+    setElements(
+      elements.map((element) => {
+        return {
+          ...element,
+          isOnMouseUp: false,
+        };
+      })
+    );
+  };
+
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE,backgroundColor: defaultColor }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>
@@ -78,7 +100,19 @@ const Logical = () => {
           <TrayGroup trays={trays} width={width}/>
           {elements &&
             elements.map((element, index) => (              
-                <KonvaImage id={"element-" + index} name={element.type} onDragEnd={(e) => updateTrayQuantity(index,element)} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />              
+                <KonvaImage id={"element-" + index} 
+                            name={element.type} 
+                            onDragEnd={(e) => updateTrayQuantity(index,element)} 
+                            onMouseOver={() => handleOnMouseOver(index)} 
+                            onMouseOut={() => handleOnMouseOut()} 
+                            scaleX={element.isOnMouseUp ? 1.2 : 1}
+                            scaleY={element.isOnMouseUp ? 1.2 : 1}
+                            key={element.id} x={element.x} y={element.y}                             
+                            width={element.width} 
+                            height={element.height} 
+                            image={imageFactory(element.src)} 
+                            draggable={element.draggable} 
+                />              
               )
             )
           }

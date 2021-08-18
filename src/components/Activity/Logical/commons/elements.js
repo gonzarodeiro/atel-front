@@ -10,7 +10,8 @@ const generateElements = (w) => {
     height: 50,
     draggable: true,
     x: Math.round(Math.random()*(w/2) + 20),
-    y: 350
+    y: 350,
+    isMouseUp: true,
   });
 }
 
