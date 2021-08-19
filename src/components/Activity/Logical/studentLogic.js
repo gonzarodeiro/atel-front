@@ -33,7 +33,7 @@ const Logical = () => {
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);            
     const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
-    if(!currentElement) return;
+    if(!currentElement) return
     let group = currentElement.getParent();    
     currentElement.moveToTop();
     group.moveToTop();
@@ -86,9 +86,9 @@ const Logical = () => {
   function checkColision(px,py){
     let result = {x:px,y:py}
     if(px > width)
-      result.x = width-20;
+      result.x = width-50;
     if(py > height)
-      result.y = height-20;
+      result.y = height-50;
       if(px < 0)
       result.x = 0;
     if(py < 0)
@@ -118,6 +118,14 @@ const Logical = () => {
     );
   };
 
+  function fixElementIntoStage(e){
+    const element = e.target;
+    const point = stageRef.current.getPointerPosition();
+    var newPoint = checkColision(point.x, point.y);
+    element.x(newPoint.x);
+    element.y(newPoint.y);
+  }
+
   return (
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE,backgroundColor: defaultColor }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>
@@ -131,6 +139,7 @@ const Logical = () => {
                             onDragEnd={() => updateTrayQuantity(index,element)} 
                             onMouseOver={() => handleOnMouseOver(index)} 
                             onMouseOut={() => handleOnMouseOut()} 
+                            onDragMove={(e) => fixElementIntoStage(e)}
                             scaleX={element.isOnMouseUp ? 1.2 : 1}
                             scaleY={element.isOnMouseUp ? 1.2 : 1}
                             key={element.id} x={element.x} y={element.y}                             
