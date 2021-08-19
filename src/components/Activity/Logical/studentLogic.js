@@ -21,8 +21,7 @@ const Logical = () => {
   },[]);
   
 
-  function setConfiguration(){
-    let rect = divRef.current.getBoundingClientRect();
+  function setConfiguration(){   
     const width = 700;
     const height = 500;
     setDimensions({ width, height });  
@@ -30,14 +29,24 @@ const Logical = () => {
     setElements(generateElements(width));
   }
 
+  function moveTop(index){
+    const point = stageRef.current.getPointerPosition();
+    const intersections = stageRef.current.getAllIntersections(point);            
+    const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
+    if(!currentElement) return;
+    let group = currentElement.getParent();    
+    currentElement.moveToTop();
+    group.moveToTop();
+  }
 
   function updateTrayQuantity(index){    
-    const point = stageRef.current.getPointerPosition();    
-    const intersections = stageRef.current.getAllIntersections(point);        
-    const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
+    const point = stageRef.current.getPointerPosition();
+    const intersections = stageRef.current.getAllIntersections(point);            
+    const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);      
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));    
     let group;
-    updateElementsPositions(currentElement);
+    updateElementsPositions(index,point);
+    if(!currentElement) return;
     if(tray){  
       group = tray.getParent();   
       currentElement.moveTo(group);         
@@ -59,14 +68,32 @@ const Logical = () => {
   }
 
 
-  function updateElementsPositions(currentElement){    
+  function updateElementsPositions(elementIndex, point){    
     var copyOfElements = [...elements];
-    copyOfElements.map(element => {      
-        if(element.id == currentElement.attrs.id)
-          return {...element, x:element.x(), y:element.y()}
+    
+    copyOfElements.map((element,index) => {      
+        if(elementIndex == index){          
+          let newPoint = checkColision(point.x, point.y)
+          return {...element, x:newPoint.x, y:newPoint.y}
+        }
         return element;
       });
       setElements(copyOfElements);
+  }
+
+
+
+  function checkColision(px,py){
+    let result = {x:px,y:py}
+    if(px > width)
+      result.x = width-20;
+    if(py > height)
+      result.y = height-20;
+      if(px < 0)
+      result.x = 0;
+    if(py < 0)
+      result.y = 0;  
+    return result;
   }
 
   const handleOnMouseOver = (i) => {    
@@ -100,7 +127,8 @@ const Logical = () => {
             elements.map((element, index) => (              
                 <KonvaImage id={"element-" + index} 
                             name={element.type} 
-                            onDragEnd={(e) => updateTrayQuantity(index,element)} 
+                            onDragStart={() => moveTop(index)} 
+                            onDragEnd={() => updateTrayQuantity(index,element)} 
                             onMouseOver={() => handleOnMouseOver(index)} 
                             onMouseOut={() => handleOnMouseOut()} 
                             scaleX={element.isOnMouseUp ? 1.2 : 1}
