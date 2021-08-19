@@ -32,7 +32,7 @@ const Logical = () => {
 
 
   function updateTrayQuantity(index){    
-    const point = stageRef.current.getPointerPosition();
+    const point = stageRef.current.getPointerPosition();    
     const intersections = stageRef.current.getAllIntersections(point);        
     const currentElement = intersections.find((element) => element.attrs.id == "element-" + index);  
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));    
@@ -40,22 +40,20 @@ const Logical = () => {
     updateElementsPositions(currentElement);
     if(tray){  
       group = tray.getParent();   
-      group.add(currentElement);             
+      currentElement.moveTo(group);         
     }else{
       group = currentElement.getParent();
       currentElement.moveTo(layerRef.current);     
     }
-    updateGroup(group); 
+    updateGroups(); 
   }
 
-  function updateGroup(group){
-    
-    var elementsOfType = group.find("." + group.attrs.type);
-      var newQuantity = elementsOfType.length;
-      var copyofTrays = trays.map( x => {        
-        if(x.type == group.attrs.type)
-          return {...x, quantity: newQuantity}
-        return x;
+  function updateGroups(){  
+      var copyofTrays = trays.map( x => {          
+        var group = stageRef.current.find(".group-" + x.type);
+        var elementsOfType = group[0].find("." + x.type);
+        var newQuantity = elementsOfType.length;        
+        return {...x, quantity: newQuantity}
       });
       setTrays(copyofTrays);
   }
