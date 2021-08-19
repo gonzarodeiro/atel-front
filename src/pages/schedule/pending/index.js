@@ -141,7 +141,7 @@ const Index = () => {
   async function patchSchedule(session) {
     setLoading(true);
     const values = { status: status.Canceled };
-    await patchApi(`${BASE_URL}/session`, values, session.id);
+    await patchApi(`${BASE_URL}/session`, session.id, values);
     setLoading(false);
     await showAlert('Sesión eliminada', `La sesión: ${session.date} ha sido dada de baja`, 'success');
     history.push(`/home`);

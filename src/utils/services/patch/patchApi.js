@@ -1,8 +1,8 @@
 import patchResponseApi from './patchResponseApi';
 import catchErrors from '../catchErrors';
 
-export default async function patchApi(url, data, id) {
-  let response = await patchResponseApi(url, data, id).catch(async (error) => {
+export default async function patchApi(url, id, data) {
+  let response = await patchResponseApi(url, id, data).catch(async (error) => {
     if (catchErrors(error)) return [];
   });
 
