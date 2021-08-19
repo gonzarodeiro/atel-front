@@ -19,15 +19,14 @@ const Index = () => {
 
   async function getNextSessions() {
     let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, sessionStorage.getItem('idProfessional'));
-    if (result[0].length > 0) {
-      const date = convertDateTime(new Date(result[0][0].startDatetime));
-      setSession(result[0][0]);
+    if (result.length > 0) {
+      const date = convertDateTime(new Date(result[0].startDatetime));
+      setSession(result[0]);
       setNextSession('Próxima sesión: ' + date + ' hs');
     } else setNextSession('No hay próximas sesiones');
   }
 
   function loadSession() {
-    console.log(session);
     if (session.allowEnterRoom) {
       const date = convertDate(new Date());
       if (session.type === 'Sesión de inclusión') {
