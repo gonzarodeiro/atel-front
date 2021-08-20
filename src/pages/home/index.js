@@ -10,7 +10,6 @@ import patchApi from '../../utils/services/patch/patchResponseApi';
 
 const Index = () => {
   const [nextSession, setNextSession] = useState();
-  const [student, setStudent] = useState({ show: false, name: '' });
   const [session, setSession] = useState();
   let history = useHistory();
 
@@ -22,11 +21,10 @@ const Index = () => {
   async function getNextSessions() {
     let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, sessionStorage.getItem('idProfessional'));
     if (result.length > 0) {
-      setStudent({ show: true, name: result[0].roomName });
       const date = convertDateTime(new Date(result[0].startDatetime));
       setSession(result[0]);
       setNextSession(`Próxima sesión: ${date} hs`);
-    } else setNextSession('No hay próximas sesiones');
+    } else setNextSession(`No hay próximas sesiones`);
   }
 
   async function loadSession() {
@@ -56,13 +54,10 @@ const Index = () => {
       <div className='content'>
         <div className='section-title'>
           <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>Hola, {sessionStorage.getItem('name')}</h1>
-          <div className='dates' style={{ fontSize: '16.4px', marginRight: '3px', cursor: 'pointer', marginBottom: '30px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }} onClick={loadSession}>
-            <div className='actual-date'>{nextSession}</div>
-            {student.show && (
-              <div className='last-login' title='Unirse'>
-                Alumno: {student.name}
-              </div>
-            )}
+          <div className='dates' onClick={loadSession} style={{ fontSize: '17.4px', marginTop: '2px', marginRight: '3px', cursor: 'pointer', marginBottom: '28px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
+            <div className='actual-date' title='Unirse'>
+              {nextSession}
+            </div>
           </div>
         </div>
         <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid rgb(206, 203, 203)' }}>
