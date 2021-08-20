@@ -4,17 +4,17 @@ import { generateTrays } from './commons/tray';
 import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import TrayGroup from './components/TrayGroup';
+import Basket from './images/basket.png'
 
-const Logical = () => {
-  const defaultColor = '#8896AB';
+
+const Logical = () => {  
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
   const [{ width, height }, setDimensions] = useState({});
   const [trays, setTrays] = useState();
-  const [elements, setElements] = useState();
-
+  const [elements, setElements] = useState();    
   useEffect(() => {
     setConfiguration(); // will be register in socket event listener
   }, []);
@@ -24,7 +24,25 @@ const Logical = () => {
     const height = 500;
     setDimensions({ width, height });
     setTrays(generateTrays());
-    setElements(generateElements(width));
+    setElements(generateElements(width));    
+  }
+
+  function getTypes(elements){
+    const returnObject = {};
+    elements.forEach(element => {
+      returnObject[element.type] = {
+        type:element.type,
+        height:element.height,
+        width:element.width,
+        x:element.x,
+        y:element.y
+      };                
+    });
+    var result = Object.keys(returnObject).map(x=>{
+      return {...returnObject[x]}        
+    });
+    debugger;
+    return result;
   }
 
   function moveTop(index) {
@@ -117,11 +135,16 @@ const Logical = () => {
   }
 
   return (
-    <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: defaultColor }} ref={divRef}>
+    <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundSize: "cover", backgroundImage: `url("https://i.pinimg.com/736x/25/be/35/25be353e2ca5f0c9ed8c9e3cfbc02d23.jpg")`}} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>
-        <Layer ref={layerRef}>
+        <Layer ref={layerRef}>          
           <TrayGroup trays={trays} width={width} />
-          {elements && elements.map((element, index) => <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />)}
+          {elements && getTypes(elements).map((type) => (
+            <KonvaImage id="basket" x={type.x-20} y={type.y} width={type.width+50} height={type.height+30} image={imageFactory(Basket)}></KonvaImage>
+          ))}
+          {elements && elements.map((element, index) => (                 
+            <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />                  
+          ))}
         </Layer>
       </Stage>
     </div>
