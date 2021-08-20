@@ -5,6 +5,7 @@ import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
+import { ENV, envs } from '../../../../../config/environment';
 
 const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard }) => {
   function getMessageByTool(tool) {

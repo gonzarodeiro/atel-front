@@ -1,21 +1,69 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from './menu/route';
+import { BASE_URL } from '../../config/environment';
+import getResponseById from '../../utils/services/get/getById/index';
+import showAlert from '../../utils/commons/showAlert';
+import convertDate from '../../utils/commons/convertDate';
+import convertDateTime from '../../utils/commons/convertDateTime';
+import patchApi from '../../utils/services/patch/patchResponseApi';
 
 const Index = () => {
+  const [nextSession, setNextSession] = useState();
+  const [student, setStudent] = useState({ show: false, name: '' });
+  const [session, setSession] = useState();
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else getNextSessions();
   }, []);
+
+  async function getNextSessions() {
+    let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, sessionStorage.getItem('idProfessional'));
+    if (result.length > 0) {
+      console.log('oerasdasd');
+      setStudent({ show: true, name: result[0].roomName });
+      const date = convertDateTime(new Date(result[0].startDatetime));
+      setSession(result[0]);
+      setNextSession(`Próxima sesión: ${date} hs`);
+    } else setNextSession('No hay próximas sesiones');
+  }
+
+  async function loadSession() {
+    if (session.allowEnterRoom) {
+      // await patchApi(`${BASE_URL}/session`, session.id);
+      redirectPages();
+    } else showAlert('Error', 'La sesión aún no ha comenzado', 'error');
+  }
+
+  function redirectPages() {
+    const date = convertDate(new Date());
+    if (session.type === 'Sesión de inclusión') {
+      history.push({
+        pathname: 'zoom-session',
+        state: { roomId: session.roomName, userName: session.roomName, date: date, sessionId: session.id, roomZoom: session.zoom + '-' + session.password + '-' + sessionStorage.getItem('name') }
+      });
+    } else {
+      history.push({
+        pathname: 'professionalSession',
+        state: { roomId: session.roomName, userName: session.roomName, date: date, sessionId: session.id }
+      });
+    }
+  }
 
   return (
     <div className='dashboard'>
       <div className='content'>
         <div className='section-title'>
           <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>Hola, {sessionStorage.getItem('name')}</h1>
-          <div className='dates' style={{ fontSize: '17.2px', marginTop: '2px', marginRight: '3px', marginBottom: '30px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
-            <div className='actual-date'>Próxima sesión: 08/08/2021 16:00 hs</div>
+          <div className='dates' style={{ fontSize: '16.4px', marginRight: '3px', cursor: 'pointer', marginBottom: '30px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }} onClick={loadSession}>
+            <div className='actual-date'>{nextSession}</div>
+            {student.show && (
+              <div className='last-login' title='Unirse'>
+                Alumno: {student.name}
+              </div>
+            )}
           </div>
         </div>
         <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid rgb(206, 203, 203)' }}>

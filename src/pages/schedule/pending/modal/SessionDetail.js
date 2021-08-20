@@ -28,7 +28,7 @@ const SessionPendingDetail = ({ showModal, handleClose, idSession, userName, ses
     event.preventDefault();
     setLoading(true);
     const values = { start_datetime: session.date };
-    await patchApi(`${BASE_URL}/session`, values, idSession);
+    await patchApi(`${BASE_URL}/session`, idSession, values);
     setLoading(false);
     await showAlert('Sesión modificada', `Se ha modificado la sesión con ${userName}`, 'success');
     history.push({ pathname: 'home' });

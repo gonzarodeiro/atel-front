@@ -7,7 +7,7 @@ const DeleteInformation = ({ showModal, handleClose, tableDelete, errorDelete })
   return (
     <Modal show={showModal.deleteInformation} onHide={() => handleClose('deleteInformation')} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
-        <Modal.Title style={{ fontSize: '19px' }}>Eliminar material a adaptar</Modal.Title>
+        <Modal.Title style={{ fontSize: '19px' }}>Material a adaptar</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ fontSize: '13.2px', fontWeight: 'bold', color: '#66696b' }}>
         {tableDelete.show && <Table data={tableDelete} />}
