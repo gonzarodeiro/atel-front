@@ -4,4 +4,4 @@ function imageFactory(x) {
   return rv;
 }
 
-export {imageFactory}
+export { imageFactory };

@@ -1,4 +1,5 @@
 import { operationTypes, containerTypes, fruits, animals } from './constants';
+
 const dlOperations = [
   { id: 0, code: operationTypes.NONE, description: 'Ninguna' },
   { id: 1, code: operationTypes.ADD, description: 'Suma' },

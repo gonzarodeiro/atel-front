@@ -175,7 +175,6 @@ const Settings = ({ show, onClose }) => {
       <Modal.Header closeButton>
         <Modal.Title>Configurar actividad</Modal.Title>
       </Modal.Header>
-
       <Modal.Body>
         <Dropdownlist title='Operación aritmética' id='operation' handleChange={handleOperationsChange} value={settings.operation} dropdownlist={dlOperations} disabledValue={false} className={'form-control'} />
         <Dropdownlist title='Numero de contenedores' id='containers' handleChange={handleContainerCountChange} value={settings.containers.count} dropdownlist={dlContainerCount} disabledValue={settings.operation !== operationTypes.NONE} className={'form-control'} />
@@ -206,7 +205,6 @@ const Settings = ({ show, onClose }) => {
             </div>
           ))}
       </Modal.Body>
-
       <Modal.Footer>
         <Cancel onClick={() => handleClose(modalResults.CANCEL)} title='Cancelar' />
         <Submit onClick={() => handleClose(modalResults.OK)} title='Aplicar' />
