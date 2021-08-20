@@ -22,7 +22,6 @@ const Index = () => {
   async function getNextSessions() {
     let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, sessionStorage.getItem('idProfessional'));
     if (result.length > 0) {
-      console.log('oerasdasd');
       setStudent({ show: true, name: result[0].roomName });
       const date = convertDateTime(new Date(result[0].startDatetime));
       setSession(result[0]);
@@ -32,7 +31,7 @@ const Index = () => {
 
   async function loadSession() {
     if (session.allowEnterRoom) {
-      // await patchApi(`${BASE_URL}/session`, session.id);
+      await patchApi(`${BASE_URL}/session/status`, session.id);
       redirectPages();
     } else showAlert('Error', 'La sesión aún no ha comenzado', 'error');
   }
