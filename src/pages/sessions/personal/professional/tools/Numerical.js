@@ -5,6 +5,7 @@ import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
 import Settings, { modalResults } from '../../../../../components/Activity/Logical/components/Settings';
+import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 
 const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => {
   const [showSettings, setShowSettings] = useState(false);
@@ -29,6 +30,12 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
       console.log(settings.containers);
     }
     setShowSettings(false);
+  }
+
+  function beginSession() {
+    sendMessage(clientEvents.beginSession);
+    showTools({ numerical: false });
+    showMeeting({ begin: true });
   }
 
   return (
@@ -75,14 +82,21 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
           </div>
           <div data-test='col'>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
-              Fin de la sesión
+              Información de la sesión
             </label>
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
-            <div className='col-md-12 mb-1'>
-              <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
-                <span>Finalizar</span>
-              </MDBBtn>
+            <div className='row'>
+              <div className='col-md-6 mb-1'>
+                <MDBBtn onClick={beginSession} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
+                  <span>Comienzo</span>
+                </MDBBtn>
+              </div>
+              <div className='col-md-6 mb-1'>
+                <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
+                  <span>Finalizar</span>
+                </MDBBtn>
+              </div>
             </div>
           </div>
         </div>
