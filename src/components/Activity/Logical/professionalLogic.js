@@ -4,6 +4,7 @@ import { generateTrays } from './commons/tray';
 import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import TrayGroup from './components/TrayGroup';
+import { sendMessage, clientEvents } from '../../../utils/socketManager';
 
 /**
  * @param {object} data { elements: [{ object }], trays: [{ object }] }
@@ -20,8 +21,7 @@ const Logical = ({ data }) => {
   const [trays, setTrays] = useState();
   const [elements, setElements] = useState();
 
-  useEffect(() => {
-    console.log(data);
+  useEffect(() => {    
     setConfiguration(); // will be register in socket event listener
   }, [data]);
 
@@ -31,7 +31,8 @@ const Logical = ({ data }) => {
     const height = rect.height;
     setDimensions({ width, height });
     setTrays(generateTrays());
-    setElements(generateElements(width));
+    setElements(generateElements(width));        
+    sendMessage(clientEvents.setConfiguration, data );
   }
 
   function updateTrayQuantity(index) {

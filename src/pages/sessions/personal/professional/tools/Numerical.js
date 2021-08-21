@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../../components/Jitsi';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
-import Settings, { modalResults } from '../../../../../components/Activity/Logical/components/Settings';
+import Settings, { modalResults, initialSettings } from '../../../../../components/Activity/Logical/components/Settings';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 
 const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => {
   const [showSettings, setShowSettings] = useState(false);
-  const [data, setData] = useState({});
+  const initialData = getDataFromSettings(initialSettings);
+  const [data, setData] = useState(null);
+  
+  
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -21,7 +24,9 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
     showMeeting({ end: true });
   }
 
-  function restart() {}
+  function restart() {
+    sendMessage(clientEvents.setConfiguration, data || initialData );
+  }
 
   function handleOpenSettings() {
     setShowSettings(true);
@@ -44,7 +49,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={data} />
+          <Activity data={data || initialData} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>

@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage, Text } from 'react-konva';
 import Konva from 'konva';
-import { generateTrays } from './commons/tray';
-import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import TrayGroup from './components/TrayGroup';
 import Basket from './images/basket.png';
@@ -10,6 +8,8 @@ import { getAllingX }  from './commons/alling';
 import Confites from '../../Confites';
 import {playAudio} from './commons/audio'
 import celebrateMp3 from './commons/celebrate.mp3'
+import { clientEvents, registerEvent } from '../../../utils/socketManager';
+import { operationTypes } from './components/Settings/constants';
 
 const Logical = () => {  
   const CONTAINER_SIZE = '100%';
@@ -20,21 +20,85 @@ const Logical = () => {
   const [{ width, height }, setDimensions] = useState({});
   const [trays, setTrays] = useState();
   const [elements, setElements] = useState();  
+  const [dataConfiguration, setDataConfiguration] = useState(null);
   const [showConfites, setShowConfites] = useState(false);  
-  const mathOperator = "%";
+  const [mathOperation, setMathOperation] = useState();
   const [playing, setPlaying] = useState('');
 
+  useEffect(()=>{
+    registerEvents();
+  },[])
+
   useEffect(() => {
-    setShowConfites(false);
+    setShowConfites(false);      
     setConfiguration(); // will be register in socket event listener
-  }, []);
+  }, [dataConfiguration]);
+
+
+  function registerEvents() { 
+    registerEvent((data) => {      
+      setDataConfiguration(data);
+    }, clientEvents.setConfiguration);
+  }
 
   function setConfiguration() {
-    const width = 700;
-    const height = 500;
-    setDimensions({ width, height });
-    setTrays(generateTrays());
-    setElements(generateElements(width));    
+    if(dataConfiguration){
+      const width = 700;
+      const height = 500;    
+      setDimensions({ width, height });    
+      setTrays(dataConfiguration.trays);      
+      const elements = setXElements(dataConfiguration.elements,width);
+      toInitialPositions(dataConfiguration.elements);
+      setElements(elements);    
+      setMathOperation(convertOperation(dataConfiguration.operation));
+    }
+  }
+
+  function toInitialPositions(elements){
+    elements.forEach((element, index) => {
+      let konvaElement = stageRef.current.find((el) => el.attrs.id === 'element-' + index)[0];
+      if(konvaElement){
+        konvaElement.x(element.x);
+        konvaElement.y(element.y);
+      }
+    })
+  }
+
+  function setXElements(elements,width){
+    let result = [];
+    //Por cada tipo
+    getTypes(elements).map((obj, index, array) =>{
+      //Recorro los elementos y busco los de ese tipo
+      let elementsOfType = [];
+      elements.forEach(element =>{        
+        if(obj.type === element.type){
+          //Refactorizo los elementos y en base al tipo pongo la posicion
+          elementsOfType.push({
+          ...element,
+          x: Math.round((width / (array.length + 1)) * (index + 1) - obj.width/2 ),
+          y: 380
+          });
+        }
+      })
+      result = result.concat(elementsOfType);
+      
+    });    
+    return result;
+  }
+
+  function convertOperation(operationString){    
+    switch(operationString){
+      case operationTypes.ADD :
+        return "+";
+      case operationTypes.SUB :
+        return "-";
+      case operationTypes.DIV:
+        return "%";
+      case operationTypes.MUL:
+        return "x";
+      default:
+        return null;
+    }
   }
 
   function getTypes(elements){
@@ -87,22 +151,24 @@ const Logical = () => {
       currentElement.moveTo(layerRef.current);
       currentElement.filters([]);
     }
-    stageRef.current.find(x=>x.attrs.id == "circle-text-result")[0].moveToTop();
-    stageRef.current.find(x=>x.attrs.id == "quantity-result")[0].moveToTop();
+    if(mathOperation){
+      stageRef.current.find(x=>x.attrs.id == "circle-text-result")[0].moveToTop();
+      stageRef.current.find(x=>x.attrs.id == "quantity-result")[0].moveToTop();
+    }
     updateGroups();    
   }
 
   function checkFinish(trays){
     let finish = true;
-    let group = stageRef.current.find('.group-RESULT');
-    let shouldBe, result,quantityType1,quantityType2,okType1,okType2;
-    if(mathOperator){
-      switch(mathOperator){
+    let group = stageRef.current.find('.group-RESULT-2');
+    let shouldBe = 0, result = 0,quantityType1 = 0,quantityType2 = 0,okType1 = false,okType2 = false;
+    if(mathOperation){
+      switch(mathOperation){
         case "+":
           shouldBe = trays[0].expectedQuantity + trays[1].expectedQuantity;
           result = trays[2].quantity;
-          quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type).length;
-          quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type).length;
+          quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type + '-0').length;
+          quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type + '-1').length;
           okType1 = quantityType1 == trays[0].expectedQuantity;
           okType2 = quantityType2 == trays[1].expectedQuantity;
           finish = result == shouldBe && okType1 && okType2;
@@ -110,29 +176,17 @@ const Logical = () => {
         case "-":
           shouldBe = trays[0].expectedQuantity - trays[1].expectedQuantity;
           result = trays[2].quantity;
-          quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type).length;
-          quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type).length;
-          okType1 = quantityType1 == trays[0].expectedQuantity;
-          okType2 = quantityType2 == trays[1].expectedQuantity;
-          finish = result == shouldBe && okType1 && okType2;
+          finish = result == shouldBe;
           break;
         case "x":
           shouldBe = trays[0].expectedQuantity * trays[1].expectedQuantity;
           result = trays[2].quantity;
-          quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type).length;
-          quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type).length;
-          okType1 = quantityType1 == trays[0].expectedQuantity;
-          okType2 = quantityType2 == trays[1].expectedQuantity;
-          finish = result == shouldBe && okType1 && okType2;
+          finish = result == shouldBe;
           break
         case "%":
           shouldBe = trays[0].expectedQuantity / trays[1].expectedQuantity;
           result = trays[2].quantity;
-          quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type).length;
-          quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type).length;
-          okType1 = quantityType1 == trays[0].expectedQuantity;
-          okType2 = quantityType2 == trays[1].expectedQuantity;
-          finish = result == shouldBe && okType1 && okType2;
+          finish = result == shouldBe;
           break;
       }
     }else{
@@ -140,14 +194,14 @@ const Logical = () => {
         if(x.quantity != x.expectedQuantity)
           finish = false;
       });
-    }
+    }    
 
     return finish;
   }
 
   function updateGroups() {
-    let copyofTrays = trays.map((x) => {
-      let group = stageRef.current.find('.group-' + x.type);
+    let copyofTrays = trays.map((x,index) => {
+      let group = stageRef.current.find('.group-' + x.type + '-' + index);
       let elementsOfType = x.type == "RESULT" ? group[0].find(x=>x.attrs.id.startsWith("element")) : group[0].find('.' + x.type);      
       let newQuantity = elementsOfType.length;
       return { ...x, quantity: newQuantity };
@@ -211,11 +265,12 @@ const Logical = () => {
   }
 
   return (
+    
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundSize: "cover", backgroundImage: `url("https://i.pinimg.com/736x/25/be/35/25be353e2ca5f0c9ed8c9e3cfbc02d23.jpg")`}} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>      
         <Layer ref={layerRef}>          
-          {mathOperator && trays && trays.map((tray,index,array) => {
-            return index < array.length-1 ? (<Text id={'operator'} text={index == 0 ? mathOperator : "="} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180}  fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} />) : <></>
+          {mathOperation && trays && trays.map((tray,index,array) => {
+            return index < array.length-1 ? (<Text id={'Operation'} text={index == 0 ? mathOperation : "="} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180}  fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} />) : <></>
           })}
           <TrayGroup trays={trays} width={width} />
           {elements && getTypes(elements).map((type) => (
@@ -229,7 +284,7 @@ const Logical = () => {
       </Stage>
       <audio controls={false} ref={audioRef}>
         <source src={playing} />
-      </audio>
+      </audio>              
     </div>
   );
 };

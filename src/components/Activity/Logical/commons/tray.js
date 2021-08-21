@@ -34,7 +34,7 @@ const generateTrays = () => {
       srcType: '.',
       width: 160,
       height: 120,
-      expectedQuantity: 3,
+      expectedQuantity: 0,
       quantity: 0,
       draggable: false
     }

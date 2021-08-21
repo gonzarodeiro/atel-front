@@ -214,3 +214,4 @@ const Settings = ({ show, onClose }) => {
 };
 
 export default Settings;
+export {initialSettings};

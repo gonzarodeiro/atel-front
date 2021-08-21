@@ -11,7 +11,7 @@ import dog from '../../../../components/Activity/Logical/images/animals/dog.png'
 import elephant from '../../../../components/Activity/Logical/images/animals/elephant.png';
 import giraffe from '../../../../components/Activity/Logical/images/animals/giraffe.png';
 import lion from '../../../../components/Activity/Logical/images/animals/lion.png';
-import { animals, containerTypes, fruits } from '../components/Settings/constants';
+import { animals, containerTypes, fruits, operationTypes } from '../components/Settings/constants';
 
 const getSourceByTypeAndSubtype = (type, subType) => {
   switch (type) {
@@ -63,7 +63,7 @@ const generateTraysFromSettings = (settings) => {
   if (!settings || !settings.containers || !settings.containers.count) return;
   if (!settings.containers.items || !settings.containers.items.length) return;
 
-  return settings.containers.items.map((container) => ({
+  let result = settings.containers.items.map((container) => ({
     id: uuidv4(),
     type: container.subType,
     src: tray,
@@ -74,6 +74,20 @@ const generateTraysFromSettings = (settings) => {
     quantity: 0,
     draggable: false
   }));
+
+  if(settings.operation != containerTypes.NONE){
+    result.push({id: uuidv4(),
+      type: "RESULT",
+      src: tray,
+      srcType: '.',
+      width: 160,
+      height: 100,
+      expectedQuantity: 0,
+      quantity: 0,
+      draggable: false});
+  }
+
+  return result;
 };
 
 /**
@@ -86,7 +100,7 @@ const generateElementsFromSettings = (settings) => {
 
   const result = [];
   settings.containers.items.forEach((container) => {
-    for (let i = 0; i < container.capacity; i++) {
+    for (let i = 0; i < container.capacity*3; i++) {
       result.push({
         id: uuidv4(),
         type: container.subType,
@@ -113,5 +127,7 @@ const getDataFromSettings = (settings) => {
   const elements = generateElementsFromSettings(settings);
   return { operation, trays, elements };
 };
+
+
 
 export { generateTraysFromSettings, generateElementsFromSettings, getDataFromSettings };
