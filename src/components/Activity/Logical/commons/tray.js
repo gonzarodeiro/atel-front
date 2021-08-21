@@ -10,7 +10,7 @@ const generateTrays = () => {
       src: tray,
       srcType: bannana,
       width: 160,
-      height: 100,
+      height: 120,
       expectedQuantity: 4,
       quantity: 0,
       draggable: false
@@ -21,7 +21,18 @@ const generateTrays = () => {
       src: tray,
       srcType: apple,
       width: 160,
-      height: 100,
+      height: 120,
+      expectedQuantity: 3,
+      quantity: 0,
+      draggable: false
+    },
+    {
+      id: uuidv4(),
+      type: 'RESULT',
+      src: tray,
+      srcType: '.',
+      width: 160,
+      height: 120,
       expectedQuantity: 3,
       quantity: 0,
       draggable: false

@@ -6,6 +6,7 @@ function startAnimationConfites(stage, layer) {
   if (!stage || !stage) {
     return;
   }
+  
   let confites = generateConfites();
   let confitesTemp = stage.find('#circle');
   finalyConfites = confitesTemp.map((element, index) => ({
