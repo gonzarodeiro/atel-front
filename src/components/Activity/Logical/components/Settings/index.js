@@ -153,7 +153,7 @@ const Settings = ({ show, onClose }) => {
     // exit when getting invalid envents
     if (!e || !e.target) return;
 
-    const capacity = e.target.value;
+    const capacity = parseInt(e.target.value);
 
     // make a copy of the state
     const newSettings = { ...settings };
@@ -164,7 +164,7 @@ const Settings = ({ show, onClose }) => {
 
     // mutate the copy
     const container = newSettings.containers.items[index];
-    container.capacity = capacity;
+    container.capacity = parseInt(capacity);
 
     // set the copy as the new state
     setSettings(newSettings);
