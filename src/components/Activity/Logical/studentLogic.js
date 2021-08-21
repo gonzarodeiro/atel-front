@@ -167,11 +167,15 @@ const Logical = () => {
         case "+":
           shouldBe = trays[0].expectedQuantity + trays[1].expectedQuantity;
           result = trays[2].quantity;
-          quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type + '-0').length;
-          quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type + '-1').length;
-          okType1 = quantityType1 == trays[0].expectedQuantity;
-          okType2 = quantityType2 == trays[1].expectedQuantity;
-          finish = result == shouldBe && okType1 && okType2;
+          if(trays[0].type != trays[1].type){
+            quantityType1 = group[0].find(x=>x.attrs.name == trays[0].type).length;
+            quantityType2 = group[0].find(x=>x.attrs.name == trays[1].type).length;
+            okType1 = quantityType1 == trays[0].expectedQuantity;
+            okType2 = quantityType2 == trays[1].expectedQuantity;
+            finish = result == shouldBe && okType1 && okType2;
+          }else{
+            finish = result == shouldBe 
+          }
           break;
         case "-":
           shouldBe = trays[0].expectedQuantity - trays[1].expectedQuantity;
