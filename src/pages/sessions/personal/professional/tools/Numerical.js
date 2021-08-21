@@ -6,9 +6,11 @@ import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
 import Settings, { modalResults } from '../../../../../components/Activity/Logical/components/Settings';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
+import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 
 const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const [data, setData] = useState({});
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -26,8 +28,8 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
   }
   function handleCloseSettings(mr, settings) {
     if (mr === modalResults.OK) {
-      console.log(settings);
-      console.log(settings.containers);
+      const newData = getDataFromSettings(settings);
+      setData(newData);
     }
     setShowSettings(false);
   }
@@ -42,7 +44,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity />
+          <Activity data={data} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>

@@ -5,7 +5,11 @@ import { generateElements } from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import TrayGroup from './components/TrayGroup';
 
-const Logical = () => {
+/**
+ * @param {object} data { elements: [{ object }], trays: [{ object }] }
+ * @returns JSX.Element
+ */
+const Logical = ({ data }) => {
   const defaultColor = '#8896AB';
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
@@ -17,8 +21,9 @@ const Logical = () => {
   const [elements, setElements] = useState();
 
   useEffect(() => {
+    console.log(data);
     setConfiguration(); // will be register in socket event listener
-  }, []);
+  }, [data]);
 
   function setConfiguration() {
     let rect = divRef.current.getBoundingClientRect();
