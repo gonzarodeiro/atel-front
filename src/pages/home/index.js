@@ -7,6 +7,7 @@ import showAlert from '../../utils/commons/showAlert';
 import convertDate from '../../utils/commons/convertDate';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import patchApi from '../../utils/services/patch/patchResponseApi';
+import { MDBBtn } from 'mdbreact';
 
 const Index = () => {
   const [nextSession, setNextSession] = useState();
@@ -54,9 +55,13 @@ const Index = () => {
       <div className='content'>
         <div className='section-title'>
           <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>Hola, {sessionStorage.getItem('name')}</h1>
-          <div className='dates' onClick={loadSession} style={{ fontSize: '17.4px', marginTop: '2px', marginRight: '3px', cursor: 'pointer', marginBottom: '28px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
-            <div className='actual-date' title='Unirse'>
-              {nextSession}
+          <div className='dates' style={{ fontSize: '17.4px', marginTop: '2px', marginRight: '3px', cursor: 'pointer', marginBottom: '28px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
+            <div className='actual-date'  onClick={loadSession} title='Unirse'>
+              <row className="row">                
+                {nextSession}                            
+                
+                <i className='fas fa-sign-in-alt ml-3' style={{ fontSize: '28px', color: '#2a3f54' }} />                
+              </row>
             </div>
           </div>
         </div>
