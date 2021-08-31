@@ -8,7 +8,7 @@ import { getAllingX }  from './commons/alling';
 import Confites from '../../Confites';
 import {playAudio} from './commons/audio'
 import celebrateMp3 from './commons/celebrate.mp3'
-import { clientEvents, registerEvent } from '../../../utils/socketManager';
+import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
 import { operationTypes } from './components/Settings/constants';
 
 const Logical = () => {  
@@ -31,7 +31,7 @@ const Logical = () => {
 
   useEffect(() => {
     setShowConfites(false);      
-    setConfiguration(); // will be register in socket event listener
+    setConfiguration(); 
   }, [dataConfiguration]);
 
 
@@ -51,6 +51,7 @@ const Logical = () => {
       toInitialPositions(dataConfiguration.elements);
       setElements(elements);    
       setMathOperation(convertOperation(dataConfiguration.operation));
+      sendMessage(clientEvents.setConfiguration, dataConfiguration);
     }
   }
 
@@ -281,7 +282,7 @@ const Logical = () => {
             <KonvaImage id="basket" x={type.x-20} y={type.y} width={type.width+50} height={type.height+30} image={imageFactory(Basket)}></KonvaImage>
           ))}
           {elements && elements.map((element, index) => (                 
-            <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />                  
+            <KonvaImage id={'element-' + index} name={element.type} onDrag={console.log(Date.now())} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />                  
           ))}
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
