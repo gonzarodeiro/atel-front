@@ -22,6 +22,10 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
         <i className='far fa-calendar-alt' style={{ fontSize: '20px', marginRight: '23px' }}></i>
         <span style={{ fontWeight: '600' }}>Agenda</span>
       </div>
+      <div className={'menu-item ' + (history.location.pathname === '/share-session' ? 'active' : '')} onClick={() => redirectPage('share-session')}>
+        <i className='fas fa-share-alt' style={{ fontSize: '20px', marginRight: '20px' }}></i>
+        <span style={{ fontWeight: '600' }}>Compartir</span>
+      </div>
       <Footer redirectPage={redirectPage} />
     </div>
   );
