@@ -1,84 +1,134 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Image as KonvaImage } from 'react-konva';
-import { generateTrays } from './commons/tray';
-import { generateElements } from './commons/elements';
+import { Stage, Layer, Image as KonvaImage, Text } from 'react-konva';
 import { imageFactory } from './commons/imageFactory';
 import TrayGroup from './components/TrayGroup';
-import { sendMessage, clientEvents } from '../../../utils/socketManager';
+import { sendMessage, registerEvent, clientEvents } from '../../../utils/socketManager';
+import Konva from 'konva';
+import Basket from './images/basket.png';
+import { getAllingX } from './commons/alling';
+import Confites from '../../Confites';
+import { playAudio } from './commons/audio';
+import celebrateMp3 from './commons/celebrate.mp3';
+import { getDataFromSettings } from '../../../components/Activity/Logical/commons/data';
+import { initialSettings } from '../../../components/Activity/Logical/components/Settings';
+import bkgnd from './images/board.jpg';
 
-/**
- * @param {object} data { elements: [{ object }], trays: [{ object }] }
- * @returns JSX.Element
- */
-const Logical = ({ data }) => {
-  const defaultColor = '#8896AB';
-  const CONTAINER_SIZE = '100%';
+const Logical = ({ validate }) => {
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
-
+  const audioRef = useRef(null);
+  const validateRef = useRef();
   const [{ width, height }, setDimensions] = useState({});
   const [trays, setTrays] = useState();
   const [elements, setElements] = useState();
+  const [showConfites, setShowConfites] = useState(false);
+  const [mathOperation, setMathOperation] = useState();
+  const [playing, setPlaying] = useState('');
 
-  useEffect(() => {    
-    setConfiguration(); // will be register in socket event listener
-  }, [data]);
+  useEffect(() => {
+    validateRef.current = validate;
+    setShowConfites(false);
+    setEventListeners();
+    const initialData = getDataFromSettings(initialSettings);
+    sendMessage(clientEvents.setConfiguration, initialData);
+  }, []);
+
+  /**
+   * este useEffect se ejecuta cada
+   * vez que cambia la prop "validate"
+   */
+  useEffect(() => {
+    if (validateRef.current !== validate) {
+      sendMessage(clientEvents.checkResults, trays);
+    }
+    validateRef.current = validate;
+  }, [validate]);
+
+  function setEventListeners() {
+    setConfiguration();
+    registerEvents();
+  }
 
   function setConfiguration() {
-    let rect = divRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    setDimensions({ width, height });
-    setTrays(generateTrays());
-    setElements(generateElements(width));        
-    sendMessage(clientEvents.setConfiguration, data );
+    registerEvent((obj) => {
+      setElements(obj.elements);
+      setDimensions({ width: 700, height: 500 });
+      setTrays(obj.trays);
+      setMathOperation(obj.mathOperation);
+    }, clientEvents.setConfiguration);
   }
 
-  function updateTrayQuantity(index) {
-    const point = stageRef.current.getPointerPosition();
-    const intersections = stageRef.current.getAllIntersections(point);
-    const currentElement = intersections.find((element) => element.attrs.id == 'element-' + index);
-    const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));
-    let group;
-    updateElementsPositions(currentElement);
-    if (tray) {
-      group = tray.getParent();
-      group.add(currentElement);
-    } else {
-      group = currentElement.getParent();
-      currentElement.moveTo(layerRef.current);
-    }
-    updateGroup(group);
+  function registerEvents() {
+    registerEvent((obj) => {
+      // setElements(obj);
+      setElementPosition(obj.id, obj.point);
+    }, clientEvents.elementPosition);
+
+    registerEvent((obj) => {
+      setTrays(obj);
+      setShowConfites(false);
+    }, clientEvents.trays);
+
+    registerEvent((obj) => {
+      let element = stageRef.current.find((x) => x.attrs.id == obj.id)[0];
+      if (obj.filter) {
+        element.cache();
+        element.filters([Konva.Filters.Grayscale]);
+      } else {
+        element.filters([]);
+      }
+    }, clientEvents.setFilter);
+
+    registerEvent(() => {
+      playAudio(celebrateMp3, setPlaying, audioRef);
+      setShowConfites(true);
+    }, clientEvents.showCelebration);
   }
 
-  function updateGroup(group) {
-    let elementsOfType = group.find('.' + group.attrs.type);
-    let newQuantity = elementsOfType.length;
-    let copyofTrays = trays.map((x) => {
-      if (x.type === group.attrs.type) return { ...x, quantity: newQuantity };
-      return x;
+  function setElementPosition(id, point) {
+    let element = stageRef.current.find((el) => el.attrs.id === id)[0];
+    element.x(point.x);
+    element.y(point.y);
+  }
+
+  function getTypes(elements) {
+    const returnObject = {};
+    elements.forEach((element) => {
+      returnObject[element.type] = {
+        type: element.type,
+        height: element.height,
+        width: element.width,
+        x: element.x,
+        y: element.y,
+        xFix: element.xFix,
+        yFix: element.yFix
+      };
     });
-    setTrays(copyofTrays);
-  }
-
-  function updateElementsPositions(currentElement) {
-    let copyOfElements = [...elements];
-    copyOfElements.map((element) => {
-      if (element.id === currentElement.attrs.id) return { ...element, x: element.x(), y: element.y() };
-      return element;
+    var result = Object.keys(returnObject).map((x) => {
+      return { ...returnObject[x] };
     });
-    setElements(copyOfElements);
+    return result;
   }
 
   return (
-    <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundColor: defaultColor }} ref={divRef}>
+    <div style={{ width: width, height: height, backgroundSize: 'cover', backgroundImage: `url("${bkgnd}")` }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef}>
         <Layer ref={layerRef}>
+          {mathOperation &&
+            trays &&
+            trays.map((tray, index, array) => {
+              return index < array.length - 1 ? <Text id={'Operation'} text={index == 0 ? mathOperation : '='} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180} fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} /> : <></>;
+            })}
           <TrayGroup trays={trays} width={width} />
-          {elements && elements.map((element, index) => <KonvaImage id={'element-' + index} name={element.type} onDragEnd={(e) => updateTrayQuantity(index, element)} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />)}
+          {elements && getTypes(elements).map((type) => <KonvaImage id='basket' x={type.xFix - 20} y={type.yFix} width={type.width + 50} height={type.height + 30} image={imageFactory(Basket)}></KonvaImage>)}
+          {elements && elements.map((element, index) => <KonvaImage key={element.id} id={'element-' + index} name={element.type} key={element.id} x={elements[index].x} y={elements[index].y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={false} />)}
         </Layer>
+        {showConfites && <Confites stageRef={stageRef} />}
       </Stage>
+      <audio controls={false} ref={audioRef}>
+        <source src={playing} />
+      </audio>
     </div>
   );
 };

@@ -9,7 +9,7 @@ const envs = {
 };
 
 const urls = {
-  [DEV]: 'http://localhost:4000',
+  [DEV]: 'http://localhost:3005',
   [STG]: 'https://atel-back-stg.herokuapp.com',
   [PRD]: 'https://atel-back-prd.herokuapp.com'
 };
@@ -23,7 +23,7 @@ const [ENV, BASE_URL] = (function (opt) {
    * Setear [DEV | STG | PRD]
    * manualmente por ahora
    * */
-  STG
+  DEV
 );
 
 export { ENV, BASE_URL };
