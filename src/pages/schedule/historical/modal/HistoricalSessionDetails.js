@@ -2,7 +2,8 @@ import React from 'react';
 import { Modal, Accordion, Card } from 'react-bootstrap';
 import Cancel from '../../../../components/html/button/Cancel';
 
-const HistoricalSessionDetails = ({ showModal, handleClose }) => {
+const HistoricalSessionDetails = ({ showModal, handleClose, obj }) => {
+  console.log(obj);
   return (
     <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>

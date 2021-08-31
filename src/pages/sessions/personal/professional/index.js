@@ -58,7 +58,7 @@ const ProfessionalSession = (props) => {
 
   return (
     <Layout>
-      <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container px-0 mb-3' style={{ border: '1px solid #cecbcb' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />

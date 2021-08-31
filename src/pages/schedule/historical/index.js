@@ -11,12 +11,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import datepicker from '../../../utils/commons/datepicker';
 import HistoricalSessionDetails from './modal/HistoricalSessionDetails';
+import cleanObject from '../../../utils/commons/cleanObject';
+import convertDate from '../../../utils/commons/convertDate';
+import convertDateTime from '../../../utils/commons/convertDateTime';
+import { BASE_URL } from '../../../config/environment';
+import getParametry from '../../../utils/services/get/getByFilters/index';
+import getResponseById from '../../../utils/services/get/getById/index';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', status: '', message: '' });
+  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', status: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
+  const [sessionDetails, setSessionDetails] = useState();
   const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
   let history = useHistory();
@@ -30,58 +37,49 @@ const Index = () => {
     setParams({ ...params, [id]: value });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  function handleSubmit() {
     setLoading(true);
     getSchedule();
-  };
+  }
 
   async function getSchedule() {
-    const result = [
-      {
-        name: 'German Perez',
-        difficulty: 'TEA',
-        status: 'Finalizada',
-        type: 'Personal',
-        date: '01/06/2021 14:00 hs'
-      },
-      {
-        name: 'Augusto Gomez',
-        difficulty: 'Dislexia',
-        status: 'Finalizada',
-        type: 'Inclusión',
-        date: '05/06/2021 16:00 hs'
-      },
-      {
-        name: 'Lucas Gomez',
-        difficulty: 'TDA',
-        status: 'Cancelada',
-        type: 'Inclusión',
-        date: '12/06/2021 16:00 hs'
-      }
-    ];
+    const values = getParameters();
+    cleanObject(values);
+    const result = await getParametry(`${BASE_URL}/session`, values);
     createActions(result);
     fillTable(result);
   }
 
+  function getParameters() {
+    return {
+      id_professional: parseInt(sessionStorage.getItem('idProfessional')),
+      status: params.status,
+      studentName: params.studentName,
+      dateTo: convertDate(params.dateTo),
+      dateFrom: convertDate(params.dateFrom)
+    };
+  }
+
   function createActions(result) {
     for (let i = 0; i < result.length; i++) {
+      result[i].date = convertDateTime(new Date(result[i].start_datetime));
       result[i].actions = (
         <div>
-          {result[i].status === 'Finalizada' && <i onClick={() => handleDetails(result[i])} className='fas fa-eye mt-1' title='Ver detalles' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
-          {result[i].status === 'Cancelada' && <i onClick={() => handleObservation(result[i])} className='fas fa-eye mt-1' title='Ver detalles' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
-          {result[i].status === 'Finalizada' && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
-          {result[i].status === 'Cancelada' && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#d32f2f' }} aria-hidden='true'></i>}
+          {result[i].status === 2 && <i onClick={() => handleDetails(result[i])} className='fas fa-eye mt-1' title='Ver detalles' style={{ cursor: 'pointer' }} aria-hidden='true'></i>}
+
+          {result[i].status === 1 && <i className='fas fa-circle mt-1' style={{ color: 'orange' }} aria-hidden='true'></i>}
+          {result[i].status === 2 && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
+          {result[i].status === 3 && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#d32f2f' }} aria-hidden='true'></i>}
         </div>
       );
     }
   }
 
-  function handleDetails() {
+  async function handleDetails(obj) {
     setShowModal({ details: true });
+    let result = await getResponseById(`${BASE_URL}/calification/session/tool/all`, obj.id);
+    setSessionDetails(result);
   }
-
-  function handleObservation() {}
 
   function handleCloseDetails() {
     setShowModal({ details: false });
@@ -92,9 +90,8 @@ const Index = () => {
       setTable({
         columns: [
           { label: '', field: 'actions' },
-          { label: 'Nombre', field: 'name' },
-          { label: 'Dificultad', field: 'difficulty' },
-          { label: 'Estado', field: 'status' },
+          { label: 'Alumno', field: 'full_name' },
+          { label: 'Dificultad', field: 'diagnostic' },
           { label: 'Tipo', field: 'type' },
           { label: 'Fecha sesión', field: 'date' }
         ],
@@ -140,9 +137,12 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
+                  <span>
+                    <i className='fas fa-square ml-2' style={{ color: 'orange', marginBottom: '13px', marginLeft: '2px' }}></i> = Pendiente
+                  </span>
                   <span>
                     <i className='fas fa-square ml-2' style={{ color: '#388e3c', marginBottom: '13px', marginLeft: '2px' }}></i> = Finalizada
                   </span>
