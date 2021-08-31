@@ -7,6 +7,7 @@ import Login from './steps/Login';
 import Registration from './steps/Registration';
 import postApi from '../../utils/services/post/postApi';
 import showAlert from '../../utils/commons/showAlert';
+import Logo from '../../styles/images/logo.png';
 
 const Index = () => {
   const [user, setUser] = useState({ name: '', password: '' });
@@ -94,7 +95,9 @@ const Index = () => {
                   <Loading />
                 </div>
               )}
-              <div className='title-header'>ATEL - Asistente terapéutico en línea</div>
+              <div style={{ marginBottom: '40px', marginTop: '-5px' }}>
+                <img src={Logo} alt='' width='310' style={{ marginLeft: '40px' }} />
+              </div>
               {steps.login && <Login handleChange={handleChangeLogin} user={user} handleLogin={handleLogin} setSteps={setSteps} errorsLogin={errorsLogin} setErrorsLogin={setErrorsLogin} />}
               {steps.registration && <Registration handleChange={handleChangeRegistration} registration={registration} handleRegistration={handleRegistration} setSteps={setSteps} errorsRegistration={errorsRegistration} setErrorsRegistration={setErrorsRegistration} />}
             </div>

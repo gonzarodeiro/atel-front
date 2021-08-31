@@ -53,7 +53,7 @@ const Registration = ({ handleChange, registration, handleRegistration, setSteps
           </div>
         </div>
         {errorsRegistration.show && (
-          <div className='w-100 animated fadeInUp faster shadow' style={{ left: 0, bottom: -40, marginTop: '20px' }}>
+          <div className='w-100 animated fadeInUp faster shadow' style={{ left: 0, bottom: -40, marginTop: '15px' }}>
             <span className='d-block small text-white text-center py-3 mx-auto rounded w-100' style={{ backgroundColor: '#e53935' }}>
               {errorsRegistration.message}
             </span>
