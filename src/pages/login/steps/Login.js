@@ -1,17 +1,43 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { MDBInput, MDBBtn } from 'mdbreact';
 
-const Login = ({ handleChange, user, handleLogin, setSteps, errorsLogin, setErrorsLogin }) => {
+const Login = ({ handleChange, user, setSteps, errorsLogin, setErrorsLogin, setLoading }) => {
+  let history = useHistory();
+
   function registration() {
     setSteps({ login: false, registration: true });
     setErrorsLogin({ show: false, message: '' });
+  }
+
+  function handleLogin(event) {
+    event.preventDefault();
+    setErrorsLogin({ message: '', show: false });
+    if (!user.name && !user.password) {
+      setErrorsLogin({ message: 'Debe ingresar usuario y contraseña', show: true });
+      setTimeout(() => {
+        setErrorsLogin({ message: '', show: false });
+      }, 3000);
+    } else checkUser();
+  }
+
+  async function checkUser() {
+    setLoading(true);
+    // const params = { user: values.user.toUpperCase(), password: values.password };
+    // await postApi("login", params);
+
+    const name = 'Gonzalo Rodeiro';
+    sessionStorage.setItem('name', name);
+    sessionStorage.setItem('idProfessional', 1);
+    setLoading(false);
+    history.push(`/home`);
   }
 
   return (
     <React.Fragment>
       <form action=''>
         <div className='tittle'>¡Hola! Bienvenido</div>
-        <div className='d-block mt-3' style={{ fontSize: '16px !important' }}>
+        <div className='d-block' style={{ fontSize: '16px !important' }}>
           <MDBInput label='Usuario' id='name' onChange={handleChange} value={user.name} group type='text' validate success='right' style={{ marginBottom: '25px' }} />
           <MDBInput label='Contraseña' id='password' onChange={handleChange} value={user.password} group type='password' validate='container' className='mb-4' />
         </div>

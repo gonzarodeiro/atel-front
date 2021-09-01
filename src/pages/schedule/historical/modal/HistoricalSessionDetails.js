@@ -2,17 +2,22 @@ import React from 'react';
 import { Modal, Accordion, Card } from 'react-bootstrap';
 import Cancel from '../../../../components/html/button/Cancel';
 
-const HistoricalSessionDetails = ({ showModal, handleClose, obj }) => {
-  console.log(obj);
+const HistoricalSessionDetails = ({ showModal, handleClose, obj, date }) => {
   return (
     <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
         <Modal.Title style={{ fontSize: '19px' }}>Detalle de la sesión</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ fontSize: '14px', fontWeight: 'bold', color: '#66696b' }}>
-        <div className='pb-3 mt-1' style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          <label style={{ fontWeight: 'bold', marginRight: '5px' }}>Alumno: </label>
-          German Perez - 01/06/2021
+        <div data-test='col'>
+          <label className='mb-2'>Alumno: {obj.fullName} </label>
+        </div>
+        <div data-test='container' className='container-fluid section mb-4 border p-2'>
+          <div className='text-center' style={{ marginTop: '2px', marginBottom: '-5px' }}>
+            <label>Fecha: </label> {date}
+            <label className='ml-2 mr-2'> - </label>Evaluación: {obj.evaluation}
+            <label className='ml-2 mr-2'> - </label>Atención: {obj.attention}
+          </div>
         </div>
         <Accordion className='pb-4'>
           <Card>
@@ -22,24 +27,9 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj }) => {
             <Accordion.Collapse eventKey='0'>
               <Card.Body>
                 <div className='row pb-2'>
-                  <div className='col-md-3 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Intentos: </label> <br />5
-                  </div>
-                  <div className='col-md-3 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Aciertos: </label> <br />4
-                  </div>
-                  <div className='col-md-3 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Errores: </label> <br />1
-                  </div>
-                  <div className='col-md-3 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Efectividad: </label> <br />
-                    80%
-                  </div>
-                </div>
-                <div className='row pb-2'>
                   <div className='col-md-12 my-2'>
                     <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
-                    Durante la sesión note que estuvo enfocado y logro entender la actividad
+                    {obj.alphabetical.observation}
                   </div>
                 </div>
               </Card.Body>
@@ -52,7 +42,14 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj }) => {
               Herramienta numérica y lógica
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
-              <Card.Body></Card.Body>
+              <Card.Body>
+                <div className='row pb-2'>
+                  <div className='col-md-12 my-2'>
+                    <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
+                    {obj.numerical.observation}
+                  </div>
+                </div>
+              </Card.Body>
             </Accordion.Collapse>
           </Card>
         </Accordion>
@@ -62,7 +59,14 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj }) => {
               Pictogramas
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
-              <Card.Body></Card.Body>
+              <Card.Body>
+                <div className='row pb-2'>
+                  <div className='col-md-12 my-2'>
+                    <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
+                    {obj.pictogram.observation}
+                  </div>
+                </div>
+              </Card.Body>
             </Accordion.Collapse>
           </Card>
         </Accordion>
@@ -72,7 +76,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj }) => {
               Observaciones generales
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
-              <Card.Body></Card.Body>
+              <Card.Body>{obj.observation}</Card.Body>
             </Accordion.Collapse>
           </Card>
         </Accordion>

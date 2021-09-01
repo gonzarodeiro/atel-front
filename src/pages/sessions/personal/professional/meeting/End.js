@@ -27,8 +27,8 @@ const End = ({ handleChange, session, props }) => {
       alphabeticalComments: session.alphabeticalComments,
       pictogramComments: session.pictogramComments,
       status: status.Finished,
-      attention: parseInt(session.attention),
-      evaluation: parseInt(session.evaluation)
+      attention: session.attention,
+      evaluation: session.evaluation
     };
     cleanObject(values);
     return values;

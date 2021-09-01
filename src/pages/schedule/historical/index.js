@@ -24,6 +24,7 @@ const Index = () => {
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [sessionDetails, setSessionDetails] = useState();
+  const [dateDetails, setDateDetails] = useState();
   const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
   let history = useHistory();
@@ -69,16 +70,17 @@ const Index = () => {
 
           {result[i].status === 1 && <i className='fas fa-circle mt-1' style={{ color: 'orange' }} aria-hidden='true'></i>}
           {result[i].status === 2 && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i>}
-          {result[i].status === 3 && <i className='fas fa-circle mt-1 ml-2' style={{ color: '#d32f2f' }} aria-hidden='true'></i>}
+          {result[i].status === 3 && <i className='fas fa-circle mt-1' style={{ color: '#d32f2f' }} aria-hidden='true'></i>}
         </div>
       );
     }
   }
 
   async function handleDetails(obj) {
+    let result = await getResponseById(`${BASE_URL}/session/details`, obj.id);
+    setSessionDetails(result[0]);
+    setDateDetails(convertDateTime(new Date(result[0].startDateTime)));
     setShowModal({ details: true });
-    let result = await getResponseById(`${BASE_URL}/calification/session/tool/all`, obj.id);
-    setSessionDetails(result);
   }
 
   function handleCloseDetails() {
@@ -137,7 +139,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>

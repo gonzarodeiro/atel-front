@@ -404,7 +404,7 @@ const global = createGlobalStyle`
     margin-right: 15px;
     margin-left: 85px;
     position: absolute;
-    top: 70px;
+    top: 180px;
   }
 
   @media(max-width: 550px) {
@@ -416,11 +416,7 @@ const global = createGlobalStyle`
     .tittle {
         font-size: 30px;
         font-weight: 600;
-        letter-spacing: -0.39px;
-        margin-top: 18px;
-        margin-bottom: 40px;
-        color: #1b252e;
-        width: 85%;
+        color: #4d4d4d;
     }
 
     .tittle-registration{
@@ -429,7 +425,7 @@ const global = createGlobalStyle`
       letter-spacing: -0.39px;
       margin-top: 18px;
       margin-bottom: 23px;
-      color: #1b252e;
+      color: #4d4d4d;
       width: 85%;
     }
 
