@@ -18,11 +18,12 @@ import celebrateMp3 from './commons/celebrate.mp3'
  * @returns JSX.Element
  */
 const Logical = ({ data }) => {  
+  
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
   const audioRef = useRef(null);
-  const [{ width, height }, setDimensions] = useState({});
+  const [{ width, height }, setDimensions] = useState({width:700,height:500});
   const [trays, setTrays] = useState();
   const [elements, setElements] = useState();    
   const [showConfites, setShowConfites] = useState(false);  
@@ -30,16 +31,29 @@ const Logical = ({ data }) => {
   const [playing, setPlaying] = useState('');
 
   useEffect(() => {    
-    registerEvent((data) => {
-      setConfiguration(data)
-    }, clientEvents.setConfiguration);
+    registerEvents();    
   }, []);
 
   useEffect(() => {    
     sendMessage(clientEvents.setConfiguration, data );
   }, [data]);
   
-  function setConfiguration(dataConfiguration) {    
+
+  function registerEvents(){
+    registerEvent((obj) => {
+      setConfiguration(obj)
+    }, clientEvents.setConfiguration);
+
+    registerEvent((obj) => {
+      fixElementIntoStage(obj.id,obj.point);
+    }, clientEvents.elementPosition);
+    
+    registerEvent((obj) => {
+      updateTrayQuantity(obj.index, obj.point);
+    }, clientEvents.updateTrayQuantity);
+  }
+
+  const setConfiguration = (dataConfiguration) => {    
     const width = 700;
     const height = 500;    
     setDimensions({ width, height });
@@ -114,7 +128,7 @@ const Logical = ({ data }) => {
     return result;
   }
 
-  function moveTop(index) {
+  const moveTop = (index) => {
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
@@ -124,8 +138,9 @@ const Logical = ({ data }) => {
     group.moveToTop();
   }
 
-  function updateTrayQuantity(index) {
-    const point = stageRef.current.getPointerPosition();
+  const updateTrayQuantity = (index, point) => {
+
+    debugger;
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));
@@ -154,7 +169,7 @@ const Logical = ({ data }) => {
     updateGroups();    
   }
 
-  function checkFinish(trays){
+  const checkFinish = (trays) => {
     let finish = true;
     let group = stageRef.current.find('.group-RESULT-2');
     let shouldBe = 0, result = 0,quantityType1 = 0,quantityType2 = 0,okType1 = false,okType2 = false;
@@ -199,7 +214,7 @@ const Logical = ({ data }) => {
     return finish;
   }
 
-  function updateGroups() {
+  const updateGroups = () => {
     let copyofTrays = trays.map((x,index) => {
       let group = stageRef.current.find('.group-' + x.type + '-' + index);
       let elementsOfType = x.type == "RESULT" ? group[0].find(x=>x.attrs.id.startsWith("element")) : group[0].find('.' + x.type);      
@@ -213,7 +228,7 @@ const Logical = ({ data }) => {
     }
   }
 
-  function updateElementsPositions(elementIndex, point) {
+  const updateElementsPositions = (elementIndex, point) => {
     let copyOfElements = [...elements];
     copyOfElements.map((element, index) => {
       if (elementIndex === index) {
@@ -256,9 +271,9 @@ const Logical = ({ data }) => {
     );
   };
 
-  function fixElementIntoStage(e) {
-    const element = e.target;
-    const point = stageRef.current.getPointerPosition();
+  const fixElementIntoStage = (id, point) => {
+    
+    const element = stageRef.current.find((el) => el.attrs.id === id)[0];    
     let newPoint = checkColision(point.x, point.y);
     element.x(newPoint.x);
     element.y(newPoint.y);
@@ -276,7 +291,7 @@ const Logical = ({ data }) => {
             <KonvaImage id="basket" x={type.x-20} y={type.y} width={type.width+50} height={type.height+30} image={imageFactory(Basket)}></KonvaImage>
           ))}
           {elements && elements.map((element, index) => (                 
-            <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={false} />                  
+            <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={false} />                  
           ))}
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}

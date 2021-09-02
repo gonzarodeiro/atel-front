@@ -129,8 +129,9 @@ const Logical = () => {
     group.moveToTop();
   }
 
-  function updateTrayQuantity(index) {
+  function updateTrayQuantity(index) {    
     const point = stageRef.current.getPointerPosition();
+    sendMessage(clientEvents.updateTrayQuantity, {index,point});
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));
@@ -141,7 +142,7 @@ const Logical = () => {
       group = tray.getParent();      
       if(group.attrs.type !== currentElement.attrs.name && group.attrs.type != "RESULT"){
         currentElement.cache();
-        currentElement.filters([Konva.Filters.Grayscale]);
+        currentElement.filters([Konva.Filters.Grayscale]);        
       }else{
         currentElement.filters([]);
       }
@@ -269,6 +270,12 @@ const Logical = () => {
     element.y(newPoint.y);
   }
 
+  function sendPosition(e){
+    const element = e.target;
+    const point = stageRef.current.getPointerPosition();
+    sendMessage(clientEvents.elementPosition, {id:element.attrs.id,point});
+  }
+
   return (
     
     <div style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE, backgroundSize: "cover", backgroundImage: `url("https://i.pinimg.com/736x/25/be/35/25be353e2ca5f0c9ed8c9e3cfbc02d23.jpg")`}} ref={divRef}>
@@ -282,7 +289,7 @@ const Logical = () => {
             <KonvaImage id="basket" x={type.x-20} y={type.y} width={type.width+50} height={type.height+30} image={imageFactory(Basket)}></KonvaImage>
           ))}
           {elements && elements.map((element, index) => (                 
-            <KonvaImage id={'element-' + index} name={element.type} onDrag={console.log(Date.now())} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => fixElementIntoStage(e)} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />                  
+            <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => {fixElementIntoStage(e); sendPosition(e) }} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />                  
           ))}
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}

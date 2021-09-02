@@ -14,7 +14,9 @@ const clientEvents = {
   showActivityWizard: 'show-activity-wizard',
   closeActivityWizard: 'close-activity-wizard',
   showCelebration: 'show-celebration',
-  closeCelebration: 'close-celebration'
+  closeCelebration: 'close-celebration',
+  elementPosition: 'element-position',
+  updateTrayQuantity: 'update-tray-quantity'
 };
 
 const serverEvents = {
