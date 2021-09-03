@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../../components/Jitsi';
 import finishSession from '../finishSession';
@@ -10,10 +10,9 @@ import { getDataFromSettings } from '../../../../../components/Activity/Logical/
 
 const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const [validate, setValidate] = useState(false);
   const initialData = getDataFromSettings(initialSettings);
   const [data, setData] = useState(null);
-  
-  
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -25,12 +24,13 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
   }
 
   function restart() {
-    sendMessage(clientEvents.setConfiguration, data || initialData );
+    sendMessage(clientEvents.setConfiguration, data || initialData);
   }
 
   function handleOpenSettings() {
     setShowSettings(true);
   }
+
   function handleCloseSettings(mr, settings) {
     if (mr === modalResults.OK) {
       const newData = getDataFromSettings(settings);
@@ -38,6 +38,10 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
       setData(newData);
     }
     setShowSettings(false);
+  }
+
+  function handleCheckResults() {
+    setValidate(!validate);
   }
 
   function beginSession() {
@@ -50,7 +54,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity />
+          <Activity validate={validate} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
@@ -58,7 +62,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
               Cámara del alumno
             </label>
           </div>
-          {/* {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />} */}
+          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones
@@ -66,6 +70,11 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
+              <div className='col-md-12 mt-1 mb-1'>
+                <MDBBtn onClick={handleCheckResults} size='lg' className='py-2 peru darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Validar</span>
+                </MDBBtn>
+              </div>
               <div className='col-md-12 mt-1 mb-1'>
                 <MDBBtn onClick={handleOpenSettings} size='lg' className='py-2 grey darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Configurar</span>

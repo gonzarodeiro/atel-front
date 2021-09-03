@@ -17,7 +17,8 @@ const clientEvents = {
   closeCelebration: 'close-celebration',
   elementPosition: 'element-position',
   trays: 'trays',
-  setFilter: 'setFilter'
+  setFilter: 'setFilter',
+  checkResults: 'check-results'
 };
 
 const serverEvents = {
