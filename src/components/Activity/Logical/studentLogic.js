@@ -37,6 +37,7 @@ const Logical = () => {
 
   function registerEvents() { 
     registerEvent((data) => {      
+      debugger;
       setDataConfiguration(data);
     }, clientEvents.setConfiguration);
   }
@@ -50,8 +51,9 @@ const Logical = () => {
       const elements = setXElements(dataConfiguration.elements,width);
       toInitialPositions(dataConfiguration.elements);
       setElements(elements);    
-      setMathOperation(convertOperation(dataConfiguration.operation));
-      sendMessage(clientEvents.setConfiguration, dataConfiguration);
+      const mathOperation = convertOperation(dataConfiguration.operation);
+      setMathOperation(mathOperation);
+      sendMessage(clientEvents.setConfiguration, {elements:elements,trays:dataConfiguration.trays, mathOperation:mathOperation});
     }
   }
 
@@ -77,7 +79,9 @@ const Logical = () => {
           elementsOfType.push({
           ...element,
           x: Math.round((width / (array.length + 1)) * (index + 1) - obj.width/2 ),
-          y: 380
+          y: 380,
+          xFix: Math.round((width / (array.length + 1)) * (index + 1) - obj.width/2 ),
+          yFix: 380
           });
         }
       })
@@ -110,7 +114,10 @@ const Logical = () => {
         height:element.height,
         width:element.width,
         x:element.x,
-        y:element.y
+        y:element.y,
+        xFix: element.xFix,
+        yFix: element.yFix,
+
       };                
     });
     var result = Object.keys(returnObject).map(x=>{
@@ -142,8 +149,10 @@ const Logical = () => {
       group = tray.getParent();      
       if(group.attrs.type !== currentElement.attrs.name && group.attrs.type != "RESULT"){
         currentElement.cache();
+        sendMessage(clientEvents.setFilter, {id:currentElement.attrs.id,filter:true});
         currentElement.filters([Konva.Filters.Grayscale]);        
       }else{
+        sendMessage(clientEvents.setFilter, {id:currentElement.attrs.id,filter:false});
         currentElement.filters([]);
       }
       
@@ -151,6 +160,7 @@ const Logical = () => {
     } else {
       group = currentElement.getParent();
       currentElement.moveTo(layerRef.current);
+      sendMessage(clientEvents.setFilter, {id:currentElement.attrs.id,filter:false});
       currentElement.filters([]);
     }
     if(mathOperation){
@@ -213,7 +223,9 @@ const Logical = () => {
       return { ...x, quantity: newQuantity };
     });
     setTrays(copyofTrays);
+    sendMessage(clientEvents.trays, copyofTrays); 
     if(checkFinish(copyofTrays)){
+      sendMessage(clientEvents.showCelebration);
       playAudio(celebrateMp3, setPlaying, audioRef);
       setShowConfites(true);
     }
@@ -271,9 +283,13 @@ const Logical = () => {
   }
 
   function sendPosition(e){
-    const element = e.target;
+    const element = e.target;    
     const point = stageRef.current.getPointerPosition();
-    sendMessage(clientEvents.elementPosition, {id:element.attrs.id,point});
+    const stateElements = [...elements];
+    const id = parseInt(element.attrs.id.replace("element-",""));
+    stateElements[id].x = point.x;
+    stateElements[id].y = point.y;
+    sendMessage(clientEvents.elementPosition, stateElements);
   }
 
   return (
@@ -286,7 +302,7 @@ const Logical = () => {
           })}
           <TrayGroup trays={trays} width={width} />
           {elements && getTypes(elements).map((type) => (
-            <KonvaImage id="basket" x={type.x-20} y={type.y} width={type.width+50} height={type.height+30} image={imageFactory(Basket)}></KonvaImage>
+            <KonvaImage id="basket" x={type.xFix-20} y={type.yFix} width={type.width+50} height={type.height+30} image={imageFactory(Basket)}></KonvaImage>
           ))}
           {elements && elements.map((element, index) => (                 
             <KonvaImage id={'element-' + index} name={element.type} onDragStart={() => moveTop(index)} onDragEnd={() => updateTrayQuantity(index, element)} onMouseOver={() => handleOnMouseOver(index)} onMouseOut={() => handleOnMouseOut()} onDragMove={(e) => {fixElementIntoStage(e); sendPosition(e) }} scaleX={element.isOnMouseUp ? 1.2 : 1} scaleY={element.isOnMouseUp ? 1.2 : 1} key={element.id} x={element.x} y={element.y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={element.draggable} />                  

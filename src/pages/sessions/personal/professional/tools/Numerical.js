@@ -34,6 +34,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
   function handleCloseSettings(mr, settings) {
     if (mr === modalResults.OK) {
       const newData = getDataFromSettings(settings);
+      sendMessage(clientEvents.setConfiguration, newData);
       setData(newData);
     }
     setShowSettings(false);
@@ -49,7 +50,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={data || initialData} />
+          <Activity />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
@@ -57,7 +58,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
               Cámara del alumno
             </label>
           </div>
-          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
+          {/* {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />} */}
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones

@@ -16,7 +16,8 @@ const clientEvents = {
   showCelebration: 'show-celebration',
   closeCelebration: 'close-celebration',
   elementPosition: 'element-position',
-  updateTrayQuantity: 'update-tray-quantity'
+  trays: 'trays',
+  setFilter: 'setFilter'
 };
 
 const serverEvents = {

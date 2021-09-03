@@ -12,6 +12,7 @@ const TrayGroup = ({ trays, width }) => {
           if(element.type != "RESULT"){
             return (
               <Group type={element.type} name={'group-' + element.type  + '-' + index} height={180}>
+                <Text/>
                 <KonvaImage id={'tray-' + index} name={element.id} key={element.id} x={getAllingX(element.width, index, array.length, width)} y={130} width={element.width} height={element.height} image={imageFactory(element.src)} />
                 <Text id={'quantity' + element.id} text={element.quantity} x={getAllingX(element.width, index, array.length, width) - 20} y={240} height={20} width={20} fontVariant='bold' fontSize={25} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} />
                 {element.srcType && <Circle id='circle-text' x={getAllingX(element.width, index, array.length,width) + element.width / 2} y={240} radius={25} fill='white' stroke='black' />}
