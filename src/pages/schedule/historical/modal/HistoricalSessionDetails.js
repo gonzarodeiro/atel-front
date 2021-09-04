@@ -19,57 +19,63 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date }) => {
             <label className='ml-2 mr-2'> - </label>Atención: {obj.attention}
           </div>
         </div>
-        <Accordion className='pb-4'>
-          <Card>
-            <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-              Herramienta de alfabetización
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey='0'>
-              <Card.Body>
-                <div className='row pb-2'>
-                  <div className='col-md-12 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
-                    {obj.alphabetical.observation}
+        {obj.alphabetical && (
+          <Accordion className='pb-4'>
+            <Card>
+              <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
+                Herramienta de alfabetización
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey='0'>
+                <Card.Body>
+                  <div className='row pb-2'>
+                    <div className='col-md-12 my-2'>
+                      <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
+                      {obj.alphabetical.observation}
+                    </div>
                   </div>
-                </div>
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
-        <Accordion className='pb-4'>
-          <Card>
-            <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-              Herramienta numérica y lógica
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey='0'>
-              <Card.Body>
-                <div className='row pb-2'>
-                  <div className='col-md-12 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
-                    {obj.numerical.observation}
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        )}
+        {obj.numerical && (
+          <Accordion className='pb-4'>
+            <Card>
+              <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
+                Herramienta numérica y lógica
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey='0'>
+                <Card.Body>
+                  <div className='row pb-2'>
+                    <div className='col-md-12 my-2'>
+                      <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
+                      {obj.numerical.observation}
+                    </div>
                   </div>
-                </div>
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
-        <Accordion className='pb-4'>
-          <Card>
-            <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-              Pictogramas
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey='0'>
-              <Card.Body>
-                <div className='row pb-2'>
-                  <div className='col-md-12 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
-                    {obj.pictogram.observation}
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        )}
+        {obj.pictogram && (
+          <Accordion className='pb-4'>
+            <Card>
+              <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
+                Pictogramas
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey='0'>
+                <Card.Body>
+                  <div className='row pb-2'>
+                    <div className='col-md-12 my-2'>
+                      <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
+                      {obj.pictogram.observation}
+                    </div>
                   </div>
-                </div>
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        )}
         <Accordion className='pb-4'>
           <Card>
             <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
