@@ -7,7 +7,7 @@ import tools from '../../../../../utils/enums/tools';
 import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 
-const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard }) => {
+const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible }) => {
   useEffect(() => {
     showModal({ notification: false });
     showWizard(true);
@@ -20,6 +20,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
   function redirectEnd() {
     showTools({ alphabetical: false });
     showMeeting({ end: true });
+    setCelebrationVisible(false);
   }
 
   function restart() {

@@ -23,6 +23,7 @@ const ProfessionalSession = (props) => {
   const [modal, showModal] = useState({ notification: false });
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
+  const [celebrationVisible, setCelebrationVisible] = useState(true);
   let history = useHistory();
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const ProfessionalSession = (props) => {
 
   return (
     <Layout>
-      <div className='card shadow-sm container px-0 mb-3' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
@@ -74,16 +75,16 @@ const ProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} />}
-              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} />}
-              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
-              {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} />}
+              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} />}
+              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} />}
+              {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
         </div>
       </div>
-      <Celebration type={celebrationType.SENDER} />
+      {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
     </Layout>
   );

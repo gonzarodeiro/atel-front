@@ -15,8 +15,16 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date }) => {
         <div data-test='container' className='container-fluid section mb-4 border p-2'>
           <div className='text-center' style={{ marginTop: '2px', marginBottom: '-5px' }}>
             <label>Fecha: </label> {date}
-            <label className='ml-2 mr-2'> - </label>Evaluación: {obj.evaluation}
-            <label className='ml-2 mr-2'> - </label>Atención: {obj.attention}
+            {obj.evaluation && (
+              <>
+                <label className='ml-2 mr-2'> - </label>Evaluación: {obj.evaluation}
+              </>
+            )}
+            {obj.attention && (
+              <>
+                <label className='ml-2 mr-2'> - </label>Atención: {obj.attention}
+              </>
+            )}
           </div>
         </div>
         {obj.alphabetical && (

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
 import Jitsi from '../../../../../components/Jitsi';
 import finishSession from '../finishSession';
@@ -8,12 +8,10 @@ import Settings, { modalResults, initialSettings } from '../../../../../componen
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 
-const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => {
+const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible }) => {
   const [showSettings, setShowSettings] = useState(false);
   const initialData = getDataFromSettings(initialSettings);
   const [data, setData] = useState(null);
-  
-  
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -22,10 +20,11 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting }) => 
   function redirectEnd() {
     showTools({ numerical: false });
     showMeeting({ end: true });
+    setCelebrationVisible(false);
   }
 
   function restart() {
-    sendMessage(clientEvents.setConfiguration, data || initialData );
+    sendMessage(clientEvents.setConfiguration, data || initialData);
   }
 
   function handleOpenSettings() {

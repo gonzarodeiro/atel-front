@@ -47,7 +47,7 @@ const End = ({ handleChange, session, props }) => {
           <label className='ml-2 mr-2'> - </label>Pictogramas: 4 minutos
         </div>
       </div>
-      <div className='row'>
+      <div className='row mb-3'>
         <div className='col-md-6 my-2'>
           <Dropdownlist title='Valoración de la sesión' id='evaluation' handleChange={handleChange} value={session.evaluation} dropdownlist={dlEvaluationSession} disabledValue={false} className='form-control' />
         </div>

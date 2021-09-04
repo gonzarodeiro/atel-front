@@ -6,7 +6,7 @@ import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
 
-const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard }) => {
+const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible }) => {
   function getMessageByTool(tool) {
     let mapToolToEvent = {
       [tools.alphabetical]: clientEvents.initAlphabetical,
@@ -24,6 +24,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
 
   function redirectEnd() {
     showMeeting({ begin: false, end: true });
+    setCelebrationVisible(false);
   }
 
   return (
