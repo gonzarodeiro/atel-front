@@ -10,8 +10,7 @@ import { getDataFromSettings } from '../../../../../components/Activity/Logical/
 
 const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible }) => {
   const [showSettings, setShowSettings] = useState(false);
-  const initialData = getDataFromSettings(initialSettings);
-  const [data, setData] = useState(null);
+  const [validate, setValidate] = useState(false);
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -24,18 +23,24 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
   }
 
   function restart() {
-    sendMessage(clientEvents.setConfiguration, data || initialData);
+    const initialData = getDataFromSettings(initialSettings);
+    sendMessage(clientEvents.setConfiguration, initialData);
   }
 
   function handleOpenSettings() {
     setShowSettings(true);
   }
+
   function handleCloseSettings(mr, settings) {
     if (mr === modalResults.OK) {
       const newData = getDataFromSettings(settings);
-      setData(newData);
+      sendMessage(clientEvents.setConfiguration, newData);
     }
     setShowSettings(false);
+  }
+
+  function handleCheckResults() {
+    setValidate(!validate);
   }
 
   function beginSession() {
@@ -48,7 +53,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={data || initialData} />
+          <Activity validate={validate} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>
@@ -64,6 +69,11 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
+              <div className='col-md-12 mt-1 mb-1'>
+                <MDBBtn onClick={handleCheckResults} size='lg' className='py-2 peru darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Validar</span>
+                </MDBBtn>
+              </div>
               <div className='col-md-12 mt-1 mb-1'>
                 <MDBBtn onClick={handleOpenSettings} size='lg' className='py-2 grey darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Configurar</span>
