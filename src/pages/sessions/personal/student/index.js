@@ -27,6 +27,7 @@ const StudentSession = (props) => {
   const [session, setSession] = useState({ generalComments: '' });
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
+  const [sessionId, setSessionId] = useState(-1);
   let { roomId } = useParams();
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const StudentSession = (props) => {
   function loadSessionStatus() {
     const fields = roomId.split('-');
     setStudent(fields[0]);
+    setSessionId(fields[1]);
     checkSessionCreated(fields);
     showMeeting({ begin: true });
     showTools({ alphabetical: false });
@@ -112,7 +114,7 @@ const StudentSession = (props) => {
                   <div className='pb-3 mt-2 col-md-12'>
                     {meeting.begin && <Jitsi roomId={roomId} userName={student} height='580px'></Jitsi>}
                     {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} />}
-                    {tools.numerical && <Numerical roomId={roomId} userName={student} />}
+                    {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} />}
                     {tools.pictogram && <Pictogram roomId={roomId} userName={student} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
