@@ -11,6 +11,8 @@ import celebrateMp3 from './commons/celebrate.mp3';
 import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
 import { operationTypes } from './components/Settings/constants';
 import bkgnd from './images/board.jpg';
+import postResponseApi from '../../../utils/services/post/postResponseApi';
+import { BASE_URL } from '../../../config/environment';
 
 let metrics = {metricActivity:[]};
 let currentActivityMetrics;
@@ -57,7 +59,7 @@ function saveMathTry(success){
   currentActivityMetrics.total++;
 }
 
-const Logical = () => {
+const Logical = ({sessionId}) => {
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
   const stageRef = useRef(null);
@@ -73,12 +75,22 @@ const Logical = () => {
 
   useEffect(() => {
     registerEvents();
+    
+    return async () =>{
+      await saveMetrics();
+    }
   }, []);
 
   useEffect(() => {
     setShowConfites(false);
     setConfiguration();
   }, [dataConfiguration]);
+
+
+  async function saveMetrics(){
+    debugger;
+    await postResponseApi(`${BASE_URL}/statistics/numerical/session/`+ sessionId , metrics);
+  }
 
   function registerEvents() {
     registerEvent((data) => {
