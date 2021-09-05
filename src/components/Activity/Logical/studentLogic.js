@@ -14,44 +14,44 @@ import bkgnd from './images/board.jpg';
 import postResponseApi from '../../../utils/services/post/postResponseApi';
 import { BASE_URL } from '../../../config/environment';
 
-let metrics = {metricActivity:[]};
+let metrics = { metricActivity: [] };
 let currentActivityMetrics;
 
-function addNewMetrics(mathType, types){
+function addNewMetrics(mathType, types) {
   let metricalMath = [];
-  types.forEach(type => {
+  types.forEach((type) => {
     metricalMath.push({
-        type: type,
-        fails:0,
-        success:0,        
+      type: type,
+      fails: 0,
+      success: 0
     });
   });
 
   return {
     type: mathType,
-    activityFails:0,
-    activitySuccess:0,    
-    total:0,    			
+    activityFails: 0,
+    activitySuccess: 0,
+    total: 0,
     initialDTime: Date.now(),
-    finishTime:null,	
-    diffTime:null,				
-    metricMatch:metricalMath
-  }
+    finishTime: null,
+    diffTime: null,
+    metricMatch: metricalMath
+  };
 }
 
-function saveDropTry(type,success){
-  currentActivityMetrics.metricMatch.map((metric) =>{  
-    if(!metric.type === type) return { ...metric };
-    if(success){
-      return { ...metric, success: ++metric.success, total: ++metric.total}
+function saveDropTry(type, success) {
+  currentActivityMetrics.metricMatch.map((metric) => {
+    if (!metric.type === type) return { ...metric };
+    if (success) {
+      return { ...metric, success: ++metric.success, total: ++metric.total };
     } else {
-      return { ...metric, success: ++metric.fails, total: ++metric.total}
+      return { ...metric, success: ++metric.fails, total: ++metric.total };
     }
-  })
+  });
 }
 
-function saveMathTry(success){
-  if(success){
+function saveMathTry(success) {
+  if (success) {
     currentActivityMetrics.activitySuccess++;
   } else {
     currentActivityMetrics.activityFails++;
@@ -59,7 +59,7 @@ function saveMathTry(success){
   currentActivityMetrics.total++;
 }
 
-const Logical = ({sessionId}) => {
+const Logical = ({ sessionId }) => {
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
   const stageRef = useRef(null);
@@ -75,10 +75,10 @@ const Logical = ({sessionId}) => {
 
   useEffect(() => {
     registerEvents();
-    
-    return async () =>{
+
+    return async () => {
       await saveMetrics();
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -86,15 +86,13 @@ const Logical = ({sessionId}) => {
     setConfiguration();
   }, [dataConfiguration]);
 
-
-  async function saveMetrics(){
+  async function saveMetrics() {
     debugger;
-    await postResponseApi(`${BASE_URL}/statistics/numerical/session/`+ sessionId , metrics);
+    await postResponseApi(`${BASE_URL}/statistics/numerical/session/` + sessionId, metrics);
   }
 
   function registerEvents() {
     registerEvent((data) => {
-      debugger;
       setDataConfiguration(data);
     }, clientEvents.setConfiguration);
 
@@ -104,7 +102,7 @@ const Logical = ({sessionId}) => {
   }
 
   function setConfiguration() {
-    if (dataConfiguration) {    
+    if (dataConfiguration) {
       const width = 700;
       const height = 500;
       setDimensions({ width, height });
@@ -115,8 +113,8 @@ const Logical = ({sessionId}) => {
       const mathOperation = convertOperation(dataConfiguration.operation);
       setMathOperation(mathOperation);
       var dateNow = Date.now();
-      if(currentActivityMetrics) metrics.metricActivity.push({...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime});      
-      currentActivityMetrics = addNewMetrics(dataConfiguration.operation,getTypes(elements));
+      if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
+      currentActivityMetrics = addNewMetrics(dataConfiguration.operation, getTypes(elements));
       sendMessage(clientEvents.setConfiguration, { elements: elements, trays: dataConfiguration.trays, mathOperation: mathOperation });
     }
   }
@@ -199,7 +197,7 @@ const Logical = ({sessionId}) => {
   }
 
   function updateTrayQuantity(index) {
-    const point = stageRef.current.getPointerPosition();    
+    const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));
@@ -278,7 +276,6 @@ const Logical = ({sessionId}) => {
         if (x.quantity != x.expectedQuantity) finish = false;
       });
     }
-    debugger;
     return finish;
   }
 
