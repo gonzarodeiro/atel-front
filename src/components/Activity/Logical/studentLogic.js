@@ -11,6 +11,51 @@ import celebrateMp3 from './commons/celebrate.mp3';
 import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
 import { operationTypes } from './components/Settings/constants';
 
+let metrics = {metricActivity:[]};
+let currentActivityMetrics;
+
+function addNewMetrics(mathType, types){
+  let metricalMath = [];
+  types.forEach(type => {
+    metricalMath.push({
+        type: type,
+        fails:0,
+        success:0,        
+    });
+  });
+
+  return {
+    type: mathType,
+    activityFails:0,
+    activitySuccess:0,    
+    total:0,    			
+    initialDTime: Date.now(),
+    finishTime:null,	
+    diffTime:null,				
+    metricMatch:metricalMath
+  }
+}
+
+function saveDropTry(type,success){
+  currentActivityMetrics.metricMatch.map((metric) =>{  
+    if(!metric.type === type) return { ...metric };
+    if(success){
+      return { ...metric, success: ++metric.success, total: ++metric.total}
+    } else {
+      return { ...metric, success: ++metric.fails, total: ++metric.total}
+    }
+  })
+}
+
+function saveMathTry(success){
+  if(success){
+    currentActivityMetrics.activitySuccess++;
+  } else {
+    currentActivityMetrics.activityFails++;
+  }
+  currentActivityMetrics.total++;
+}
+
 const Logical = () => {
   const CONTAINER_SIZE = '100%';
   const divRef = useRef(null);
@@ -46,7 +91,7 @@ const Logical = () => {
   }
 
   function setConfiguration() {
-    if (dataConfiguration) {
+    if (dataConfiguration) {    
       const width = 700;
       const height = 500;
       setDimensions({ width, height });
@@ -56,6 +101,9 @@ const Logical = () => {
       setElements(elements);
       const mathOperation = convertOperation(dataConfiguration.operation);
       setMathOperation(mathOperation);
+      var dateNow = Date.now();
+      if(currentActivityMetrics) metrics.metricActivity.push({...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime});      
+      currentActivityMetrics = addNewMetrics(dataConfiguration.operation,getTypes(elements));
       sendMessage(clientEvents.setConfiguration, { elements: elements, trays: dataConfiguration.trays, mathOperation: mathOperation });
     }
   }
@@ -138,8 +186,7 @@ const Logical = () => {
   }
 
   function updateTrayQuantity(index) {
-    const point = stageRef.current.getPointerPosition();
-    sendMessage(clientEvents.updateTrayQuantity, { index, point });
+    const point = stageRef.current.getPointerPosition();    
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
     const tray = intersections.find((element) => element.attrs.id.startsWith('tray'));
@@ -152,9 +199,11 @@ const Logical = () => {
         currentElement.cache();
         sendMessage(clientEvents.setFilter, { id: currentElement.attrs.id, filter: true });
         currentElement.filters([Konva.Filters.Grayscale]);
+        saveDropTry(currentElement.attrs.name, false);
       } else {
         sendMessage(clientEvents.setFilter, { id: currentElement.attrs.id, filter: false });
         currentElement.filters([]);
+        saveDropTry(currentElement.attrs.name, true);
       }
 
       currentElement.moveTo(group);
@@ -216,7 +265,7 @@ const Logical = () => {
         if (x.quantity != x.expectedQuantity) finish = false;
       });
     }
-
+    debugger;
     return finish;
   }
 
@@ -294,9 +343,12 @@ const Logical = () => {
 
   function checkResults(trays) {
     if (checkFinish(trays)) {
+      saveMathTry(true);
       sendMessage(clientEvents.showCelebration);
       playAudio(celebrateMp3, setPlaying, audioRef);
       setShowConfites(true);
+    } else {
+      saveMathTry(false);
     }
   }
 
