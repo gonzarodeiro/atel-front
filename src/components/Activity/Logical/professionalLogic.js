@@ -71,7 +71,7 @@ const Logical = ({ validate }) => {
     }, clientEvents.trays);
 
     registerEvent((obj) => {
-      let element = stageRef.current.find((x) => x.attrs.id == obj.id)[0];
+      let element = stageRef.current.find((x) => x.attrs.id === obj.id)[0];
       if (obj.filter) {
         element.cache();
         element.filters([Konva.Filters.Grayscale]);
@@ -118,11 +118,11 @@ const Logical = ({ validate }) => {
           {mathOperation &&
             trays &&
             trays.map((tray, index, array) => {
-              return index < array.length - 1 ? <Text id={'Operation'} text={index == 0 ? mathOperation : '='} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180} fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} /> : <></>;
+              return index < array.length - 1 ? <Text id={'Operation'} text={index === 0 ? mathOperation : '='} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180} fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} /> : <></>;
             })}
           <TrayGroup trays={trays} width={width} />
           {elements && getTypes(elements).map((type) => <KonvaImage id='basket' x={type.xFix - 20} y={type.yFix} width={type.width + 50} height={type.height + 30} image={imageFactory(Basket)}></KonvaImage>)}
-          {elements && elements.map((element, index) => <KonvaImage key={element.id} id={'element-' + index} name={element.type} key={element.id} x={elements[index].x} y={elements[index].y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={false} />)}
+          {elements && elements.map((element, index) => <KonvaImage key={element.id} id={'element-' + index} name={element.type} x={elements[index].x} y={elements[index].y} width={element.width} height={element.height} image={imageFactory(element.src)} draggable={false} />)}
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
       </Stage>

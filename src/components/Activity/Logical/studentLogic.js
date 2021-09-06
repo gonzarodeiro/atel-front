@@ -206,7 +206,7 @@ const Logical = ({ sessionId }) => {
     if (!currentElement) return;
     if (tray) {
       group = tray.getParent();
-      if (group.attrs.type !== currentElement.attrs.name && group.attrs.type != 'RESULT') {
+      if (group.attrs.type !== currentElement.attrs.name && group.attrs.type !== 'RESULT') {
         currentElement.cache();
         sendMessage(clientEvents.setFilter, { id: currentElement.attrs.id, filter: true });
         currentElement.filters([Konva.Filters.Grayscale]);
@@ -225,8 +225,8 @@ const Logical = ({ sessionId }) => {
       currentElement.filters([]);
     }
     if (mathOperation) {
-      stageRef.current.find((x) => x.attrs.id == 'circle-text-result')[0].moveToTop();
-      stageRef.current.find((x) => x.attrs.id == 'quantity-result')[0].moveToTop();
+      stageRef.current.find((x) => x.attrs.id === 'circle-text-result')[0].moveToTop();
+      stageRef.current.find((x) => x.attrs.id === 'quantity-result')[0].moveToTop();
     }
     updateGroups();
   }
@@ -245,35 +245,36 @@ const Logical = ({ sessionId }) => {
         case '+':
           shouldBe = trays[0].expectedQuantity + trays[1].expectedQuantity;
           result = trays[2].quantity;
-          if (trays[0].type != trays[1].type) {
-            quantityType1 = group[0].find((x) => x.attrs.name == trays[0].type).length;
-            quantityType2 = group[0].find((x) => x.attrs.name == trays[1].type).length;
-            okType1 = quantityType1 == trays[0].expectedQuantity;
-            okType2 = quantityType2 == trays[1].expectedQuantity;
-            finish = result == shouldBe && okType1 && okType2;
+          if (trays[0].type !== trays[1].type) {
+            quantityType1 = group[0].find((x) => x.attrs.name === trays[0].type).length;
+            quantityType2 = group[0].find((x) => x.attrs.name === trays[1].type).length;
+            okType1 = quantityType1 === trays[0].expectedQuantity;
+            okType2 = quantityType2 === trays[1].expectedQuantity;
+            finish = result === shouldBe && okType1 && okType2;
           } else {
-            finish = result == shouldBe;
+            finish = result === shouldBe;
           }
           break;
         case '-':
           shouldBe = trays[0].expectedQuantity - trays[1].expectedQuantity;
           result = trays[2].quantity;
-          finish = result == shouldBe;
+          finish = result === shouldBe;
           break;
         case 'x':
           shouldBe = trays[0].expectedQuantity * trays[1].expectedQuantity;
           result = trays[2].quantity;
-          finish = result == shouldBe;
+          finish = result === shouldBe;
           break;
         case '%':
           shouldBe = trays[0].expectedQuantity / trays[1].expectedQuantity;
           result = trays[2].quantity;
-          finish = result == shouldBe;
+          finish = result === shouldBe;
           break;
+        default:
       }
     } else {
       trays.forEach((x) => {
-        if (x.quantity != x.expectedQuantity) finish = false;
+        if (x.quantity !== x.expectedQuantity) finish = false;
       });
     }
     return finish;
@@ -282,7 +283,7 @@ const Logical = ({ sessionId }) => {
   function updateGroups() {
     let copyofTrays = trays.map((x, index) => {
       let group = stageRef.current.find('.group-' + x.type + '-' + index);
-      let elementsOfType = x.type == 'RESULT' ? group[0].find((x) => x.attrs.id.startsWith('element')) : group[0].find('.' + x.type);
+      let elementsOfType = x.type === 'RESULT' ? group[0].find((x) => x.attrs.id.startsWith('element')) : group[0].find('.' + x.type);
       let newQuantity = elementsOfType.length;
       return { ...x, quantity: newQuantity };
     });
@@ -369,7 +370,7 @@ const Logical = ({ sessionId }) => {
           {mathOperation &&
             trays &&
             trays.map((tray, index, array) => {
-              return index < array.length - 1 ? <Text id={'Operation'} text={index == 0 ? mathOperation : '='} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180} fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} /> : <></>;
+              return index < array.length - 1 ? <Text id={'Operation'} text={index === 0 ? mathOperation : '='} x={getAllingX(tray.width, index, array.length, width) + tray.width + 20} y={180} fontVariant='bold' fontSize={49} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} /> : <></>;
             })}
           <TrayGroup trays={trays} width={width} />
           {elements && getTypes(elements).map((type) => <KonvaImage id='basket' x={type.xFix - 20} y={type.yFix} width={type.width + 50} height={type.height + 30} image={imageFactory(Basket)}></KonvaImage>)}
