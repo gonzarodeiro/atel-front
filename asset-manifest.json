@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/atel-front/static/css/main.8902b72c.chunk.css",
-    "main.js": "/atel-front/static/js/main.0898f8e9.chunk.js",
-    "main.js.map": "/atel-front/static/js/main.0898f8e9.chunk.js.map",
+    "main.js": "/atel-front/static/js/main.4190398a.chunk.js",
+    "main.js.map": "/atel-front/static/js/main.4190398a.chunk.js.map",
     "runtime-main.js": "/atel-front/static/js/runtime-main.c3e874b7.js",
     "runtime-main.js.map": "/atel-front/static/js/runtime-main.c3e874b7.js.map",
     "static/css/2.c2774f4f.chunk.css": "/atel-front/static/css/2.c2774f4f.chunk.css",
     "static/js/2.a270f4fd.chunk.js": "/atel-front/static/js/2.a270f4fd.chunk.js",
     "static/js/2.a270f4fd.chunk.js.map": "/atel-front/static/js/2.a270f4fd.chunk.js.map",
     "index.html": "/atel-front/index.html",
-    "precache-manifest.46cf6c29d58b3a590205445409b15680.js": "/atel-front/precache-manifest.46cf6c29d58b3a590205445409b15680.js",
+    "precache-manifest.b973b378b987fb1c7405b5313df0f8cf.js": "/atel-front/precache-manifest.b973b378b987fb1c7405b5313df0f8cf.js",
     "service-worker.js": "/atel-front/service-worker.js",
     "static/css/2.c2774f4f.chunk.css.map": "/atel-front/static/css/2.c2774f4f.chunk.css.map",
     "static/css/main.8902b72c.chunk.css.map": "/atel-front/static/css/main.8902b72c.chunk.css.map",
@@ -60,6 +60,6 @@
     "static/css/2.c2774f4f.chunk.css",
     "static/js/2.a270f4fd.chunk.js",
     "static/css/main.8902b72c.chunk.css",
-    "static/js/main.0898f8e9.chunk.js"
+    "static/js/main.4190398a.chunk.js"
   ]
 }
