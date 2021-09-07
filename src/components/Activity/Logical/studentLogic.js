@@ -16,7 +16,7 @@ import { BASE_URL } from '../../../config/environment';
 
 let metrics = { metricActivity: [] };
 let currentActivityMetrics;
-
+let currentMathOperation;
 function addNewMetrics(mathType, types) {
   let metricalMath = [];
   types.forEach((type) => {
@@ -112,6 +112,7 @@ const Logical = ({ sessionId }) => {
       setElements(elements);
       const mathOperation = convertOperation(dataConfiguration.operation);
       setMathOperation(mathOperation);
+      currentMathOperation = mathOperation;
       var dateNow = Date.now();
       if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
       currentActivityMetrics = addNewMetrics(dataConfiguration.operation, getTypes(elements));
@@ -240,8 +241,8 @@ const Logical = ({ sessionId }) => {
       quantityType2 = 0,
       okType1 = false,
       okType2 = false;
-    if (mathOperation) {
-      switch (mathOperation) {
+    if (currentMathOperation) {
+      switch (currentMathOperation) {
         case '+':
           shouldBe = trays[0].expectedQuantity + trays[1].expectedQuantity;
           result = trays[2].quantity;
