@@ -1,8 +1,9 @@
 import React from 'react';
 import { Modal, Accordion, Card } from 'react-bootstrap';
 import Cancel from '../../../../components/html/button/Cancel';
+import Table from '../../../../components/html/Table';
 
-const HistoricalSessionDetails = ({ showModal, handleClose, obj, date }) => {
+const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable }) => {
   return (
     <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
@@ -27,7 +28,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date }) => {
             )}
           </div>
         </div>
-        {obj.alphabetical && (
+        {obj.alphabetical.observation && (
           <Accordion className='pb-4'>
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
@@ -46,26 +47,28 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date }) => {
             </Card>
           </Accordion>
         )}
-        {obj.numerical && (
-          <Accordion className='pb-4'>
-            <Card>
-              <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-                Herramienta numérica y lógica
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey='0'>
-                <Card.Body>
-                  <div className='row pb-2'>
+        <Accordion className='pb-4'>
+          <Card>
+            <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
+              Herramienta numérica y lógica
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey='0'>
+              <Card.Body>
+                {aritmeticTable.show && <Table data={aritmeticTable} />}
+                {matchesTable.show && <Table data={matchesTable} />}
+                <div className='row pb-2'>
+                  {obj.numerical.observation && (
                     <div className='col-md-12 my-2'>
                       <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
                       {obj.numerical.observation}
                     </div>
-                  </div>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        )}
-        {obj.pictogram && (
+                  )}
+                </div>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+        {obj.pictogram.observation && (
           <Accordion className='pb-4'>
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>

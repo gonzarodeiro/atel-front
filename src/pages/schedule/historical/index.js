@@ -22,6 +22,8 @@ registerLocale('es', datepicker);
 const Index = () => {
   const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', status: '' });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [numericalAritmeticTable, setNumericalAritmeticTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [numericalMatchesTable, setNumericalMatchesTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [sessionDetails, setSessionDetails] = useState();
   const [dateDetails, setDateDetails] = useState();
@@ -76,11 +78,93 @@ const Index = () => {
     }
   }
 
-  async function handleDetails(obj) {
-    let result = await getResponseById(`${BASE_URL}/session/details`, obj.id);
+  async function handleDetails(response) {
+    let result = await getResponseById(`${BASE_URL}/session/details`, response.id);
     setSessionDetails(result[0]);
+    const aritmeticsRows = convertAritmetic(result[0].numerical.statistics.aritmetic);
+    const matchesRows = convertMatches(result[0].numerical.statistics.matches);
+    fillAritmeticTable(aritmeticsRows);
+    fillMatchesTable(matchesRows);
     setDateDetails(convertDateTime(new Date(result[0].startDateTime)));
     setShowModal({ details: true });
+  }
+
+  function convertAritmetic(obj) {
+    const mapKeys = {
+      Suma: 'Suma',
+      Resta: 'Resta',
+      Multiplicacion: 'Multiplicación',
+      Division: 'División',
+      SinOperacion: 'Matcheo de formas'
+    };
+
+    let rows = Object.keys(mapKeys).map((k) => {
+      let attempts = obj[k].fails + obj[k].success;
+      let percentage = 0;
+      if (attempts) percentage = (obj[k].success * 100) / attempts;
+
+      return {
+        name: mapKeys[k],
+        attempts: attempts,
+        fail: obj[k].fails,
+        success: obj[k].success,
+        percentage: percentage + '%'
+      };
+    });
+    return rows;
+  }
+
+  function convertMatches(obj) {
+    let rows = Object.keys(obj).map((k) => {
+      let attempts = obj[k].fails + obj[k].success;
+      let percentage = 0;
+      if (attempts) percentage = (obj[k].success * 100) / attempts;
+
+      return {
+        name: k.charAt(0).toUpperCase() + k.slice(1),
+        attempts: attempts,
+        fail: obj[k].fails,
+        success: obj[k].success,
+        percentage: percentage + '%'
+      };
+    });
+    return rows;
+  }
+
+  function fillAritmeticTable(obj) {
+    if (obj) {
+      setNumericalAritmeticTable({
+        columns: [
+          { label: 'Operación', field: 'name' },
+          { label: 'Intentos', field: 'attempts' },
+          { label: 'Aciertos', field: 'success' },
+          { label: 'Errores', field: 'fail' },
+          { label: 'Efectividad', field: 'percentage' }
+        ],
+        rows: obj,
+        show: true
+      });
+    } else {
+      setNumericalAritmeticTable({ show: false });
+    }
+  }
+
+  function fillMatchesTable(obj) {
+    if (obj) {
+      setNumericalMatchesTable({
+        columns: [
+          { label: 'Elemento', field: 'name' },
+          { label: 'Intentos', field: 'attempts' },
+          { label: 'Aciertos', field: 'success' },
+          { label: 'Errores', field: 'fail' },
+          { label: 'Efectividad', field: 'percentage' }
+        ],
+        rows: obj,
+        show: true
+      });
+    } else {
+      setNumericalMatchesTable({ show: false });
+    }
   }
 
   function handleCloseDetails() {
@@ -139,7 +223,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>
