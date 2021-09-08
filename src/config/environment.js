@@ -9,7 +9,7 @@ const envs = {
 };
 
 const urls = {
-  [DEV]: 'http://localhost:3005',
+  [DEV]: 'https://atel-back-stg.herokuapp.com',
   [STG]: 'https://atel-back-stg.herokuapp.com',
   [PRD]: 'https://atel-back-prd.herokuapp.com'
 };
