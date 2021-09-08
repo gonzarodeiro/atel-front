@@ -87,7 +87,8 @@ const Logical = ({ sessionId }) => {
   }, [dataConfiguration]);
 
   async function saveMetrics() {
-    debugger;
+    const dateNow = Date.now();
+    if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
     await postResponseApi(`${BASE_URL}/statistics/numerical/session/` + sessionId, metrics);
   }
 
@@ -113,7 +114,7 @@ const Logical = ({ sessionId }) => {
       const mathOperation = convertOperation(dataConfiguration.operation);
       setMathOperation(mathOperation);
       currentMathOperation = mathOperation;
-      var dateNow = Date.now();
+      const dateNow = Date.now();
       if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
       currentActivityMetrics = addNewMetrics(dataConfiguration.operation, getTypes(elements));
       sendMessage(clientEvents.setConfiguration, { elements: elements, trays: dataConfiguration.trays, mathOperation: mathOperation });
