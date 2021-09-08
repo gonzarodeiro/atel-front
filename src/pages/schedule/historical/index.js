@@ -26,6 +26,7 @@ const Index = () => {
   const [numericalMatchesTable, setNumericalMatchesTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [sessionDetails, setSessionDetails] = useState();
+  const [avgTime, setAvgTime] = useState();
   const [dateDetails, setDateDetails] = useState();
   const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
@@ -83,10 +84,17 @@ const Index = () => {
     setSessionDetails(result[0]);
     const aritmeticsRows = convertAritmetic(result[0].numerical.statistics.aritmetic);
     const matchesRows = convertMatches(result[0].numerical.statistics.matches);
+    if (result[0].numerical) setAvgTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
     fillAritmeticTable(aritmeticsRows);
     fillMatchesTable(matchesRows);
     setDateDetails(convertDateTime(new Date(result[0].startDateTime)));
     setShowModal({ details: true });
+  }
+
+  function convertMStoMinutes(avgTime) {
+    const min = Math.floor((avgTime / 1000 / 60) << 0),
+      sec = Math.floor((avgTime / 1000) % 60);
+    return `${min} minutos y ${sec} segundos`;
   }
 
   function convertAritmetic(obj) {
@@ -108,7 +116,7 @@ const Index = () => {
         attempts: attempts,
         fail: obj[k].fails,
         success: obj[k].success,
-        percentage: percentage + '%'
+        percentage: percentage.toFixed(2) + '%'
       };
     });
     return rows;
@@ -125,7 +133,7 @@ const Index = () => {
         attempts: attempts,
         fail: obj[k].fails,
         success: obj[k].success,
-        percentage: percentage + '%'
+        percentage: percentage.toFixed(2) + '%'
       };
     });
     return rows;
@@ -223,7 +231,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>
