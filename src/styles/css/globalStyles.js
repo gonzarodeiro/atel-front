@@ -272,7 +272,7 @@ const global = createGlobalStyle`
 
   #hvr-float {
     vertical-align: middle;
-    transition: box-shadow 1s, transform 1s;
+    transition: box-shadow 2s ease 1s, transform 0.5s ease 0s;
     transform: perspective(1px) translateZ(0);
     box-shadow: 0px 0px 5px rgba(0, 0, 0, .4);
   }
@@ -282,7 +282,6 @@ const global = createGlobalStyle`
   #hvr-float:active {
     -webkit-transform: translateY(-8px);
     transform: translateY(-8px);
-    box-shadow: 10px 10px 5px rgba(0, 0, 0, .4);
   }
 
   .logo{
