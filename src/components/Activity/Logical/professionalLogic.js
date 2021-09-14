@@ -53,7 +53,7 @@ const Logical = ({ validate }) => {
   function setConfiguration() {
     registerEvent((obj) => {
       setElements(obj.elements);
-      setDimensions({ width: 700, height: 500 });
+      setDimensions({ width: 700, height: 492 });
       setTrays(obj.trays);
       setMathOperation(obj.mathOperation);
     }, clientEvents.setConfiguration);

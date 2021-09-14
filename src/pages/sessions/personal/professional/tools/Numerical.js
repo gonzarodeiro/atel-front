@@ -69,12 +69,12 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
-              <div className='col-md-12 mt-1 mb-1'>
+              <div className='col-md-6 mt-1 mb-1'>
                 <MDBBtn onClick={handleCheckResults} size='lg' className='py-2 peru darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Validar</span>
                 </MDBBtn>
               </div>
-              <div className='col-md-12 mt-1 mb-1'>
+              <div className='col-md-6 mt-1 mb-1'>
                 <MDBBtn onClick={handleOpenSettings} size='lg' className='py-2 grey darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Configurar</span>
                 </MDBBtn>
@@ -96,31 +96,33 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className='row mb-2'>
+        <div className='col-md-8 my-1'>
+          <label>Observaciones de la actividad</label>
+          <textarea id='numericalComments' rows='3' onChange={handleChange} value={session.numericalComments} type='text' className='form-control' />
+        </div>
+        <div className='col-md-4 my-1'>
           <div data-test='col'>
-            <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
+            <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Información de la sesión
             </label>
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
-              <div className='col-md-6 mb-1'>
+              <div className='col-md-6'>
                 <MDBBtn onClick={beginSession} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
                   <span>Comienzo</span>
                 </MDBBtn>
               </div>
-              <div className='col-md-6 mb-1'>
+              <div className='col-md-6'>
                 <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
                   <span>Finalizar</span>
                 </MDBBtn>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className='row mb-2'>
-        <div className='col-md-12 my-1'>
-          <label>Observaciones de la actividad</label>
-          <textarea id='numericalComments' rows='3' onChange={handleChange} value={session.numericalComments} type='text' className='form-control' />
         </div>
       </div>
       <Settings show={showSettings} onClose={handleCloseSettings} />

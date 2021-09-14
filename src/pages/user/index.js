@@ -13,7 +13,7 @@ import patchApi from '../../utils/services/patch/patchApi';
 import { BASE_URL } from '../../config/environment';
 
 const Index = () => {
-  const [user, setUser] = useState({ name: '', userName: '', password: '', profession: '' });
+  const [user, setUser] = useState({ name: '', userName: '', password: '', email: '', profession: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -29,6 +29,7 @@ const Index = () => {
       name: 'Gonzalo Rodeiro',
       userName: 'grodeiro',
       password: '12345678',
+      email: 'gonza.rodeiro@gmail.com',
       profession: 'Asistente social'
     });
   }
@@ -43,12 +44,13 @@ const Index = () => {
     if (validateFields()) {
       setLoading(false);
       await showAlert('Profesional modificado', 'Se han modificado los datos con éxito en el sistema', 'success');
+      history.push(`/home`);
     }
     setLoading(false);
   }
 
   function validateFields() {
-    if (!user.name || !user.userName || !user.password || !user.profession) {
+    if (!user.name || !user.userName || !user.password || !user.email || !user.profession) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -104,11 +106,11 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row mb-3'>
                 <div className='col-md-4 my-2'>
-                  <label>Nombre y apellido </label>
+                  <label>Nombre y apellido</label>
                   <input id='name' onChange={handleChange} value={user.name} type='text' className={'form-control ' + (!user.name && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-2'>
-                  <label>Usuario </label>
+                  <label>Usuario</label>
                   <input id='userName' onChange={handleChange} value={user.userName} type='text' className={'form-control ' + (!user.userName && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-2'>
@@ -117,11 +119,15 @@ const Index = () => {
                 </div>
               </div>
               <div className='row mb-1'>
-                <div className='col-md-12 my-1'>
+                <div className='col-md-6 my-1'>
+                  <label>Email</label>
+                  <input id='email' onChange={handleChange} value={user.email} type='text' className={'form-control ' + (!user.email && showValidation ? 'borderRed' : '')} />
+                </div>
+                <div className='col-md-6 my-1'>
                   <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={user.profession} dropdownlist={dlProfession} disabledValue={false} className={'form-control ' + (!user.profession && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
-              <div className='mb-3' style={{ textAlign: 'left' }}>
+              <div className='mb-3' style={{ textAlign: 'left', marginLeft: '-4px', marginTop: '10px' }}>
                 <MDBBtn onClick={handleDelete} className='red darken-2 btnOption' style={{ backgroundColor: '#dd4b39', color: '#FFF', borderColor: '#dd4b39 !important' }}>
                   <i className='fas fa-trash'></i>
                   <span className='ml-2'>Eliminar cuenta</span>
