@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MDBBtn } from 'mdbreact';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../utils/layout/index';
 import Loading from '../../components/Loading';
@@ -7,6 +8,9 @@ import Cancel from '../../components/html/button/Cancel';
 import showAlert from '../../utils/commons/showAlert';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { dlProfession } from '../../utils/dropdownlists/index';
+import swal from '@sweetalert/with-react';
+import patchApi from '../../utils/services/patch/patchApi';
+import { BASE_URL } from '../../config/environment';
 
 const Index = () => {
   const [user, setUser] = useState({ name: '', userName: '', password: '', profession: '' });
@@ -52,6 +56,38 @@ const Index = () => {
     return true;
   }
 
+  function handleDelete() {
+    swal(
+      <div>
+        <p className='h4 mt-4 mb-4'>¿Querés dar de baja el usuario?</p>
+        <span>Nombre: {user.name}</span>
+        <p>Profesión: {user.profession}</p>
+      </div>,
+      {
+        icon: 'warning',
+        input: 'text',
+        buttons: {
+          cancel: 'No',
+          catch: {
+            text: 'Si',
+            value: 'delete'
+          }
+        }
+      }
+    ).then((value) => {
+      if (value === 'delete') patchUser();
+    });
+  }
+
+  async function patchUser(session) {
+    setLoading(true);
+    const values = { status: 1 };
+    await patchApi(`${BASE_URL}/session`, session.id, values);
+    setLoading(false);
+    await showAlert('Usuario eliminado', `El usuario: ${user.userName} ha sido dada de baja`, 'success');
+    history.push(`/login`);
+  }
+
   return (
     <Layout>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb' }}>
@@ -80,10 +116,16 @@ const Index = () => {
                   <input id='password' onChange={handleChange} value={user.password} type='password' className={'form-control ' + (!user.password && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
-              <div className='row mb-3'>
+              <div className='row mb-1'>
                 <div className='col-md-12 my-1'>
                   <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={user.profession} dropdownlist={dlProfession} disabledValue={false} className={'form-control ' + (!user.profession && showValidation ? 'borderRed' : '')} />
                 </div>
+              </div>
+              <div className='mb-3' style={{ textAlign: 'left' }}>
+                <MDBBtn onClick={handleDelete} className='red darken-2 btnOption' style={{ backgroundColor: '#dd4b39', color: '#FFF', borderColor: '#dd4b39 !important' }}>
+                  <i className='fas fa-trash'></i>
+                  <span className='ml-2'>Eliminar cuenta</span>
+                </MDBBtn>
               </div>
               <div className='row align-items-center d-flex flex-column-reverse flex-md-row pb-2'>
                 <div className='col-md-6'>{errors.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>

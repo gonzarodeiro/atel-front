@@ -69,7 +69,7 @@ const Index = () => {
           </h2>
           <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '20px', marginRight: '20px' }}>
             <Card title='Sesiones' module='sessions' colorStyle='#ec407a' description='Generar nuevas reuniones' iconItem='fas fa-video' />
-            {/* <Card title='Alumnos' module='students' colorStyle='rgb(50 174 220)' description='Ver más información' iconItem='fas fa-user-friends' /> */}
+            <Card title='Alumnos' module='students' colorStyle='rgb(50 174 220)' description='Ver más información' iconItem='fas fa-user-friends' />
             <Card title='Agenda' module='schedule' colorStyle='#ff7043' description='Consulta de sesiones' iconItem='far fa-calendar-alt' />
           </div>
         </div>
