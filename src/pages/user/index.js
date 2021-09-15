@@ -12,9 +12,10 @@ import swal from '@sweetalert/with-react';
 import patchApi from '../../utils/services/patch/patchApi';
 import { BASE_URL } from '../../config/environment';
 import getResponseById from '../../utils/services/get/getById/getResponseById';
+import deleteResponseApi from '../../utils/services/delete/deleteResponseApi';
 
 const Index = () => {
-  const [user, setUser] = useState({ firstName: '', lastName: '', userName: '', password: '', email: '', profession: '' });
+  const [user, setUser] = useState({ firstName: '', lastName: '', username: '', password: '', email: '', profession: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,14 @@ const Index = () => {
 
   async function loadUserDetails() {
     let result = await getResponseById(`${BASE_URL}/user`, sessionStorage.getItem('idProfessional'));
-    setUser(result.data);
+    setUser({
+      firstName: result.data.firstName,
+      lastName: result.data.lastName,
+      username: result.data.username,
+      password: result.data.password,
+      email: result.data.email,
+      profession: result.data.profession
+    });
   }
 
   const handleChange = (event) => {
@@ -39,6 +47,7 @@ const Index = () => {
   async function handleSubmit() {
     setLoading(true);
     if (validateFields()) {
+      await patchApi(`${BASE_URL}/user`, sessionStorage.getItem('idProfessional'), user);
       setLoading(false);
       await showAlert('Profesional modificado', 'Se han modificado los datos con éxito en el sistema', 'success');
       history.push(`/home`);
@@ -47,11 +56,18 @@ const Index = () => {
   }
 
   function validateFields() {
-    if (!user.firstName || !user.lastName || !user.userName || !user.password || !user.email || !user.profession) {
+    if (!user.firstName || !user.lastName || !user.username || !user.password || !user.email || !user.profession) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
     }
+
+    const validEmail = /\S+@\S+\.\S+/;
+    if (!validEmail.test(user.email)) {
+      setErrors({ show: true, message: 'Ingrese un email válido' });
+      return;
+    }
+
     return true;
   }
 
@@ -76,16 +92,15 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') patchUser();
+      if (value === 'delete') deleteUser();
     });
   }
 
-  async function patchUser(session) {
+  async function deleteUser() {
     setLoading(true);
-    const values = { status: 1 };
-    await patchApi(`${BASE_URL}/session`, session.id, values);
+    await deleteResponseApi(`${BASE_URL}/user/${sessionStorage.getItem('idProfessional')}`);
     setLoading(false);
-    await showAlert('Usuario eliminado', `El usuario: ${user.userName} ha sido dada de baja`, 'success');
+    await showAlert('Usuario eliminado', `El usuario: ${user.username} ha sido dada de baja`, 'success');
     history.push(`/login`);
   }
 
@@ -118,7 +133,7 @@ const Index = () => {
                 </div>
                 <div className='col-md-4 my-2'>
                   <label>Usuario</label>
-                  <input id='userName' onChange={handleChange} value={user.userName} type='text' className={'form-control ' + (!user.userName && showValidation ? 'borderRed' : '')} />
+                  <input id='username' onChange={handleChange} value={user.username} type='text' className={'form-control ' + (!user.username && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
               <div className='row mb-1'>
@@ -126,10 +141,10 @@ const Index = () => {
                   <label>Contraseña</label>
                   <div data-test='container'>
                     <div data-test='input-group' class='input-group'>
-                      <input id='contraseña' data-test='input' type={passwordType} class='form-control' aria-disabled='false' value={user.password} />
+                      <input id='password' onChange={handleChange} type={passwordType} class='form-control' value={user.password} />
                       <div class='input-group-append' onClick={showPassword}>
                         <span class='form-control input-group-text'>
-                          <i class={passwordType === 'password' ? 'fas fa-eye mt-1' : 'fas fa-eye-slash mt-1'} title='Mostrar contraseña' style={{ cursor: 'pointer' }}></i>
+                          <i class={passwordType === 'password' ? 'fas fa-eye mt-1' : 'fas fa-eye-slash mt-1'} title={passwordType === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña'} style={{ cursor: 'pointer' }}></i>
                         </span>
                       </div>
                     </div>
