@@ -9,7 +9,7 @@ import Logo from '../../styles/images/logo.png';
 
 const Index = () => {
   const [user, setUser] = useState({ name: '', password: '' });
-  const [registration, setRegistration] = useState({ name: '', user: '', email: '', password: '', profession: '' });
+  const [registration, setRegistration] = useState({ firstName: '', lastName: '', username: '', email: '', password: '', profession: '' });
   const [steps, setSteps] = useState({ login: true, registration: false });
   const [errorsLogin, setErrorsLogin] = useState({ message: '', show: false });
   const [errorsRegistration, setErrorsRegistration] = useState({ message: '', show: false });

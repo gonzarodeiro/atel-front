@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { MDBInput, MDBBtn } from 'mdbreact';
+import { BASE_URL } from '../../../config/environment';
+import postResponseApi from '../../../utils/services/post/postResponseApi';
 
 const Login = ({ handleChange, user, setSteps, errorsLogin, setErrorsLogin, setLoading }) => {
   let history = useHistory();
@@ -23,9 +25,7 @@ const Login = ({ handleChange, user, setSteps, errorsLogin, setErrorsLogin, setL
 
   async function checkUser() {
     setLoading(true);
-    // const params = { user: values.user.toUpperCase(), password: values.password };
-    // await postApi("login", params);
-
+    // const response = await postResponseApi(`${BASE_URL}/user`, params);
     const name = 'Gonzalo Rodeiro';
     sessionStorage.setItem('name', name);
     sessionStorage.setItem('idProfessional', 1);

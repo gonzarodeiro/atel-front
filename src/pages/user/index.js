@@ -11,12 +11,14 @@ import { dlProfession } from '../../utils/dropdownlists/index';
 import swal from '@sweetalert/with-react';
 import patchApi from '../../utils/services/patch/patchApi';
 import { BASE_URL } from '../../config/environment';
+import getResponseById from '../../utils/services/get/getById/getResponseById';
 
 const Index = () => {
-  const [user, setUser] = useState({ name: '', userName: '', password: '', email: '', profession: '' });
+  const [user, setUser] = useState({ firstName: '', lastName: '', userName: '', password: '', email: '', profession: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
+  const [passwordType, setPasswordType] = useState('password');
   let history = useHistory();
 
   useEffect(() => {
@@ -24,14 +26,9 @@ const Index = () => {
     loadUserDetails();
   }, []);
 
-  function loadUserDetails() {
-    setUser({
-      name: 'Gonzalo Rodeiro',
-      userName: 'grodeiro',
-      password: '12345678',
-      email: 'gonza.rodeiro@gmail.com',
-      profession: 'Asistente social'
-    });
+  async function loadUserDetails() {
+    let result = await getResponseById(`${BASE_URL}/user`, sessionStorage.getItem('idProfessional'));
+    setUser(result.data);
   }
 
   const handleChange = (event) => {
@@ -50,7 +47,7 @@ const Index = () => {
   }
 
   function validateFields() {
-    if (!user.name || !user.userName || !user.password || !user.email || !user.profession) {
+    if (!user.firstName || !user.lastName || !user.userName || !user.password || !user.email || !user.profession) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -62,7 +59,9 @@ const Index = () => {
     swal(
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés dar de baja el usuario?</p>
-        <span>Nombre: {user.name}</span>
+        <span>
+          Nombre: {user.firstName} {user.lastName}
+        </span>
         <p>Profesión: {user.profession}</p>
       </div>,
       {
@@ -90,6 +89,10 @@ const Index = () => {
     history.push(`/login`);
   }
 
+  function showPassword() {
+    passwordType === 'text' ? setPasswordType('password') : setPasswordType('text');
+  }
+
   return (
     <Layout>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb' }}>
@@ -106,24 +109,37 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row mb-3'>
                 <div className='col-md-4 my-2'>
-                  <label>Nombre y apellido</label>
-                  <input id='name' onChange={handleChange} value={user.name} type='text' className={'form-control ' + (!user.name && showValidation ? 'borderRed' : '')} />
+                  <label>Nombre</label>
+                  <input id='firstName' onChange={handleChange} value={user.firstName} type='text' className={'form-control ' + (!user.firstName && showValidation ? 'borderRed' : '')} />
+                </div>
+                <div className='col-md-4 my-2'>
+                  <label>Apellido</label>
+                  <input id='lastName' onChange={handleChange} value={user.lastName} type='text' className={'form-control ' + (!user.lastName && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-2'>
                   <label>Usuario</label>
                   <input id='userName' onChange={handleChange} value={user.userName} type='text' className={'form-control ' + (!user.userName && showValidation ? 'borderRed' : '')} />
                 </div>
-                <div className='col-md-4 my-2'>
-                  <label>Contraseña</label>
-                  <input id='password' onChange={handleChange} value={user.password} type='password' className={'form-control ' + (!user.password && showValidation ? 'borderRed' : '')} />
-                </div>
               </div>
               <div className='row mb-1'>
-                <div className='col-md-6 my-1'>
+                <div className='col-md-4 my-1 mb-3'>
+                  <label>Contraseña</label>
+                  <div data-test='container'>
+                    <div data-test='input-group' class='input-group'>
+                      <input id='contraseña' data-test='input' type={passwordType} class='form-control' aria-disabled='false' value={user.password} />
+                      <div class='input-group-append' onClick={showPassword}>
+                        <span class='form-control input-group-text'>
+                          <i class={passwordType === 'password' ? 'fas fa-eye mt-1' : 'fas fa-eye-slash mt-1'} title='Mostrar contraseña' style={{ cursor: 'pointer' }}></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className='col-md-4 my-1 mb-3'>
                   <label>Email</label>
                   <input id='email' onChange={handleChange} value={user.email} type='text' className={'form-control ' + (!user.email && showValidation ? 'borderRed' : '')} />
                 </div>
-                <div className='col-md-6 my-1'>
+                <div className='col-md-4 my-1'>
                   <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={user.profession} dropdownlist={dlProfession} disabledValue={false} className={'form-control ' + (!user.profession && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
@@ -137,7 +153,7 @@ const Index = () => {
                 <div className='col-md-6'>{errors.show === true && <div className='text-danger p-1 mb-2 rounded w-100 animated bounceInLeft faster errorMessage'>* {errors.message}</div>}</div>
                 <div className='col-md-6 d-flex justify-content-center justify-content-md-end my-2'>
                   <Cancel onClick={() => history.push(`/home`)} title='Volver' />
-                  <Submit onClick={handleSubmit} title='Guardar' />
+                  <Submit onClick={handleSubmit} title='Actualizar' />
                 </div>
               </div>
             </form>
