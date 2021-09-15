@@ -29,14 +29,7 @@ const Index = () => {
 
   async function loadUserDetails() {
     let result = await getResponseById(`${BASE_URL}/user`, sessionStorage.getItem('idProfessional'));
-    setUser({
-      firstName: result.data.firstName,
-      lastName: result.data.lastName,
-      username: result.data.username,
-      password: result.data.password,
-      email: result.data.email,
-      profession: result.data.profession
-    });
+    setUser(result.data);
   }
 
   const handleChange = (event) => {

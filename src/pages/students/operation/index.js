@@ -8,20 +8,18 @@ import { dlDifficulty, dlStudents } from '../../../utils/dropdownlists/index';
 import Footer from '../../../components/html/Footer';
 import showAlert from '../../../utils/commons/showAlert';
 import swal from '@sweetalert/with-react';
+import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi';
+import { BASE_URL } from '../../../config/environment';
+import StudentDetails from './modal/StudentDetails';
 
 const Index = () => {
-  const [params, setParams] = useState({
-    studentName: '',
-    age: '',
-    difficulty: ''
-  });
-  const [table, setTable] = useState({
-    columns: [],
-    rows: [],
-    actions: [],
-    show: false
-  });
+  const [params, setParams] = useState({ name: '', age: '', difficulty: '' });
+  const [student, setStudent] = useState({ firstName: '', lastName: '', age: '', difficulty: '', comments: '' });
+  const [showModal, setShowModal] = useState({ details: false });
+  const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
+  const [errorStudents, setErrorsStudents] = useState({ show: false, message: '' });
+  const [showValidation, setShowValidation] = useState(false);
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
@@ -70,7 +68,10 @@ const Index = () => {
     }
   }
 
-  function handleEdit() {}
+  function handleEdit(obj) {
+    setStudent(obj);
+    setShowModal({ details: true });
+  }
 
   function handleDelete(obj) {
     swal(
@@ -88,16 +89,15 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') patchStudent(obj);
+      if (value === 'delete') deleteStudent(obj);
     });
   }
 
-  async function patchStudent(obj) {
+  async function deleteStudent(obj) {
     setLoading(true);
-    // const data = { status: obj.id };
-    // await patchApi("endpoint", data);
+    await deleteResponseApi(`${BASE_URL}/student/${obj.id}`);
     setLoading(false);
-    await showAlert('Alumno eliminado', `El alumno ${obj.name} ha sido dado de baja`, 'success');
+    await showAlert('Alumno eliminado', `El alumno ${obj.firstName} ${obj.lastName} ha sido dado de baja`, 'success');
     history.push(`/home`);
   }
 
@@ -122,6 +122,15 @@ const Index = () => {
     setLoading(false);
   }
 
+  function handleClose() {
+    setShowModal({ details: false });
+  }
+
+  const handleChangeStudent = (event) => {
+    const { id, value } = event.target;
+    setStudent({ ...params, [id]: value });
+  };
+
   return (
     <Layout>
       <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
@@ -138,7 +147,7 @@ const Index = () => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
                 <div className='col-md-4 my-2'>
-                  <Dropdownlist title='Nombre' id='name' handleChange={handleChange} value={params.name} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
+                  <Dropdownlist title='Nombre y apellido' id='name' handleChange={handleChange} value={params.name} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
                 </div>
                 <div className='col-md-4 my-2'>
                   <label>Edad</label>
@@ -149,6 +158,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
+              {showModal.details && <StudentDetails showModal={showModal} handleClose={handleClose} student={student} handleChange={handleChangeStudent} showValidation={showValidation} errors={errorStudents} setErrors={setErrorsStudents} setShowValidation={setShowValidation} />}
               {table.show && <Table data={table} />}
             </form>
           </div>
