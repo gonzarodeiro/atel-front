@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../../components/Jitsi';
 import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
 
-const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible }) => {
+const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, onJitsiLayout }) => {
+  useLayoutEffect(() => {
+    handleResize();
+    const listener = window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
+  function handleResize() {
+    const htmlElement = document.querySelector('#begin-jitsi');
+    if (!htmlElement) return;
+    const rect = htmlElement.getBoundingClientRect();
+    onJitsiLayout({
+      width: htmlElement.offsetWidth,
+      height: htmlElement.offsetHeight,
+      top: htmlElement.offsetTop,
+      left: htmlElement.offsetLeft,
+      rect: rect
+    });
+  }
+
   function getMessageByTool(tool) {
     let mapToolToEvent = {
       [tools.alphabetical]: clientEvents.initAlphabetical,
@@ -30,7 +48,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
   return (
     <React.Fragment>
       <div className='row'>
-        <div className='pb-3 mt-2 col-md-8'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='460px' />}</div>
+        <div id='begin-jitsi' className='pb-3 mt-2 col-md-8' />
         <div className='col-md-4' style={{ marginTop: '4.5px' }}>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
