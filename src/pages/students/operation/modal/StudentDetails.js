@@ -9,8 +9,13 @@ import showAlert from '../../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../../config/environment';
 import Dropdownlist from '../../../../components/html/Dropdownlist';
 import { dlDifficulty } from '../../../../utils/dropdownlists/index';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { registerLocale } from 'react-datepicker';
+import datepicker from '../../../../utils/commons/datepicker';
+registerLocale('es', datepicker);
 
-const StudentDetails = ({ showModal, handleClose, student, handleChange, showValidation, errors, setErrors, setShowValidation }) => {
+const StudentDetails = ({ showModal, handleClose, student, handleChange, showValidation, errors, setErrors, setShowValidation, setStudent }) => {
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
@@ -26,7 +31,7 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
   };
 
   function validateFields() {
-    if (!student.firstName || !student.lastName || !student.age || !student.difficulty) {
+    if (!student.firstName || !student.lastName || !student.difficulty) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -55,8 +60,8 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
             <input id='lastName' onChange={handleChange} value={student.lastName} type='text' className={'form-control ' + (!student.lastName && showValidation ? 'borderRed' : '')} />
           </div>
           <div className='col-md-3 my-1'>
-            <label>Edad</label>
-            <input id='age' onChange={handleChange} value={student.age} type='number' className={'form-control ' + (!student.name && showValidation ? 'borderRed' : '')} />
+            <label>Nacimiento</label>
+            <DatePicker id='birthdate' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={student.birthdate} todayButton='Hoy' onChange={(date) => setStudent({ ...student, birthdate: date })} value={student.birthdate} className='form-control' locale='es' />
           </div>
           <div className='col-md-3 my-1'>
             <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={student.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className={'form-control ' + (!student.difficulty && showValidation ? 'borderRed' : '')} />

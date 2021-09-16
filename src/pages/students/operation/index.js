@@ -1,31 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../../utils/layout/index';
 import Table from '../../../components/html/Table';
 import Loading from '../../../components/Loading';
 import Dropdownlist from '../../../components/html/Dropdownlist';
-import { dlDifficulty, dlStudents } from '../../../utils/dropdownlists/index';
+import { dlDifficulty } from '../../../utils/dropdownlists/index';
 import Footer from '../../../components/html/Footer';
 import showAlert from '../../../utils/commons/showAlert';
 import swal from '@sweetalert/with-react';
 import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi';
 import { BASE_URL } from '../../../config/environment';
 import StudentDetails from './modal/StudentDetails';
+import getById from '../../../utils/services/get/getById';
 
 const Index = () => {
-  const [params, setParams] = useState({ name: '', age: '', difficulty: '' });
-  const [student, setStudent] = useState({ firstName: '', lastName: '', age: '', difficulty: '', comments: '' });
+  const [params, setParams] = useState({ name: '', difficulty: '' });
+  const [student, setStudent] = useState({ firstName: '', lastName: '', birthDate: new Date(), difficulty: '', comments: '' });
   const [showModal, setShowModal] = useState({ details: false });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [errorStudents, setErrorsStudents] = useState({ show: false, message: '' });
   const [showValidation, setShowValidation] = useState(false);
+  const [apis, setApis] = useState({ dlStudents: [] });
   const [loading, setLoading] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else loadStudents();
   }, []);
+
+  async function loadStudents() {
+    // let result = await getResponseById(`${BASE_URL}/student`, sessionStorage.getItem('idProfessional'));
+    let students = await getById(`${BASE_URL}/student`, 3);
+    students.unshift({ id: 0, code: '', fullName: 'Seleccione' });
+    setApis({ dlStudents: students });
+  }
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -146,19 +157,24 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row'>
-                <div className='col-md-4 my-2'>
-                  <Dropdownlist title='Nombre y apellido' id='name' handleChange={handleChange} value={params.name} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
+                <div className='col-md-6 my-2'>
+                  <Form.Group>
+                    <Form.Label> Nombre y apellido </Form.Label>
+                    <Form.Control id='name' onChange={handleChange} className='form-control' value={params.name} style={{ cursor: 'pointer' }} as='select' disabled={false}>
+                      {apis.dlStudents.map((file) => (
+                        <option key={file.id} value={file.code}>
+                          {file.fullName}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
                 </div>
-                <div className='col-md-4 my-2'>
-                  <label>Edad</label>
-                  <input id='age' onChange={handleChange} value={params.age} type='number' className='form-control' />
-                </div>
-                <div className='col-md-4 my-2'>
+                <div className='col-md-6 my-2'>
                   <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={params.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className='form-control' />
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <StudentDetails showModal={showModal} handleClose={handleClose} student={student} handleChange={handleChangeStudent} showValidation={showValidation} errors={errorStudents} setErrors={setErrorsStudents} setShowValidation={setShowValidation} />}
+              {showModal.details && <StudentDetails showModal={showModal} handleClose={handleClose} student={student} handleChange={handleChangeStudent} showValidation={showValidation} errors={errorStudents} setErrors={setErrorsStudents} setShowValidation={setShowValidation} setStudent={setStudent} />}
               {table.show && <Table data={table} />}
             </form>
           </div>
