@@ -28,12 +28,25 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      await patchApi(`${BASE_URL}/student`, student.id, student);
+      const params = getParams();
+      await patchApi(`${BASE_URL}/student`, student.id, params);
       setLoading(false);
       await showAlert('Alumno modificado', `Se ha modificado los datos de: ${student.firstName} ${student.lastName}`, 'success');
       history.push({ pathname: 'home' });
     }
   };
+
+  function getParams() {
+    return {
+      id: student.id,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      fullName: student.fullName,
+      birthDate: student.birthDate,
+      difficulty: student.difficulty,
+      comments: student.comments
+    };
+  }
 
   function validateFields() {
     if (!student.firstName || !student.lastName || !student.difficulty) {

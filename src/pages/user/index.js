@@ -13,6 +13,7 @@ import patchApi from '../../utils/services/patch/patchApi';
 import { BASE_URL } from '../../config/environment';
 import getResponseById from '../../utils/services/get/getById/getResponseById';
 import deleteResponseApi from '../../utils/services/delete/deleteResponseApi';
+import { HttpStatusCode } from '../../utils/enums/httpConstants';
 
 const Index = () => {
   const [user, setUser] = useState({ firstName: '', lastName: '', username: '', password: '', email: '', profession: '' });
@@ -40,12 +41,16 @@ const Index = () => {
   async function handleSubmit() {
     setLoading(true);
     if (validateFields()) {
-      await patchApi(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')), user);
-      setLoading(false);
-      await showAlert('Profesional modificado', 'Se han modificado los datos con éxito en el sistema', 'success');
-      history.push(`/home`);
+      const response = await patchApi(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')), user);
+      if (response.statusText === HttpStatusCode.Ok) {
+        setLoading(false);
+        await showAlert('Profesional modificado', 'Se han modificado los datos con éxito en el sistema', 'success');
+        history.push(`/home`);
+      } else {
+        setLoading(false);
+        setErrors({ show: true, message: `El usuario: ${user.username} ya existe en el sistema` });
+      }
     }
-    setLoading(false);
   }
 
   function validateFields() {
