@@ -16,7 +16,7 @@ import getByFilters from '../../../utils/services/get/getByFilters/index';
 
 const Index = () => {
   const [params, setParams] = useState({ fullName: '', difficulty: '' });
-  const [student, setStudent] = useState({ firstName: '', lastName: '', birthDate: new Date(), diagnostic: '', comments: '' });
+  const [student, setStudent] = useState({ firstName: '', lastName: '', birthDate: new Date(), difficulty: '', comments: '' });
   const [showModal, setShowModal] = useState({ details: false });
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
@@ -32,7 +32,7 @@ const Index = () => {
   }, []);
 
   async function loadStudents() {
-    const filters = { idProfessional: sessionStorage.getItem('idProfessional') };
+    const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
     let students = await getByFilters(`${BASE_URL}/student/search`, filters);
     students.unshift({ id: 0, fullName: 'Seleccione' });
     setApis({ dlStudents: students });
@@ -117,7 +117,7 @@ const Index = () => {
           { label: '', field: 'actions' },
           { label: 'Nombre', field: 'fullName' },
           { label: 'Edad', field: 'age' },
-          { label: 'Dificultad', field: 'diagnostic' },
+          { label: 'Dificultad', field: 'difficulty' },
           { label: 'Información', field: 'comments' }
         ],
         rows: result,

@@ -28,7 +28,7 @@ const Index = () => {
   }, []);
 
   async function loadUserDetails() {
-    let result = await getResponseById(`${BASE_URL}/user`, sessionStorage.getItem('idProfessional'));
+    let result = await getResponseById(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')));
     setUser(result.data);
   }
 
@@ -40,7 +40,7 @@ const Index = () => {
   async function handleSubmit() {
     setLoading(true);
     if (validateFields()) {
-      await patchApi(`${BASE_URL}/user`, sessionStorage.getItem('idProfessional'), user);
+      await patchApi(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')), user);
       setLoading(false);
       await showAlert('Profesional modificado', 'Se han modificado los datos con éxito en el sistema', 'success');
       history.push(`/home`);
@@ -91,7 +91,8 @@ const Index = () => {
 
   async function deleteUser() {
     setLoading(true);
-    await deleteResponseApi(`${BASE_URL}/user/${sessionStorage.getItem('idProfessional')}`);
+    const idProfessional = parseInt(sessionStorage.getItem('idProfessional'));
+    await deleteResponseApi(`${BASE_URL}/user/${idProfessional}`);
     setLoading(false);
     await showAlert('Usuario eliminado', `El usuario: ${user.username} ha sido dada de baja`, 'success');
     history.push(`/login`);

@@ -19,7 +19,7 @@ const Index = () => {
   }, []);
 
   async function getNextSessions() {
-    let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, sessionStorage.getItem('idProfessional'));
+    let result = await getResponseById(`${BASE_URL}/session/nexts/professional`, parseInt(sessionStorage.getItem('idProfessional')));
     if (result[0].length > 0) {
       const date = convertDateTime(new Date(result[0][0].startDatetime));
       setSession(result[0][0]);

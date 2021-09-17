@@ -28,8 +28,7 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      const params = { ...student, difficulty: student.diagnostic };
-      await patchApi(`${BASE_URL}/student`, student.id, params);
+      await patchApi(`${BASE_URL}/student`, student.id, student);
       setLoading(false);
       await showAlert('Alumno modificado', `Se ha modificado los datos de: ${student.firstName} ${student.lastName}`, 'success');
       history.push({ pathname: 'home' });
@@ -37,7 +36,7 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
   };
 
   function validateFields() {
-    if (!student.firstName || !student.lastName || !student.diagnostic) {
+    if (!student.firstName || !student.lastName || !student.difficulty) {
       setErrors({ show: true, message: 'Complete los campos obligatorios' });
       setShowValidation(true);
       return;
@@ -70,7 +69,7 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
             <DatePicker id='birthDate' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={student.birthDate} todayButton='Hoy' onChange={(date) => setStudent({ ...student, birthDate: date })} value={student.birthDate} className='form-control' locale='es' />
           </div>
           <div className='col-md-3 my-1'>
-            <Dropdownlist title='Dificultad' id='diagnostic' handleChange={handleChange} value={student.diagnostic} dropdownlist={dlDifficulty} disabledValue={false} className={'form-control ' + (!student.diagnostic && showValidation ? 'borderRed' : '')} />
+            <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={student.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className={'form-control ' + (!student.difficulty && showValidation ? 'borderRed' : '')} />
           </div>
         </div>
         <div className='row mb-3'>
