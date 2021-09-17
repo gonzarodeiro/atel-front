@@ -77,7 +77,7 @@ const Header = () => {
             {sessionStorage.getItem('name')}
           </a>
           <li onClick={logout} className='white-text headerRight mr-1'>
-            <i className='fas fa-sign-out-alt mr-1 ml-1'></i>Salir
+            <i className='fas fa-power-off mr-2 ml-1'></i>Salir
           </li>
         </ul>
       </div>
