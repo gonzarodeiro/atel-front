@@ -61,7 +61,7 @@ const StudentDetails = ({ showModal, handleClose, student, handleChange, showVal
           </div>
           <div className='col-md-3 my-1'>
             <label>Nacimiento</label>
-            <DatePicker id='birthdate' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={student.birthdate} todayButton='Hoy' onChange={(date) => setStudent({ ...student, birthdate: date })} value={student.birthdate} className='form-control' locale='es' />
+            <DatePicker id='birthDate' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={student.birthDate} todayButton='Hoy' onChange={(date) => setStudent({ ...student, birthDate: date })} value={student.birthDate} className='form-control' locale='es' />
           </div>
           <div className='col-md-3 my-1'>
             <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={student.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className={'form-control ' + (!student.difficulty && showValidation ? 'borderRed' : '')} />

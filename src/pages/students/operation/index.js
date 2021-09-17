@@ -12,7 +12,7 @@ import swal from '@sweetalert/with-react';
 import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi';
 import { BASE_URL } from '../../../config/environment';
 import StudentDetails from './modal/StudentDetails';
-import getById from '../../../utils/services/get/getById';
+import getResponseByFilters from '../../../utils/services/get/getByFilters/getResponseByFilters';
 
 const Index = () => {
   const [params, setParams] = useState({ name: '', difficulty: '' });
@@ -33,7 +33,8 @@ const Index = () => {
 
   async function loadStudents() {
     // let result = await getResponseById(`${BASE_URL}/student`, sessionStorage.getItem('idProfessional'));
-    let students = await getById(`${BASE_URL}/student`, 3);
+    const filters = { idProfessional: 3 };
+    let students = await getResponseByFilters(`${BASE_URL}/student/search`, filters);
     students.unshift({ id: 0, code: '', fullName: 'Seleccione' });
     setApis({ dlStudents: students });
   }
@@ -50,20 +51,8 @@ const Index = () => {
   };
 
   async function getStudents() {
-    const result = [
-      {
-        name: 'German Perez',
-        age: '5',
-        difficulty: 'TEA',
-        comments: 'Vive con su familia y le cuesta prestar atención a las clases'
-      },
-      {
-        name: 'Lucas Gomez',
-        age: '8',
-        difficulty: 'Down',
-        comments: 'Vive con su familia y le cuesta usar la compu'
-      }
-    ];
+    const filters = { idProfessional: 3 };
+    let result = await getResponseByFilters(`${BASE_URL}/student/search`, filters);
     createActions(result);
     fillTable(result);
   }

@@ -16,7 +16,7 @@ import datepicker from '../../../utils/commons/datepicker';
 registerLocale('es', datepicker);
 
 const Index = () => {
-  const [student, setStudent] = useState({ firstName: '', lastName: '', birthdate: new Date(), difficulty: '', comments: '' });
+  const [student, setStudent] = useState({ firstName: '', lastName: '', birthDate: new Date(), difficulty: '', comments: '' });
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ const Index = () => {
     event.preventDefault();
     if (validateFields()) {
       setLoading(true);
-      const values = { ...student };
+      const values = { ...student, idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
       const response = await postResponseApi(`${BASE_URL}/student`, values);
       console.log(response);
       setLoading(false);
@@ -78,7 +78,7 @@ const Index = () => {
                 </div>
                 <div className='col-md-3 my-1'>
                   <label>Nacimiento</label>
-                  <DatePicker id='birthdate' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={student.birthdate} todayButton='Hoy' onChange={(date) => setStudent({ ...student, birthdate: date })} value={student.birthdate} className='form-control' locale='es' />
+                  <DatePicker id='birthDate' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={student.birthDate} todayButton='Hoy' onChange={(date) => setStudent({ ...student, birthDate: date })} value={student.birthDate} className='form-control' locale='es' />
                 </div>
                 <div className='col-md-3 my-1'>
                   <Dropdownlist title='Dificultad' id='difficulty' handleChange={handleChange} value={student.difficulty} dropdownlist={dlDifficulty} disabledValue={false} className={'form-control ' + (!student.difficulty && showValidation ? 'borderRed' : '')} />
