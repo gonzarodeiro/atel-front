@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
 import Dropdownlist from '../../../components/html/Dropdownlist';
-import { dlProfession } from '../../../utils/dropdownlists/index';
 import showAlert from '../../../utils/commons/showAlert';
 import { BASE_URL } from '../../../config/environment';
 import { HttpStatusCode } from '../../../utils/enums/httpConstants';
 import postResponseApi from '../../../utils/services/post/postResponseApi';
+import getByFilters from '../../../utils/services/get/getByFilters';
 
 const Registration = ({ handleChange, registration, setSteps, errorsRegistration, setErrorsRegistration, setRegistration }) => {
   const [passwordType, setPasswordType] = useState('password');
+  const [apis, setApis] = useState({ dlProfession: [] });
+
+  useEffect(() => {
+    loadProfession();
+  }, []);
+
+  async function loadProfession() {
+    let profession = await getByFilters(`${BASE_URL}/professional/types`);
+    profession.unshift({ id: 0, code: '', description: 'Seleccione' });
+    setApis({ dlProfession: profession });
+  }
 
   function handlePrevStep() {
     setSteps({ login: true, registration: false });
@@ -92,7 +103,7 @@ const Registration = ({ handleChange, registration, setSteps, errorsRegistration
             <input id='email' onChange={handleChange} value={registration.email} type='text' className='form-control' />
           </div>
           <div className='col-md-6'>
-            <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={registration.profession} dropdownlist={dlProfession} disabledValue={false} className='form-control' />
+            <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={registration.profession} dropdownlist={apis.dlProfession} disabledValue={false} className='form-control' />
           </div>
         </div>
         <div className='row text-center'>

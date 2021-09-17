@@ -7,13 +7,13 @@ import Submit from '../../components/html/button/Submit';
 import Cancel from '../../components/html/button/Cancel';
 import showAlert from '../../utils/commons/showAlert';
 import Dropdownlist from '../../components/html/Dropdownlist';
-import { dlProfession } from '../../utils/dropdownlists/index';
 import swal from '@sweetalert/with-react';
-import patchApi from '../../utils/services/patch/patchApi';
 import { BASE_URL } from '../../config/environment';
 import getResponseById from '../../utils/services/get/getById/getResponseById';
 import deleteResponseApi from '../../utils/services/delete/deleteResponseApi';
 import { HttpStatusCode } from '../../utils/enums/httpConstants';
+import patchResponseApi from '../../utils/services/patch/patchResponseApi';
+import getByFilters from '../../utils/services/get/getByFilters';
 
 const Index = () => {
   const [user, setUser] = useState({ firstName: '', lastName: '', username: '', password: '', email: '', profession: '' });
@@ -21,12 +21,22 @@ const Index = () => {
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
   const [passwordType, setPasswordType] = useState('password');
+  const [apis, setApis] = useState({ dlProfession: [] });
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
-    loadUserDetails();
+    else {
+      loadProfession();
+      loadUserDetails();
+    }
   }, []);
+
+  async function loadProfession() {
+    let profession = await getByFilters(`${BASE_URL}/professional/types`);
+    profession.unshift({ id: 0, code: '', description: 'Seleccione' });
+    setApis({ dlProfession: profession });
+  }
 
   async function loadUserDetails() {
     let result = await getResponseById(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')));
@@ -41,7 +51,7 @@ const Index = () => {
   async function handleSubmit() {
     setLoading(true);
     if (validateFields()) {
-      const response = await patchApi(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')), user);
+      const response = await patchResponseApi(`${BASE_URL}/user`, parseInt(sessionStorage.getItem('idProfessional')), user);
       if (response.statusText === HttpStatusCode.Ok) {
         setLoading(false);
         await showAlert('Profesional modificado', 'Se han modificado los datos con éxito en el sistema', 'success');
@@ -154,7 +164,7 @@ const Index = () => {
                   <input id='email' onChange={handleChange} value={user.email} type='text' className={'form-control ' + (!user.email && showValidation ? 'borderRed' : '')} />
                 </div>
                 <div className='col-md-4 my-1'>
-                  <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={user.profession} dropdownlist={dlProfession} disabledValue={false} className={'form-control ' + (!user.profession && showValidation ? 'borderRed' : '')} />
+                  <Dropdownlist title='Profesión' id='profession' handleChange={handleChange} value={user.profession} dropdownlist={apis.dlProfession} disabledValue={false} className={'form-control ' + (!user.profession && showValidation ? 'borderRed' : '')} />
                 </div>
               </div>
               <div className='mb-3' style={{ textAlign: 'left', marginLeft: '-4px', marginTop: '10px' }}>
