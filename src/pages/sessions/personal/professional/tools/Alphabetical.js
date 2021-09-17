@@ -7,7 +7,7 @@ import tools from '../../../../../utils/enums/tools';
 import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 
-const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible }) => {
+const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, showPictograms }) => {
   useEffect(() => {
     showModal({ notification: false });
     showWizard(true);
@@ -64,7 +64,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('pictogram')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
                 </MDBBtn>
               </div>

@@ -1,0 +1,31 @@
+.pic-stripe-item {
+  border-radius: 4px;
+  overflow: hidden;
+  width: 140px;
+  height: 140px;
+  background-color: white;
+  margin-left: 16px;
+}
+
+.pic-stripe-item-image {
+  width: 140px;
+  height: 140px;
+}
+
+.pic-stripe-fallback-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  word-wrap: break-word;
+  width: 140px;
+  height: 140px;
+}
+
+.pic-stripe-fallback-p {
+  width: 140px;
+  padding: 8px;
+  margin: 0;
+}

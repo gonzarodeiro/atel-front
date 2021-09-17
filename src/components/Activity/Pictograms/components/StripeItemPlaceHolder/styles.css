@@ -1,0 +1,16 @@
+.pic-stripe-item-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 2px dashed white;
+}
+
+.pic-placeholder-icon {
+  font-size: 48px;
+}
