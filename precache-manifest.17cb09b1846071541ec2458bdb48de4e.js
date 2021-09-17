@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "aa02fe74e9a8ffb839d23114634985e6",
+    "revision": "8246a51ad5f04f38114d93f6177dbba7",
     "url": "/atel-front/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/atel-front/static/css/2.c2774f4f.chunk.css"
   },
   {
-    "revision": "5de2761861deb00fb7aa",
+    "revision": "dcfc0164f7ba3a5aae0f",
     "url": "/atel-front/static/css/main.8902b72c.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/atel-front/static/js/2.41a6b5f6.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "5de2761861deb00fb7aa",
-    "url": "/atel-front/static/js/main.60715571.chunk.js"
+    "revision": "dcfc0164f7ba3a5aae0f",
+    "url": "/atel-front/static/js/main.60198da2.chunk.js"
   },
   {
     "revision": "0ed2c031c6f88dda54f0",
