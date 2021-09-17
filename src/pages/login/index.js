@@ -4,7 +4,6 @@ import './../../styles/css/login.css';
 import Loading from '../../components/Loading';
 import Login from './steps/Login';
 import Registration from './steps/Registration';
-import postApi from '../../utils/services/post/postApi';
 import Logo from '../../styles/images/logo.png';
 
 const Index = () => {

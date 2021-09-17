@@ -28,11 +28,14 @@ const Login = ({ handleChange, user, setSteps, errorsLogin, setErrorsLogin, setL
     setLoading(true);
     const response = await postResponseApi(`${BASE_URL}/login`, user);
     if (response.statusText === HttpStatusCode.Ok) {
-      sessionStorage.setItem('name', response.name);
-      sessionStorage.setItem('idProfessional', response.idProfessional);
+      sessionStorage.setItem('name', response.data.name);
+      sessionStorage.setItem('idProfessional', response.data.idProfessional);
       setLoading(false);
       history.push(`/home`);
-    } else setErrorsLogin({ show: true, message: 'Usuario o contraseña incorrecta' });
+    } else {
+      setLoading(false);
+      setErrorsLogin({ show: true, message: 'Usuario o contraseña incorrecta' });
+    }
   }
 
   return (
