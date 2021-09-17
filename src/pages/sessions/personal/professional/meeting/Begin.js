@@ -6,7 +6,7 @@ import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
 
-const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible }) => {
+const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, showPictograms }) => {
   function getMessageByTool(tool) {
     let mapToolToEvent = {
       [tools.alphabetical]: clientEvents.initAlphabetical,
@@ -64,7 +64,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
             </div>
             <div className='row'>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool(tools.pictogram)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
                 </MDBBtn>
               </div>
