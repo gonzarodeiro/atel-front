@@ -42,6 +42,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
 
   function redirectEnd() {
     showMeeting({ begin: false, end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 
