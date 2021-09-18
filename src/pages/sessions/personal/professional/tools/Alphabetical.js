@@ -38,6 +38,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
   function redirectEnd() {
     showTools({ alphabetical: false });
     showMeeting({ end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 
