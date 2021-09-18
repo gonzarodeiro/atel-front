@@ -93,7 +93,7 @@ const ProfessionalSession = (props) => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} onJitsiLayout={handleJitsiLayout} />}
               {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} onJitsiLayout={handleJitsiLayout} />}
-              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} />}
+              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} onJitsiLayout={handleJitsiLayout} />}
               {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>

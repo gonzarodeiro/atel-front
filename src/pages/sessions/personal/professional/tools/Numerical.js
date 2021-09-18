@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../../components/Jitsi';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
@@ -8,9 +7,28 @@ import Settings, { modalResults, initialSettings } from '../../../../../componen
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 
-const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible }) => {
+const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
+
+  useLayoutEffect(() => {
+    handleResize();
+    const listener = window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
+  function handleResize() {
+    const htmlElement = document.querySelector('#numerical-jitsi');
+    if (!htmlElement) return;
+    const rect = htmlElement.getBoundingClientRect();
+    onJitsiLayout({
+      width: htmlElement.offsetWidth,
+      height: htmlElement.offsetHeight,
+      top: htmlElement.offsetTop,
+      left: htmlElement.offsetLeft,
+      rect: rect
+    });
+  }
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -61,7 +79,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
               Cámara del alumno
             </label>
           </div>
-          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
+          <div id='numerical-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '200px' }}></div>
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones
