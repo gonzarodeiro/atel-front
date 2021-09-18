@@ -6,29 +6,18 @@ import Activity from '../../../../../components/Activity/Logical/professionalLog
 import Settings, { modalResults, initialSettings } from '../../../../../components/Activity/Logical/components/Settings';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
+import handleJitsiResize from '../../../handleJitsiResize';
 
 const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
 
   useLayoutEffect(() => {
-    handleResize();
-    const listener = window.addEventListener('resize', handleResize);
+    handleJitsiResize("#numerical-jitsi", () => onJitsiLayout);
+    const listener = window.addEventListener('resize', handleJitsiResize("#numerical-jitsi", onJitsiLayout));
     return () => window.removeEventListener('resize', listener);
   }, []);
 
-  function handleResize() {
-    const htmlElement = document.querySelector('#numerical-jitsi');
-    if (!htmlElement) return;
-    const rect = htmlElement.getBoundingClientRect();
-    onJitsiLayout({
-      width: htmlElement.offsetWidth,
-      height: htmlElement.offsetHeight,
-      top: htmlElement.offsetTop,
-      left: htmlElement.offsetLeft,
-      rect: rect
-    });
-  }
 
   function redirectTool(tool) {
     showTools({ [tool]: true });

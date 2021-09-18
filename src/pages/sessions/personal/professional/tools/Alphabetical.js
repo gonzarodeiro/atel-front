@@ -5,26 +5,14 @@ import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
+import handleJitsiResize from '../../../handleJitsiResize';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, onJitsiLayout }) => {
   useLayoutEffect(() => {
-    handleResize();
-    const listener = window.addEventListener('resize', handleResize);
+    handleJitsiResize("#alphabetical-jitsi", () => onJitsiLayout);
+    const listener = window.addEventListener('resize', handleJitsiResize("#alphabetical-jitsi", onJitsiLayout));
     return () => window.removeEventListener('resize', listener);
   }, []);
-
-  function handleResize() {
-    const htmlElement = document.querySelector('#alphabetical-jitsi');
-    if (!htmlElement) return;
-    const rect = htmlElement.getBoundingClientRect();
-    onJitsiLayout({
-      width: htmlElement.offsetWidth,
-      height: htmlElement.offsetHeight,
-      top: htmlElement.offsetTop,
-      left: htmlElement.offsetLeft,
-      rect: rect
-    });
-  }
 
   useEffect(() => {
     showModal({ notification: false });
