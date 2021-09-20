@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Jitsi = forwardRef((props, ref) => {
+const Jitsi = forwardRef((props, ref) => {  
   let api = {};
   const domain = 'meet.jit.si';
   let history = useHistory();

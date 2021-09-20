@@ -8,6 +8,8 @@ import End from '../../personal/student/meeting/End';
 import { clientEvents, connect, registerEvent } from '../../../../utils/socketManager';
 import { BASE_URL } from '../../../../config/environment';
 import Loading from '../../../../components/Loading';
+import FloatingJitsi from '../../../../components/FloatingJitsi';
+
 
 const ZoomStudentSession = () => {
   const [roomZoom, setRoomZoom] = useState();
@@ -15,9 +17,14 @@ const ZoomStudentSession = () => {
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [showJitsi, setShowJitsi] = useState();
   const [session, setSession] = useState({ generalComments: '' });
-  const [roomJitsi, setRoomJitsi] = useState();
+  const [roomJitsi, setRoomJitsi] = useState();  
   const [loading, setShowLoading] = useState(true);
   let { roomId } = useParams();
+
+  const [jitsiLayout, setJitsiLayout] = useState();
+  const [zoomLayout, setZoomLayout] = useState();
+  const [defaultLayout, setDefaultLayout] = useState(true);
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -31,6 +38,28 @@ const ZoomStudentSession = () => {
     registerEvent(() => {
       showMeeting({ begin: true, end: false });
     }, clientEvents.beginSession);
+
+    registerEvent((layout) => {
+      switch(layout){
+        case 1:
+          setJitsiLayout(true);
+          setZoomLayout(false);          
+          setDefaultLayout(false);
+          break;
+        case 2:
+          setZoomLayout(true);
+          setJitsiLayout(false);
+          setDefaultLayout(false);
+          break;
+        case 3:
+          setDefaultLayout(true);
+          setZoomLayout(false);
+          setJitsiLayout(false);
+          break;
+        default:
+      }
+    }, clientEvents.inclusionLayout);
+    
 
     loadSessionStatus();
   }, []);
@@ -60,6 +89,18 @@ const ZoomStudentSession = () => {
     setSession({ ...session, [id]: value });
   };
 
+  function handleJitsiLayout(layout) {    
+    debugger;
+    const htmlElement = document.querySelector('#jitsi-iframe');
+    if (!htmlElement) return;
+    htmlElement.style.position = 'absolute';
+    htmlElement.style.left = `${layout.rect.x}px`;
+    htmlElement.style.top = `${layout.rect.y}px`;
+    htmlElement.style.width = `${layout.width}px`;
+    htmlElement.style.height = `${layout.height}px`;
+  }
+
+
   return (
     <>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
@@ -77,7 +118,7 @@ const ZoomStudentSession = () => {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Begin roomId={roomJitsi} roomZoom={roomZoom} />}
+                    {meeting.begin && <Begin roomZoom={roomZoom}  onJitsiLayout={handleJitsiLayout} jitsiLayout={jitsiLayout} zoomLayout={zoomLayout} defaultLayout={defaultLayout} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>
@@ -86,6 +127,7 @@ const ZoomStudentSession = () => {
           </div>
         </div>
       </div>
+      {roomJitsi && student && <div id="index-jitsi"><FloatingJitsi roomId={roomJitsi} name={student}/></div>}
     </>
   );
 };

@@ -1,18 +1,47 @@
-import React from 'react';
-import Jitsi from '../../../../components/Jitsi';
+import React, {useEffect} from 'react';
 import Zoom from '../../../../components/Zoom';
+import handleJitsiResize from '../../handleJitsiResize';
 
-const Begin = ({ roomId, roomZoom }) => {
+const Begin = ({roomZoom, onJitsiLayout, jitsiLayout, defaultLayout, zoomLayout }) => {    
+
+  useEffect(() => {        
+    handleJitsiResize("#begin-jitsi", onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize("#begin-jitsi", onJitsiLayout));    
+    return () => window.removeEventListener('resize', listener);  
+  }, []);
+
+
+
   return (
     <React.Fragment>
       <div className='row'>
-        <div className='pb-2 col-md-6 mt-3 mb-2'>
-          <Zoom roomZoom={roomZoom} />
-        </div>
-        <div className='pb-2 col-md-6 mt-3 mb-2'>
-          <Jitsi roomId={roomId} userName={roomId} height='460px' />
-        </div>
-      </div>
+        
+        {defaultLayout &&
+        <>
+          <div className='pb-2 col-md-6 mt-3 mb-2'>
+            <Zoom roomZoom={roomZoom} />
+          </div>
+          <div id="begin-jitsi" className='pb-2 col-md-6 mt-3 mb-2'>        
+          </div>
+        </>
+        }
+        
+        {jitsiLayout &&
+        <>          
+          <div id="begin-jitsi" className='pb-2 col-md-12 mt-3 mb-2'>        
+          </div>
+        </>
+        }
+        
+        {zoomLayout &&
+          <>
+            <div className='pb-2 col-md-12 mt-3 mb-2'>
+              <Zoom roomZoom={roomZoom} />
+            </div>            
+          </>
+          }
+        
+      </div>      
     </React.Fragment>
   );
 };
