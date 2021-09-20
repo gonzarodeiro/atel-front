@@ -5,7 +5,7 @@ import Table from '../../../components/html/Table';
 import Loading from '../../../components/Loading';
 import Footer from '../../../components/html/Footer';
 import Dropdownlist from '../../../components/html/Dropdownlist';
-import { dlStudents, dlStatus } from '../../../utils/dropdownlists/index';
+import { dlStatus } from '../../../utils/dropdownlists/index';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
@@ -17,6 +17,8 @@ import convertDateTime from '../../../utils/commons/convertDateTime';
 import { BASE_URL } from '../../../config/environment';
 import getParametry from '../../../utils/services/get/getByFilters/index';
 import getResponseById from '../../../utils/services/get/getById/index';
+import getByFilters from '../../../utils/services/get/getByFilters/index';
+import { Form } from 'react-bootstrap';
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -30,11 +32,20 @@ const Index = () => {
   const [dateDetails, setDateDetails] = useState();
   const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
+  const [apis, setApis] = useState({ dlStudents: [] });
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else loadStudents();
   }, []);
+
+  async function loadStudents() {
+    const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
+    let students = await getByFilters(`${BASE_URL}/student/search`, filters);
+    students.unshift({ id: 0, fullName: 'Seleccione' });
+    setApis({ dlStudents: students });
+  }
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -224,7 +235,16 @@ const Index = () => {
                   <DatePicker id='dateTo' showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateTo} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateTo: date })} value={params.dateTo} className='form-control' locale='es' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Nombre del alumno' id='name' handleChange={handleChange} value={params.name} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
+                  <Form.Group>
+                    <Form.Label> Nombre del alumno </Form.Label>
+                    <Form.Control id='name' onChange={handleChange} className='form-control' value={params.name} style={{ cursor: 'pointer' }} as='select' disabled={false}>
+                      {apis.dlStudents.map((file) => (
+                        <option key={file.id} value={file.fullName}>
+                          {file.fullName}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
                 </div>
                 <div className='col-md-3 my-2'>
                   <Dropdownlist title='Estado de la sesión' id='status' handleChange={handleChange} value={params.status} dropdownlist={dlStatus} disabledValue={false} className='form-control' />

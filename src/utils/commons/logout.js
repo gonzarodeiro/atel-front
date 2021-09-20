@@ -19,7 +19,7 @@ export default function logout() {
   ).then((value) => {
     if (value === 'logout') {
       sessionStorage.clear();
-      document.location.href = window.location.origin + '#/login';
+      document.location.href = window.location.origin + '/atel-front/#/login';
     }
   });
 }

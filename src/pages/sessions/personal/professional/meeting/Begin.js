@@ -6,13 +6,12 @@ import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, onJitsiLayout }) => {
+const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
   useLayoutEffect(() => {    
     handleJitsiResize("#begin-jitsi", onJitsiLayout);    
     const listener = window.addEventListener('resize', () => handleJitsiResize("#begin-jitsi", onJitsiLayout));    
     return () =>{ window.removeEventListener('resize', listener)};
   }, []);
-
 
   function getMessageByTool(tool) {
     let mapToolToEvent = {
@@ -72,7 +71,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
             </div>
             <div className='row'>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool(tools.pictogram)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
                 </MDBBtn>
               </div>

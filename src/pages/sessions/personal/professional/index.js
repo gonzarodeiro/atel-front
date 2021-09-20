@@ -5,7 +5,7 @@ import Begin from './meeting/Begin';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
-import Pictogram from './tools/Pictogram';
+import Pictograms from '../../../../components/Activity/Pictograms';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
@@ -26,6 +26,7 @@ const ProfessionalSession = (props) => {
   const [loading, setShowLoading] = useState(true);
   const [celebrationVisible, setCelebrationVisible] = useState(true);
   const [showJitsi, setShowJitsi] = useState(true);
+  const [pictogramsVisible, showPictograms] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
@@ -73,6 +74,11 @@ const ProfessionalSession = (props) => {
     htmlElement.style.height = `${layout.height}px`;
   }
 
+  function handleClosePictograms(mr, stripe) {
+    // TODO: Enviar stripe por el socket
+    showPictograms(false);
+  }
+
   return (
     <Layout>
       <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
@@ -91,10 +97,9 @@ const ProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} onJitsiLayout={handleJitsiLayout} />}
-              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} onJitsiLayout={handleJitsiLayout} />}
-              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} onJitsiLayout={handleJitsiLayout} />}
-              {tools.pictogram && <Pictogram props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
+              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
+              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
@@ -103,6 +108,7 @@ const ProfessionalSession = (props) => {
       <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />}</div>
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
+      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} />
     </Layout>
   );
 };

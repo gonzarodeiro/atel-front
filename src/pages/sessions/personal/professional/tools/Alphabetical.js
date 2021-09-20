@@ -7,8 +7,7 @@ import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, onJitsiLayout }) => {
-
+const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
 
   useEffect(() => {
     showModal({ notification: false });
@@ -71,7 +70,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool('pictogram')} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
                 </MDBBtn>
               </div>
