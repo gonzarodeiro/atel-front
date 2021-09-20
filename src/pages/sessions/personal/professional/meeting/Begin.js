@@ -37,7 +37,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
   return (
     <React.Fragment>
       <div className='row'>
-        <div id='begin-jitsi' className='pb-3 mt-2 col-md-8' />
+        <div id='begin-jitsi' className='mb-3 mt-2 col-md-8'/>
         <div className='col-md-4' style={{ marginTop: '4.5px' }}>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
@@ -58,7 +58,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
-              <div className='col-md-12 mt-2'>
+              <div className='col-md-12'>
                 <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Númerica y lógica</span>
                 </MDBBtn>
@@ -70,7 +70,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
               </div>
             </div>
             <div className='row'>
-              <div className='col-md-12 mt-2'>
+              <div className='col-md-12 mt-2 mb-2'>
                 <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Pictogramas</span>
                 </MDBBtn>
