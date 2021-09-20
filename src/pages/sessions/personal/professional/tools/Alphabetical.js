@@ -8,15 +8,15 @@ import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
 const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, onJitsiLayout }) => {
-  useLayoutEffect(() => {
-    handleJitsiResize("#alphabetical-jitsi", () => onJitsiLayout);
-    const listener = window.addEventListener('resize', handleJitsiResize("#alphabetical-jitsi", onJitsiLayout));
-    return () => window.removeEventListener('resize', listener);
-  }, []);
+
 
   useEffect(() => {
     showModal({ notification: false });
+    handleJitsiResize("#alphabetical-jitsi", onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize("#alphabetical-jitsi", onJitsiLayout));
     showWizard(true);
+    return () => window.removeEventListener('resize', listener);
+    
   }, []);
 
   function redirectTool(tool) {

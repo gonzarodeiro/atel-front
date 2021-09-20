@@ -4,26 +4,15 @@ import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
+import handleJitsiResize from '../../../handleJitsiResize';
 
 const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, onJitsiLayout }) => {
-  useLayoutEffect(() => {
-    handleResize();
-    const listener = window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', listener);
+  useLayoutEffect(() => {    
+    handleJitsiResize("#begin-jitsi", onJitsiLayout);    
+    const listener = window.addEventListener('resize', () => handleJitsiResize("#begin-jitsi", onJitsiLayout));    
+    return () =>{ window.removeEventListener('resize', listener)};
   }, []);
 
-  function handleResize() {
-    const htmlElement = document.querySelector('#begin-jitsi');
-    if (!htmlElement) return;
-    const rect = htmlElement.getBoundingClientRect();
-    onJitsiLayout({
-      width: htmlElement.offsetWidth,
-      height: htmlElement.offsetHeight,
-      top: htmlElement.offsetTop,
-      left: htmlElement.offsetLeft,
-      rect: rect
-    });
-  }
 
   function getMessageByTool(tool) {
     let mapToolToEvent = {

@@ -25,7 +25,7 @@ const ProfessionalSession = (props) => {
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
   const [celebrationVisible, setCelebrationVisible] = useState(true);
-  const [showJitsi, setShotJitsi] = useState(true);
+  const [showJitsi, setShowJitsi] = useState(true);
   let history = useHistory();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const ProfessionalSession = (props) => {
 
   function handleJitsiLayout(layout) {
     if(!layout){
-      setShotJitsi(false);
+      setShowJitsi(false);
       return;
     }
 
@@ -100,7 +100,7 @@ const ProfessionalSession = (props) => {
           </div>
         </div>
       </div>
-      <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId} sessionId={props.location.state.sessionId} />}</div>
+      <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />}</div>
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
     </Layout>
