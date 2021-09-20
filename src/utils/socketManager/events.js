@@ -19,7 +19,8 @@ const clientEvents = {
   trays: 'trays',
   setFilter: 'setFilter',
   checkResults: 'check-results',
-  showPictogramStripe: 'show-pictogram-stripe'
+  showPictogramStripe: 'show-pictogram-stripe',
+  inclusionLayout: "inclusionLayout"
 };
 
 const serverEvents = {
