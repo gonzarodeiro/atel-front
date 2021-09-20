@@ -18,7 +18,8 @@ const clientEvents = {
   elementPosition: 'element-position',
   trays: 'trays',
   setFilter: 'setFilter',
-  checkResults: 'check-results'
+  checkResults: 'check-results',
+  showPictogramStripe: 'show-pictogram-stripe'
 };
 
 const serverEvents = {

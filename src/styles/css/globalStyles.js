@@ -6,7 +6,7 @@ const global = createGlobalStyle`
   }
 
     .headerRight {
-    font-size: 15px; 
+    font-size: 15px;
     font-weight: bold;
     text-align: center;
     padding: 9px;
@@ -42,7 +42,7 @@ const global = createGlobalStyle`
     width: 100%;
     font-weight: 400 !important;
   }
-  
+
   .react-datepicker__time-container--with-today-button {
     display: inline;
     border: 1px solid #aeaeae;
@@ -126,7 +126,7 @@ const global = createGlobalStyle`
     font-weight: 600;
     font-size: 15px;
   }
-  
+
   .section-title {
     display: flex;
     justify-content: space-between;
@@ -137,7 +137,7 @@ const global = createGlobalStyle`
   .section-title {
       flex-direction: row;
       margin: 30px 0;
-  }  
+  }
 
   .section-title>.mobile-company-selector {
     display: flex;
@@ -241,7 +241,7 @@ const global = createGlobalStyle`
   .black-cast.open {
     visibility: visible;
   }
-  
+
   .btnOption {
     border-radius: 4px !important;
     padding: 9px 21px !important;
@@ -276,7 +276,7 @@ const global = createGlobalStyle`
     transform: perspective(1px) translateZ(0);
     box-shadow: 0px 0px 5px rgba(0, 0, 0, .4);
   }
-  
+
   #hvr-float:hover,
   #hvr-float:focus,
   #hvr-float:active {
@@ -428,6 +428,23 @@ const global = createGlobalStyle`
       width: 85%;
     }
 
+    .fade-in {
+      opacity: 1;
+      animation-name: fadeInOpacity;
+      animation-iteration-count: 1;
+      animation-timing-function: ease-in;
+      animation-duration: 0.5s;
+    }
+
+
+    @keyframes fadeInOpacity {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
 `;
 
 export default global;
