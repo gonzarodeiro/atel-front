@@ -11,6 +11,7 @@ import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 import Celebration, { celebrationType } from '../../../../components/Celebration';
 import Loading from '../../../../components/Loading';
+import FloatingJitsi from '../../../../components/FloatingJitsi';
 
 const wizardTitle = 'Esperando al alumno';
 const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';
@@ -24,6 +25,7 @@ const ProfessionalSession = (props) => {
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
   const [celebrationVisible, setCelebrationVisible] = useState(true);
+  const [showJitsi, setShowJitsi] = useState(true);
   const [pictogramsVisible, showPictograms] = useState(false);
   let history = useHistory();
 
@@ -58,6 +60,20 @@ const ProfessionalSession = (props) => {
     showWizard(false);
   }, []);
 
+  function handleJitsiLayout(layout) {
+    if(!layout){
+      setShowJitsi(false);
+      return;
+    }
+
+    const htmlElement = document.querySelector('#jitsi-iframe');
+    htmlElement.style.position = 'absolute';
+    htmlElement.style.left = `${layout.rect.x}px`;
+    htmlElement.style.top = `${layout.rect.y}px`;
+    htmlElement.style.width = `${layout.width}px`;
+    htmlElement.style.height = `${layout.height}px`;
+  }
+
   function handleClosePictograms(mr, stripe) {
     // TODO: Enviar stripe por el socket
     showPictograms(false);
@@ -81,14 +97,15 @@ const ProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} />}
-              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} />}
-              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
+              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
+              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
         </div>
       </div>
+      <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />}</div>
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
       <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} />

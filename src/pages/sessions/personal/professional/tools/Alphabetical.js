@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../../components/Jitsi';
 import Activity from '../../../../../components/Activity/Alphabetical/professionalLogic';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
+import handleJitsiResize from '../../../handleJitsiResize';
 
-const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, showPictograms }) => {
+const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, copyClipboard, modal, showModal, showWizard, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+
   useEffect(() => {
     showModal({ notification: false });
+    handleJitsiResize("#alphabetical-jitsi", onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize("#alphabetical-jitsi", onJitsiLayout));
     showWizard(true);
+    return () => window.removeEventListener('resize', listener);
+    
   }, []);
 
   function redirectTool(tool) {
@@ -20,6 +25,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
   function redirectEnd() {
     showTools({ alphabetical: false });
     showMeeting({ end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 
@@ -45,7 +51,7 @@ const Alphabetical = ({ props, handleChange, session, showTools, showMeeting, co
               Cámara del alumno
             </label>
           </div>
-          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
+          <div id='alphabetical-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '200px' }} />
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones

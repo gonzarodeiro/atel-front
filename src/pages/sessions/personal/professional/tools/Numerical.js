@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../../components/Jitsi';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
 import Settings, { modalResults, initialSettings } from '../../../../../components/Activity/Logical/components/Settings';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
+import handleJitsiResize from '../../../handleJitsiResize';
 
-const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms }) => {
+const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
+
+  useLayoutEffect(() => {
+    handleJitsiResize("#numerical-jitsi", () => onJitsiLayout);
+    const listener = window.addEventListener('resize', handleJitsiResize("#numerical-jitsi", onJitsiLayout));
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
 
   function redirectTool(tool) {
     showTools({ [tool]: true });
@@ -61,7 +69,7 @@ const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCe
               Cámara del alumno
             </label>
           </div>
-          {props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='200px' />}
+          <div id='numerical-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '200px' }}></div>
           <div data-test='col' style={{ paddingTop: '12px' }}>
             <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones

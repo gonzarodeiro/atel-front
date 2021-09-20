@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Jitsi from '../../../../components/Jitsi';
 import getResponseByFilters from '../../../../utils/services/get/getByFilters/getResponseByFilters';
 import showAlert from '../../../../utils/commons/showAlert';
 import status from '../../../../utils/enums/sessionStatus';
@@ -14,6 +13,8 @@ import wizardVideo from '../../../../components/Activity/Alphabetical/video/wiza
 import Celebration, { celebrationType } from '../../../../components/Celebration';
 import { BASE_URL } from '../../../../config/environment';
 import Loading from '../../../../components/Loading';
+import FloatingJitsi from '../../../../components/FloatingJitsi';
+import handleJitsiResize from '../../handleJitsiResize';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -23,12 +24,25 @@ const StudentSession = (props) => {
   const [student, setStudent] = useState();
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
-  const [showJitsi, setShowJitsi] = useState();
+  const [showJitsi, setShowJitsi] = useState(true);
   const [session, setSession] = useState({ generalComments: '' });
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
-  const [sessionId, setSessionId] = useState(-1);
+  const [sessionId, setSessionId] = useState(-1);  
   let { roomId } = useParams();
+  const [showJitsiDiv, setShowJitsiDiv] = useState(true);
+
+  useLayoutEffect(() => {
+    
+    handleJitsiResize("#init-jitsi", () => handleJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize("#init-jitsi", handleJitsiLayout));
+    
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
+  useEffect(() => {
+    initializeJitsiDiv();
+  }, [showJitsiDiv])
 
   useEffect(() => {
     setTimeout(() => {
@@ -36,24 +50,30 @@ const StudentSession = (props) => {
     }, 3000);
     connect(roomId);
     registerEvent(() => {
+      setShowJitsiDiv(false);
       showMeeting({ begin: false });
-      showTools({ alphabetical: true });
+      showTools({ alphabetical: true });      
       showWizard(true);
     }, clientEvents.initAlphabetical);
 
     registerEvent(() => {
+      setShowJitsiDiv(false);
       showMeeting({ begin: false });
-      showTools({ numerical: true });
+      showTools({ numerical: true });      
       showWizard(true);
     }, clientEvents.initNumerical);
 
     registerEvent(() => {
+      handleJitsiLayout();
+      setShowJitsi(false);
+      setShowJitsiDiv(false);
       showMeeting({ begin: false, end: true });
-      showTools({ alphabetical: false, numerical: false, pictogram: false });
+      showTools({ alphabetical: false, numerical: false, pictogram: false });      
       showWizard(false);
     }, clientEvents.finishSession);
 
     registerEvent(() => {
+      setShowJitsiDiv(true);
       showMeeting({ begin: true, end: false });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);
@@ -63,7 +83,7 @@ const StudentSession = (props) => {
       showWizard(false);
     }, clientEvents.closeActivityWizard);
 
-    loadSessionStatus();
+    loadSessionStatus();    
   }, []);
 
   function loadSessionStatus() {
@@ -73,7 +93,11 @@ const StudentSession = (props) => {
     checkSessionCreated(fields);
     showMeeting({ begin: true });
     showTools({ alphabetical: false });
-    setShowJitsi(true);
+    setShowJitsi(true);    
+  }
+
+  function initializeJitsiDiv(){    
+    handleJitsiResize("#init-jitsi", handleJitsiLayout)
   }
 
   async function checkSessionCreated(fields) {
@@ -95,6 +119,20 @@ const StudentSession = (props) => {
     showWizard(false);
   }, []);
 
+
+  function handleJitsiLayout(layout) {    
+    if(!layout){
+      setShowJitsiDiv(false);
+      return;
+    }    
+    const htmlElement = document.querySelector('#jitsi-iframe');
+    htmlElement.style.position = 'absolute';
+    htmlElement.style.left = `${layout.rect.x}px`;
+    htmlElement.style.top = `${layout.rect.y}px`;
+    htmlElement.style.width = `${layout.width}px`;
+    htmlElement.style.height = `${layout.height}px`;
+  }
+
   return (
     <>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
@@ -102,29 +140,32 @@ const StudentSession = (props) => {
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
           </div>
-        )}
+        )}        
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
               ¡ Hola, Bienvenido {student} !
             </div>
-            {showJitsi && (
+            { (
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
-                  <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Jitsi roomId={roomId} userName={student} height='580px'></Jitsi>}
-                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} />}
-                    {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} />}
+                  <div className='pb-3 mt-2 col-md-12'>             
+                    {showJitsiDiv && <div id='init-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '700px' }}></div>}
+                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
+                    {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {tools.pictogram && <Pictogram roomId={roomId} userName={student} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>
               </form>
-            )}
+            )}            
           </div>
         </div>
       </div>
+      
+      {showJitsi && <FloatingJitsi roomId={roomId} name={student} />}
       <Celebration type={celebrationType.RECEIVER} />
+      
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
     </>
   );
