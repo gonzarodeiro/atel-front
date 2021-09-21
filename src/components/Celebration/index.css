@@ -23,6 +23,21 @@
   background-color: rgb(236, 64, 122, 0.8);
 }
 
+.clb-desktop-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: #2d8cff;
+  cursor: pointer;
+}
+
+.clb-desktop-btn:hover {
+  background-color: #2d8cff;
+}
+
 .clb-list {
   display: flex;
   justify-content: space-around;

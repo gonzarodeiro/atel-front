@@ -5,6 +5,7 @@ import Begin from './meeting/Begin';
 import End from './meeting/End';
 import { connect } from '../../../../utils/socketManager';
 import Loading from '../../../../components/Loading';
+import StudentView from '../../../../components/StudentView';
 
 const ZoomProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
@@ -59,6 +60,7 @@ const ZoomProfessionalSession = (props) => {
             </form>
           </div>
         </div>
+        <StudentView />
       </div>
     </Layout>
   );
