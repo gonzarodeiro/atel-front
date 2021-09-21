@@ -10,6 +10,8 @@ function handleJitsiResize(htmlId, callback) {
     left: htmlElement.offsetLeft,
     rect: rect
   });
+
+  return true;
 }
 
 export default handleJitsiResize;

@@ -8,10 +8,8 @@ const items = [initial, therapist, zoom];
 const StudentView = () => {
   const [showList, setShowList] = useState(false);
 
-  const handleItemClick = (selected) => {
-    if (selected === 0) sendMessage(clientEvents.defaultLayout, selected);
-    if (selected === 1) sendMessage(clientEvents.jitsiLayout, selected);
-    if (selected === 2) sendMessage(clientEvents.zoomLayout, selected);
+  const handleItemClick = (selected) => {    
+    sendMessage(clientEvents.inclusionLayout, selected);      
   };
 
   const handleBlur = () => setShowList(false);

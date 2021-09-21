@@ -16,6 +16,7 @@ const ZoomStudentSession = () => {
   const [student, setStudent] = useState();
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [showJitsi, setShowJitsi] = useState();
+  const [showJitsiDiv, setShowJitsiDiv] = useState(true);
   const [session, setSession] = useState({ generalComments: '' });
   const [roomJitsi, setRoomJitsi] = useState();  
   const [loading, setShowLoading] = useState(true);
@@ -26,11 +27,10 @@ const ZoomStudentSession = () => {
   const [defaultLayout, setDefaultLayout] = useState(true);
 
 
-  useEffect(() => {
+  useEffect(() => {    
     setTimeout(() => {
       setShowLoading(false);
-    }, 3000);
-    connect(roomId);
+    }, 3000);    
     registerEvent(() => {
       showMeeting({ begin: false, end: true });
     }, clientEvents.finishSession);
@@ -38,36 +38,37 @@ const ZoomStudentSession = () => {
     registerEvent(() => {
       showMeeting({ begin: true, end: false });
     }, clientEvents.beginSession);
-
+    
+    loadSessionStatus();
+    
     registerEvent((layout) => {
+      debugger;
       switch(layout){
-        case 1:
-          setJitsiLayout(true);
+        case 0:
+          setJitsiLayout(false);
           setZoomLayout(false);          
+          setDefaultLayout(true);
+          break;
+        case 1:
+          setZoomLayout(false);
+          setJitsiLayout(true);
           setDefaultLayout(false);
           break;
         case 2:
-          setZoomLayout(true);
-          setJitsiLayout(false);
           setDefaultLayout(false);
-          break;
-        case 3:
-          setDefaultLayout(true);
-          setZoomLayout(false);
+          setZoomLayout(true);
           setJitsiLayout(false);
           break;
         default:
       }
     }, clientEvents.inclusionLayout);
-    
-
-    loadSessionStatus();
   }, []);
 
   function loadSessionStatus() {
     const fields = roomId.split('-');
     const room = fields[0] + '-' + fields[1] + '-' + fields[2];
     setRoomJitsi(fields[2] + '-' + fields[3]);
+    connect(fields[2] + '-' + fields[3]);
     setStudent(fields[2]);
     checkSessionCreated(fields);
     setRoomZoom(room);
@@ -89,8 +90,12 @@ const ZoomStudentSession = () => {
     setSession({ ...session, [id]: value });
   };
 
-  function handleJitsiLayout(layout) {    
-    debugger;
+  function handleJitsiLayout(layout) {        
+    if (!layout) {
+      setShowJitsiDiv(false);
+      return;
+    }
+
     const htmlElement = document.querySelector('#jitsi-iframe');
     if (!htmlElement) return;
     htmlElement.style.position = 'absolute';
@@ -127,7 +132,7 @@ const ZoomStudentSession = () => {
           </div>
         </div>
       </div>
-      {roomJitsi && student && <div id="index-jitsi"><FloatingJitsi roomId={roomJitsi} name={student}/></div>}
+      {roomJitsi && student && showJitsiDiv && <div id="index-jitsi"><FloatingJitsi roomId={roomJitsi} name={student}/></div>}
     </>
   );
 };

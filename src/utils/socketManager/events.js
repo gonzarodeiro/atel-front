@@ -21,9 +21,6 @@ const clientEvents = {
   checkResults: 'check-results',
   showPictogramStripe: 'show-pictogram-stripe',
   inclusionLayout: 'inclusionLayout',
-  jitsiLayout: 'jitsiLayout',
-  zoomLayout: 'zoomLayout',
-  defaultLayout: 'defaultLayout'
 };
 
 const serverEvents = {
