@@ -14,7 +14,7 @@ const StudentView = () => {
     if (selected === 2) sendMessage(clientEvents.zoomLayout, selected);
   };
 
-  const handleBlur = () => setShowList(false);
+  const handleBlur = () => {};
 
   const handleToggleList = () => setShowList(!showList);
 
