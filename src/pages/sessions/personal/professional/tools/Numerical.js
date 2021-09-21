@@ -13,7 +13,7 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
   const [validate, setValidate] = useState(false);
 
   useLayoutEffect(() => {
-    handleJitsiResize('#numerical-jitsi', () => onJitsiLayout);
+    handleJitsiResize('#numerical-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#numerical-jitsi', onJitsiLayout));
     return () => window.removeEventListener('resize', listener);
   }, []);
