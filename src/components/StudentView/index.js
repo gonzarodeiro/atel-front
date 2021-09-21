@@ -12,7 +12,7 @@ const StudentView = () => {
     sendMessage(clientEvents.inclusionLayout, selected);      
   };
 
-  const handleBlur = () => setShowList(false);
+  const handleBlur = () => {};
 
   const handleToggleList = () => setShowList(!showList);
 
