@@ -22,9 +22,6 @@ const ZoomStudentSession = () => {
   const [loading, setShowLoading] = useState(true);
   let { roomId } = useParams();
 
-  const [jitsiLayout, setJitsiLayout] = useState();
-  const [zoomLayout, setZoomLayout] = useState();
-  const [defaultLayout, setDefaultLayout] = useState(true);
 
 
   useEffect(() => {    
@@ -40,35 +37,13 @@ const ZoomStudentSession = () => {
     }, clientEvents.beginSession);
     
     loadSessionStatus();
-    
-    registerEvent((layout) => {
-      debugger;
-      switch(layout){
-        case 0:
-          setJitsiLayout(false);
-          setZoomLayout(false);          
-          setDefaultLayout(true);
-          break;
-        case 1:
-          setZoomLayout(false);
-          setJitsiLayout(true);
-          setDefaultLayout(false);
-          break;
-        case 2:
-          setDefaultLayout(false);
-          setZoomLayout(true);
-          setJitsiLayout(false);
-          break;
-        default:
-      }
-    }, clientEvents.inclusionLayout);
+        
   }, []);
 
   function loadSessionStatus() {
     const fields = roomId.split('-');
     const room = fields[0] + '-' + fields[1] + '-' + fields[2];
-    setRoomJitsi(fields[2] + '-' + fields[3]);
-    connect(fields[2] + '-' + fields[3]);
+    setRoomJitsi(fields[2] + '-' + fields[3]);    
     setStudent(fields[2]);
     checkSessionCreated(fields);
     setRoomZoom(room);
@@ -94,7 +69,7 @@ const ZoomStudentSession = () => {
     if (!layout) {
       setShowJitsiDiv(false);
       return;
-    }
+    }    
 
     const htmlElement = document.querySelector('#jitsi-iframe');
     if (!htmlElement) return;
@@ -123,7 +98,7 @@ const ZoomStudentSession = () => {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Begin roomZoom={roomZoom}  onJitsiLayout={handleJitsiLayout} jitsiLayout={jitsiLayout} zoomLayout={zoomLayout} defaultLayout={defaultLayout} />}
+                    {meeting.begin && roomJitsi && <Begin roomZoom={roomZoom}  onJitsiLayout={handleJitsiLayout} roomJitsi={roomJitsi}/>}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>
@@ -132,7 +107,7 @@ const ZoomStudentSession = () => {
           </div>
         </div>
       </div>
-      {roomJitsi && student && showJitsiDiv && <div id="index-jitsi"><FloatingJitsi roomId={roomJitsi} name={student}/></div>}
+      {roomJitsi && student &&  <div id="index-jitsi" display="none"><FloatingJitsi roomId={roomJitsi} name={student}/></div>}
     </>
   );
 };
