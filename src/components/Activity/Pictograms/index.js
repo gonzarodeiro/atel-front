@@ -1,12 +1,10 @@
 import { Button } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
-
 import PictoList from './components/PictoList';
 import Stripe from './components/Stripe';
 import { searchText, normalizeStudentPictograms } from '../../../utils/pictogramManager';
 import { BASE_URL } from '../../../config/environment';
 import getByFilters from '../../../utils/services/get/getByFilters/index';
-
 import './styles.css';
 
 const MAX_STRIPE_LENGTH = 5;
@@ -58,7 +56,6 @@ const Pictograms = ({ show, idStudent, idProfessional, onClose }) => {
     try {
       const filters = { id_professional: idProfessional, id_student: idStudent };
       const response = await getByFilters(`${BASE_URL}/pictogram/`, filters);
-      console.log(response);
       const newPictos = normalizeStudentPictograms(response);
       setCustomPictograms(newPictos);
     } catch {
@@ -77,7 +74,6 @@ const Pictograms = ({ show, idStudent, idProfessional, onClose }) => {
         setServicePictograms([]);
       } else {
         const response = await searchText(search);
-        console.log(response);
         const newPictos = response.words;
         setServicePictograms(newPictos);
       }

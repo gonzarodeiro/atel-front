@@ -23,7 +23,7 @@ const wizardButtonText = 'CONTINUAR';
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
-  const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', pictogramComments: '', evaluation: '', attention: '' });
+  const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
@@ -104,9 +104,7 @@ const ProfessionalSession = (props) => {
   }
 
   function showPictogramStripeToStudent(visible) {
-    // cambio la visibilidad del los pictogramas al terapeuta
     setStripeVisible(visible);
-    // envio la tira seleccionada al alumno y si la debo mostrar o no.
     sendMessage(clientEvents.showPictogramStripe, { stripe, visible });
   }
   return (
@@ -139,13 +137,13 @@ const ProfessionalSession = (props) => {
       {stripe && stripe.length && (
         <div className='card shadow-sm container px-0 mb-4 pt-4' style={{ border: '1px solid #cecbcb' }}>
           <Row style={{ justifyContent: 'center' }}>
+            <MDBBtn onClick={handleDiscardPictogramsClick} className='bg-light shadow-none btnOption mr-2 mt-2 ml-0' style={{ marginBottom: '10px !important', marginRight: '5px !important' }}>
+              <i className='fas fa-times-circle'></i>
+              <span className='ml-2'>Descartar</span>
+            </MDBBtn>
             <MDBBtn onClick={handleShowPictogramsToStudentClick} className={`${stripeVisible ? 'red' : 'blue'} darken-2 shadow-none btnOption mr-2 mt-2 ml-0`} style={{ marginBottom: '10px !important', marginRight: '5px !important', backgroundColor: '#dd4b39 !important', color: '#FFF', borderColor: '#dd4b39' }}>
               <i className={`fas ${stripeVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
               <span className='ml-2'>{stripeVisible ? 'Dejar de mostrar al alumno' : 'Mostrar al alumno'}</span>
-            </MDBBtn>
-            <MDBBtn onClick={handleDiscardPictogramsClick} className='bg-light shadow-none btnOption mr-2 mt-2 ml-0' style={{ marginBottom: '10px !important', marginRight: '5px !important', backgroundColor: '#dd4b39 !important', color: '#FFF', borderColor: '#dd4b39' }}>
-              <i className='fas fa-times-circle'></i>
-              <span className='ml-2'>Descartar pictogramas</span>
             </MDBBtn>
           </Row>
           <Stripe stripe={stripe} />

@@ -36,8 +36,7 @@ const Index = () => {
     if (validateFields()) {
       setLoading(true);
       const values = { ...student, idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
-      const response = await postResponseApi(`${BASE_URL}/student`, values);
-      console.log(response);
+      await postResponseApi(`${BASE_URL}/student`, values);
       setLoading(false);
       await showAlert('Alumno registrado', 'El alumno ha sido registrado en el sistema', 'success');
       history.push({ pathname: 'home' });

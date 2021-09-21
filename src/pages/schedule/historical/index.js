@@ -93,12 +93,16 @@ const Index = () => {
   async function handleDetails(response) {
     let result = await getResponseById(`${BASE_URL}/session/details`, response.id);
     setSessionDetails(result[0]);
-    const aritmeticsRows = convertAritmetic(result[0].numerical.statistics.aritmetic);
-    const matchesRows = convertMatches(result[0].numerical.statistics.matches);
-    if (result[0].numerical) setAvgTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
-    fillAritmeticTable(aritmeticsRows);
-    fillMatchesTable(matchesRows);
+    if (result[0].numerical.statistics.aritmetic.length > 0) {
+      const aritmeticsRows = convertAritmetic(result[0].numerical.statistics.aritmetic);
+      fillAritmeticTable(aritmeticsRows);
+    }
+    if (result[0].numerical.statistics.matches.length > 0) {
+      const matchesRows = convertMatches(result[0].numerical.statistics.matches);
+      fillMatchesTable(matchesRows);
+    }
     setDateDetails(convertDateTime(new Date(result[0].startDateTime)));
+    if (result[0].numerical.statistics.avgTime) setAvgTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
     setShowModal({ details: true });
   }
 

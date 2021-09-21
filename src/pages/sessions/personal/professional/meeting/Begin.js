@@ -7,10 +7,12 @@ import finishSession from '../finishSession';
 import handleJitsiResize from '../../../handleJitsiResize';
 
 const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
-  useLayoutEffect(() => {    
-    handleJitsiResize("#begin-jitsi", onJitsiLayout);    
-    const listener = window.addEventListener('resize', () => handleJitsiResize("#begin-jitsi", onJitsiLayout));    
-    return () =>{ window.removeEventListener('resize', listener)};
+  useLayoutEffect(() => {
+    handleJitsiResize('#begin-jitsi', onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize('#begin-jitsi', onJitsiLayout));
+    return () => {
+      window.removeEventListener('resize', listener);
+    };
   }, []);
 
   function getMessageByTool(tool) {
@@ -37,7 +39,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
   return (
     <React.Fragment>
       <div className='row'>
-        <div id='begin-jitsi' className='mb-3 mt-2 col-md-8'/>
+        <div id='begin-jitsi' className='mb-3 mt-2 col-md-8' />
         <div className='col-md-4' style={{ marginTop: '4.5px' }}>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
@@ -45,7 +47,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
             </label>
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
-            <div className='row'>
+            <div className='row mb-2'>
               <MDBBtn onClick={copyClipboard} size='lg' className='py-2 red darken-1 shadow-none text-white btnOption w-100' style={{ marginLeft: '15px', marginRight: '15px' }}>
                 <span>Link de la reunion</span>
               </MDBBtn>
@@ -69,10 +71,17 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
                 </MDBBtn>
               </div>
             </div>
+          </div>
+          <div data-test='col'>
+            <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
+              Pictogramas
+            </label>
+          </div>
+          <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
-              <div className='col-md-12 mt-2 mb-2'>
-                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Pictogramas</span>
+              <div className='col-md-12 mt-1 mb-1'>
+                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Seleccionar plantilla</span>
                 </MDBBtn>
               </div>
             </div>
@@ -84,7 +93,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
-              <div className='col-md-12 mt-1 mb-1'>
+              <div className='col-md-12 mt-1 mb-2'>
                 <MDBBtn onClick={() => finishSession(redirectEnd)} size='lg' className='py-2 shadow-none btnOption btnCancel w-100 ml-0'>
                   <span>Finalizar</span>
                 </MDBBtn>

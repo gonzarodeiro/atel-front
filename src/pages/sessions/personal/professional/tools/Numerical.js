@@ -8,17 +8,15 @@ import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Numerical = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
-
+const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
 
   useLayoutEffect(() => {
-    handleJitsiResize("#numerical-jitsi", () => onJitsiLayout);
-    const listener = window.addEventListener('resize', handleJitsiResize("#numerical-jitsi", onJitsiLayout));
+    handleJitsiResize('#numerical-jitsi', () => onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize('#numerical-jitsi', onJitsiLayout));
     return () => window.removeEventListener('resize', listener);
   }, []);
-
 
   function redirectTool(tool) {
     showTools({ [tool]: true });

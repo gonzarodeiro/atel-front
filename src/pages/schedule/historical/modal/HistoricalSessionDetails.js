@@ -47,7 +47,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
             </Card>
           </Accordion>
         )}
-        {obj.numerical && (
+        {obj.numerical.statistics.avgTime && (
           <Accordion className='pb-4'>
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
@@ -74,35 +74,18 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
             </Card>
           </Accordion>
         )}
-        {obj.pictogram.observation && (
+        {obj.observation && (
           <Accordion className='pb-4'>
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-                Pictogramas
+                Observaciones generales
               </Accordion.Toggle>
               <Accordion.Collapse eventKey='0'>
-                <Card.Body>
-                  <div className='row pb-2'>
-                    <div className='col-md-12 my-2'>
-                      <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
-                      {obj.pictogram.observation}
-                    </div>
-                  </div>
-                </Card.Body>
+                <Card.Body>{obj.observation}</Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
         )}
-        <Accordion className='pb-4'>
-          <Card>
-            <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-              Observaciones generales
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey='0'>
-              <Card.Body>{obj.observation}</Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
         <Modal.Footer>
           <Cancel onClick={handleClose} title='Cancelar' />
         </Modal.Footer>
