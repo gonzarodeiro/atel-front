@@ -39,6 +39,11 @@ const Begin = ({roomZoom, onJitsiLayout, roomJitsi }) => {
     return () => window.removeEventListener('resize', listener);  
   }, []);
 
+  useEffect(() => {      
+    handleJitsiResize("#begin-jitsi", onJitsiLayout);
+    }
+  ,[jitsiLayout,zoomLayout,defaultLayout]);
+
 
 
   return (
@@ -49,7 +54,7 @@ const Begin = ({roomZoom, onJitsiLayout, roomJitsi }) => {
         <>
         <div className='row'>
           <div className='pb-2 col-md-6 mt-3 mb-2'>
-            <Zoom roomZoom={roomZoom} />
+            <Zoom roomZoom={roomZoom} height={"580px"} width={"620px"}/>
           </div>
           <div id="begin-jitsi" className='pb-2 col-md-6 mt-3 mb-2' style={{ height: '580px' }}>        
           </div>
@@ -68,8 +73,8 @@ const Begin = ({roomZoom, onJitsiLayout, roomJitsi }) => {
         {zoomLayout &&
           <>
           <div className='row'>
-            <div className='pb-2 col-md-12 mt-3 mb-2'>
-              <Zoom roomZoom={roomZoom} height={"600px"} width={"800px"} />
+            <div className='container'>
+              <Zoom roomZoom={roomZoom} height={"600px"} width={"1000px"} />
             </div>            
           </div>
           <div>

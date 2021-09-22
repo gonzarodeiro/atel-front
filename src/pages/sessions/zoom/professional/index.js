@@ -6,12 +6,14 @@ import End from './meeting/End';
 import { connect } from '../../../../utils/socketManager';
 import Loading from '../../../../components/Loading';
 import StudentView from '../../../../components/StudentView';
+import FloatingJitsi from '../../../../components/FloatingJitsi'
 
 const ZoomProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
   const [session, setSession] = useState({ generalComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
   const [loading, setShowLoading] = useState(true);
+  const [showJitsi, setShowJitsi] = useState(true);
   let history = useHistory();
 
   useEffect(() => {
@@ -37,15 +39,31 @@ const ZoomProfessionalSession = (props) => {
     showModal({ notification: true });
   }
 
+  function handleJitsiLayout(layout) {        
+    debugger;
+    if (!layout) {
+      setShowJitsi(false);
+      return;
+    }    
+
+    const htmlElement = document.querySelector('#jitsi-iframe');
+    if (!htmlElement) return;
+    htmlElement.style.position = 'absolute';
+    htmlElement.style.left = `${layout.rect.x}px`;
+    htmlElement.style.top = `${layout.rect.y}px`;
+    htmlElement.style.width = `${layout.width}px`;
+    htmlElement.style.height = `${layout.height}px`;
+  }
+
   return (
     <Layout>
-      <div className='card shadow-sm container px-0 mb-3' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container container-atel mb-3' style={{ border: '1px solid #cecbcb' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
           </div>
         )}
-        <div className='container'>
+        <div>
           <div className='card-body'>
             <div className='card-title pb-1 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
               {props.location.state && (
@@ -55,14 +73,16 @@ const ZoomProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showMeeting={showMeeting} copyClipboard={copyClipboard} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showMeeting={showMeeting} copyClipboard={copyClipboard} onJitsiLayout={handleJitsiLayout}/>}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
-          </div>
+          </div>          
         </div>
-        <StudentView />
+        <StudentView />        
       </div>
+      {props.location.state &&  showJitsi && <div id="index-jitsi" ><FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')}/></div>}
     </Layout>
+    
   );
 };
 

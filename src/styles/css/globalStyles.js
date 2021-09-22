@@ -445,6 +445,12 @@ const global = createGlobalStyle`
         opacity: 1;
       }
     }
+    
+    @media (min-width: 1200px) {
+      .container-atel {              
+        max-width: 1400px !important;
+      }
+    }
 `;
 
 export default global;
