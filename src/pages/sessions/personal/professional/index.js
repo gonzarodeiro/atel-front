@@ -134,7 +134,7 @@ const ProfessionalSession = (props) => {
         </div>
       </div>
       <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />}</div>
-      {stripe && stripe.length && (
+      {stripe && stripe.length > 0 && (
         <div className='card shadow-sm container px-0 mb-4 pt-4' style={{ border: '1px solid #cecbcb' }}>
           <Row style={{ justifyContent: 'center' }}>
             <MDBBtn onClick={handleDiscardPictogramsClick} className='bg-light shadow-none btnOption mr-2 mt-2 ml-0' style={{ marginBottom: '10px !important', marginRight: '5px !important' }}>

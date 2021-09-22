@@ -36,7 +36,6 @@ const Pictograms = ({ show, idStudent, idProfessional, onClose }) => {
   function handleKeyPress(event) {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
-      console.log('DBG', 'termine de tipear');
       getPictosFromSearch();
     }, 3000);
   }

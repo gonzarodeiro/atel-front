@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import PictoItemControls from '../PictoItemControls';
-
 import noImage from './img_placeholder.jpeg';
-
 import './styles.css';
 
 const PictoItem = ({ className, picto, onClick }) => {
@@ -17,6 +15,7 @@ const PictoItem = ({ className, picto, onClick }) => {
     const lastIndex = (picto && picto.sources && picto.sources.length - 1) || 0;
     setCurrentIndex((index) => (index > 0 ? index - 1 : lastIndex));
   }
+
   function handleClickRigth() {
     const lastIndex = (picto && picto.sources && picto.sources.length - 1) || 0;
     setCurrentIndex((index) => (index < lastIndex ? index + 1 : 0));

@@ -6,7 +6,7 @@ import End from './meeting/End';
 import { connect } from '../../../../utils/socketManager';
 import Loading from '../../../../components/Loading';
 import StudentView from '../../../../components/StudentView';
-import FloatingJitsi from '../../../../components/FloatingJitsi'
+import FloatingJitsi from '../../../../components/FloatingJitsi';
 
 const ZoomProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
@@ -39,12 +39,11 @@ const ZoomProfessionalSession = (props) => {
     showModal({ notification: true });
   }
 
-  function handleJitsiLayout(layout) {        
-    debugger;
+  function handleJitsiLayout(layout) {
     if (!layout) {
       setShowJitsi(false);
       return;
-    }    
+    }
 
     const htmlElement = document.querySelector('#jitsi-iframe');
     if (!htmlElement) return;
@@ -57,7 +56,7 @@ const ZoomProfessionalSession = (props) => {
 
   return (
     <Layout>
-      <div className='card shadow-sm container container-atel mb-3' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container container-professional-atel mb-4' style={{ border: '1px solid #cecbcb' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
@@ -73,16 +72,19 @@ const ZoomProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showMeeting={showMeeting} copyClipboard={copyClipboard} onJitsiLayout={handleJitsiLayout}/>}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showMeeting={showMeeting} copyClipboard={copyClipboard} onJitsiLayout={handleJitsiLayout} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
-          </div>          
+          </div>
         </div>
-        <StudentView />        
       </div>
-      {props.location.state &&  showJitsi && <div id="index-jitsi" ><FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')}/></div>}
+      {props.location.state && showJitsi && (
+        <div id='index-jitsi'>
+          <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />
+        </div>
+      )}
+      <StudentView />
     </Layout>
-    
   );
 };
 

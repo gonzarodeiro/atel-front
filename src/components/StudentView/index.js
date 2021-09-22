@@ -8,11 +8,13 @@ const items = [initial, therapist, zoom];
 const StudentView = () => {
   const [showList, setShowList] = useState(false);
 
-  const handleItemClick = (selected) => {    
-    sendMessage(clientEvents.inclusionLayout, selected);      
+  const handleItemClick = (selected) => {
+    sendMessage(clientEvents.inclusionLayout, selected);
   };
 
-  const handleBlur = () => {};
+  const handleBlur = () => {
+    setShowList(false);
+  };
 
   const handleToggleList = () => setShowList(!showList);
 
