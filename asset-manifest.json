@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/atel-front/static/css/main.a3bce7f4.chunk.css",
-    "main.js": "/atel-front/static/js/main.28d9bb2d.chunk.js",
-    "main.js.map": "/atel-front/static/js/main.28d9bb2d.chunk.js.map",
+    "main.css": "/atel-front/static/css/main.cff968de.chunk.css",
+    "main.js": "/atel-front/static/js/main.aac1d49a.chunk.js",
+    "main.js.map": "/atel-front/static/js/main.aac1d49a.chunk.js.map",
     "runtime-main.js": "/atel-front/static/js/runtime-main.c3e874b7.js",
     "runtime-main.js.map": "/atel-front/static/js/runtime-main.c3e874b7.js.map",
     "static/css/2.c2774f4f.chunk.css": "/atel-front/static/css/2.c2774f4f.chunk.css",
-    "static/js/2.01682c81.chunk.js": "/atel-front/static/js/2.01682c81.chunk.js",
-    "static/js/2.01682c81.chunk.js.map": "/atel-front/static/js/2.01682c81.chunk.js.map",
+    "static/js/2.ff10bcbf.chunk.js": "/atel-front/static/js/2.ff10bcbf.chunk.js",
+    "static/js/2.ff10bcbf.chunk.js.map": "/atel-front/static/js/2.ff10bcbf.chunk.js.map",
     "index.html": "/atel-front/index.html",
-    "precache-manifest.794cbb94284ee1b9d454f86e1869a438.js": "/atel-front/precache-manifest.794cbb94284ee1b9d454f86e1869a438.js",
+    "precache-manifest.e9aedfed41fdc4da21c7d3c62685be3c.js": "/atel-front/precache-manifest.e9aedfed41fdc4da21c7d3c62685be3c.js",
     "service-worker.js": "/atel-front/service-worker.js",
     "static/css/2.c2774f4f.chunk.css.map": "/atel-front/static/css/2.c2774f4f.chunk.css.map",
-    "static/css/main.a3bce7f4.chunk.css.map": "/atel-front/static/css/main.a3bce7f4.chunk.css.map",
-    "static/js/2.01682c81.chunk.js.LICENSE.txt": "/atel-front/static/js/2.01682c81.chunk.js.LICENSE.txt",
+    "static/css/main.cff968de.chunk.css.map": "/atel-front/static/css/main.cff968de.chunk.css.map",
+    "static/js/2.ff10bcbf.chunk.js.LICENSE.txt": "/atel-front/static/js/2.ff10bcbf.chunk.js.LICENSE.txt",
     "static/media/apple.png": "/atel-front/static/media/apple.aeebee89.png",
     "static/media/mdb.css": "/atel-front/static/media/arrow_right.8ef6a08c.svg",
     "static/media/bannana.png": "/atel-front/static/media/bannana.a88615f3.png",
@@ -23,6 +23,7 @@
     "static/media/cat.png": "/atel-front/static/media/cat.cb465994.png",
     "static/media/celebrate.mp3": "/atel-front/static/media/celebrate.5a55c9e9.mp3",
     "static/media/correctBanner.png": "/atel-front/static/media/correctBanner.b2b6d6a8.png",
+    "static/media/default.jpeg": "/atel-front/static/media/default.bcea336d.jpeg",
     "static/media/dog.png": "/atel-front/static/media/dog.accc5f29.png",
     "static/media/elephant.png": "/atel-front/static/media/elephant.5dc4ae80.png",
     "static/media/all.min.css": "/atel-front/static/media/fa-solid-900.e8a427e1.woff2",
@@ -42,6 +43,7 @@
     "static/media/personaje2.gif": "/atel-front/static/media/personaje2.0d9dc0e0.gif",
     "static/media/personaje3.gif": "/atel-front/static/media/personaje3.3f06c234.gif",
     "static/media/strawberry.png": "/atel-front/static/media/strawberry.f3894c5f.png",
+    "static/media/therapist.jpeg": "/atel-front/static/media/therapist.556da29a.jpeg",
     "static/media/tray.png": "/atel-front/static/media/tray.ab9481ff.png",
     "static/media/voice-banana.mp3": "/atel-front/static/media/voice-banana.1cc0b2fe.mp3",
     "static/media/voice-cat.mp3": "/atel-front/static/media/voice-cat.f887f822.mp3",
@@ -53,13 +55,14 @@
     "static/media/voice-lion.mp3": "/atel-front/static/media/voice-lion.37aa4730.mp3",
     "static/media/voice-manzana.mp3": "/atel-front/static/media/voice-manzana.31d9bad7.mp3",
     "static/media/voice-uva.mp3": "/atel-front/static/media/voice-uva.5091df0c.mp3",
-    "static/media/wizard_480_1MB.mp4": "/atel-front/static/media/wizard_480_1MB.d744f6c0.mp4"
+    "static/media/wizard_480_1MB.mp4": "/atel-front/static/media/wizard_480_1MB.d744f6c0.mp4",
+    "static/media/zoom.jpeg": "/atel-front/static/media/zoom.3cc5e1d3.jpeg"
   },
   "entrypoints": [
     "static/js/runtime-main.c3e874b7.js",
     "static/css/2.c2774f4f.chunk.css",
-    "static/js/2.01682c81.chunk.js",
-    "static/css/main.a3bce7f4.chunk.css",
-    "static/js/main.28d9bb2d.chunk.js"
+    "static/js/2.ff10bcbf.chunk.js",
+    "static/css/main.cff968de.chunk.css",
+    "static/js/main.aac1d49a.chunk.js"
   ]
 }
