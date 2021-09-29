@@ -41,6 +41,9 @@ const Index = () => {
               </div>
               {steps.login && <Login handleChange={handleChangeLogin} user={user} setSteps={setSteps} errorsLogin={errorsLogin} setErrorsLogin={setErrorsLogin} setLoading={setLoading} />}
               {steps.registration && <Registration handleChange={handleChangeRegistration} registration={registration} setSteps={setSteps} errorsRegistration={errorsRegistration} setErrorsRegistration={setErrorsRegistration} setRegistration={setRegistration} />}
+              <div className='title-header'>ATEL - Asistente terapéutico en assad</div>
+              {steps.login && <Login handleChange={handleChangeLogin} user={user} handleLogin={handleLogin} setSteps={setSteps} errorsLogin={errorsLogin} setErrorsLogin={setErrorsLogin} />}
+              {steps.registration && <Registration handleChange={handleChangeRegistration} registration={registration} handleRegistration={handleRegistration} setSteps={setSteps} errorsRegistration={errorsRegistration} setErrorsRegistration={setErrorsRegistration} />}
             </div>
           </div>
         </form>
