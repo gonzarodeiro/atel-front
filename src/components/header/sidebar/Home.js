@@ -14,13 +14,17 @@ const MainMenu = ({ sidebar, redirectPage, showItemMenu }) => {
         <i className='fas fa-video' style={{ fontSize: '18px', marginRight: '18px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '2px' }}>Sesiones</span>
       </div>
-      {/* <div className={'menu-item ' + (history.location.pathname === '/students' ? 'active' : '')} onClick={() => showItemMenu('students', 'home')}>
+      <div className={'menu-item ' + (history.location.pathname === '/students' ? 'active' : '')} onClick={() => showItemMenu('students', 'home')}>
         <i className='fas fa-user-friends' style={{ fontSize: '20px', marginRight: '16px' }}></i>
         <span style={{ fontWeight: '600', marginTop: '3px' }}>Alumnos</span>
-      </div> */}
+      </div>
       <div className={'menu-item ' + (history.location.pathname === '/schedule' ? 'active' : '')} onClick={() => showItemMenu('schedule', 'home')}>
         <i className='far fa-calendar-alt' style={{ fontSize: '20px', marginRight: '23px' }}></i>
         <span style={{ fontWeight: '600' }}>Agenda</span>
+      </div>
+      <div className={'menu-item ' + (history.location.pathname === '/share-session' ? 'active' : '')} onClick={() => redirectPage('share-session')}>
+        <i className='fas fa-share-alt' style={{ fontSize: '20px', marginRight: '20px' }}></i>
+        <span style={{ fontWeight: '600' }}>Compartir</span>
       </div>
       <Footer redirectPage={redirectPage} />
     </div>

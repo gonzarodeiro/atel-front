@@ -1,5 +1,5 @@
 import axios from 'axios';
-var FormData = require('form-data');
+let FormData = require('form-data');
 
 const postFileApi = async (url, values) => {
   // FormData agrega enctype=multipart/form-data a la petición

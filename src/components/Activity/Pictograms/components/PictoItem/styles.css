@@ -1,0 +1,48 @@
+.pic-picto-item {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid #e3e3e3;
+  background-color: white;
+  width: 120px;
+  height: 120px;
+  margin: 4px;
+}
+
+.pic-picto-item:hover {
+  border: 2px solid #1976d2;
+}
+
+.pic-picto-image {
+  width: 120px;
+  height: 120px;
+}
+
+.pic-picto-fallback-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  word-wrap: break-word;
+  width: 120px;
+  height: 120px;
+  padding: 8px;
+}
+
+.pic-picto-fallback-p {
+  width: 120px;
+  margin: 0;
+}
+
+.pic-picto-item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: 'center';
+}
+
+.pic-picto-item-label {
+  font-weight: 600;
+  align-self: center;
+}

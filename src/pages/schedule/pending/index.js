@@ -5,7 +5,7 @@ import Table from '../../../components/html/Table';
 import Loading from '../../../components/Loading';
 import Footer from '../../../components/html/Footer';
 import Dropdownlist from '../../../components/html/Dropdownlist';
-import { dlStudents, dlSessionType } from '../../../utils/dropdownlists/index';
+import { dlSessionType } from '../../../utils/dropdownlists/index';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
@@ -23,6 +23,8 @@ import deleteResponseApi from '../../../utils/services/delete/deleteResponseApi'
 import SessionDetail from './modal/SessionDetail';
 import ImportMaterial from './modal/ImportMaterial';
 import DownloadMaterial from './modal/DownloadMaterial';
+import { Form } from 'react-bootstrap';
+import getByFilters from '../../../utils/services/get/getByFilters/index';
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -38,11 +40,20 @@ const Index = () => {
   const [sessionDate, setSessionDate] = useState();
   const [loading, setLoading] = useState(false);
   const [loadingDownload, setLoadingDownload] = useState(false);
+  const [apis, setApis] = useState({ dlStudents: [] });
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else loadStudents();
   }, []);
+
+  async function loadStudents() {
+    const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
+    let students = await getByFilters(`${BASE_URL}/student/search`, filters);
+    students.unshift({ id: 0, fullName: 'Seleccione' });
+    setApis({ dlStudents: students });
+  }
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -73,22 +84,22 @@ const Index = () => {
     };
   }
 
-  function createScheduleActions(result) {
-    if (!result) return;
-    for (let i = 0; i < result.length; i++) {
-      result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actions = (
+  function createScheduleActions(sessions) {
+    if (!sessions) return;
+    for (let i = 0; i < sessions.length; i++) {
+      sessions[i].date = convertDateTime(new Date(sessions[i].start_datetime));
+      sessions[i].actions = (
         <div>
-          <i onClick={() => handleEditSchedule(result[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: '#1976d2' }} aria-hidden='true'></i>
-          {result[i].type === 'Sesión de inclusión' && <i onClick={() => handleDownloadMaterial(result[i])} className='fas fa-file-alt mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>}
-          <i onClick={() => handleDeleteSchedule(result[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#dc3545' }} aria-hidden='true'></i>
+          <i onClick={() => handleEditSchedule(sessions[i])} className='fas fa-pencil-alt mt-1 mr-2' title='Editar sesión' style={{ cursor: 'pointer', color: '#1976d2' }} aria-hidden='true'></i>
+          {sessions[i].type === 'Sesión de inclusión' && <i onClick={() => handleDownloadMaterial(sessions[i])} className='fas fa-file-alt mt-1 mr-2' title='Ver material de la sesión' style={{ cursor: 'pointer', color: '#388e3c' }} aria-hidden='true'></i>}
+          <i onClick={() => handleDeleteSchedule(sessions[i])} className='fas fa-trash mt-1' title='Eliminar sesión' style={{ cursor: 'pointer', color: '#dc3545' }} aria-hidden='true'></i>
         </div>
       );
     }
   }
 
-  function fillTable(result) {
-    if (result && result.length > 0) {
+  function fillTable(sessions) {
+    if (sessions && sessions.length > 0) {
       setTable({
         columns: [
           { label: '', field: 'actions' },
@@ -97,7 +108,7 @@ const Index = () => {
           { label: 'Tipo', field: 'type' },
           { label: 'Fecha sesión', field: 'date' }
         ],
-        rows: result,
+        rows: sessions,
         show: true
       });
       setErrors({ show: false });
@@ -108,19 +119,19 @@ const Index = () => {
     setLoading(false);
   }
 
-  function handleEditSchedule(obj) {
+  function handleEditSchedule(session) {
     setShowModal({ details: true });
-    setIdSession(obj.id);
-    setUserName(obj.full_name);
-    setSessionDate(obj.start_datetime);
+    setIdSession(session.id);
+    setUserName(session.full_name);
+    setSessionDate(session.start_datetime);
   }
 
-  function handleDeleteSchedule(obj) {
+  function handleDeleteSchedule(session) {
     swal(
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés dar de baja la sesión?</p>
-        <span>Alumno: {obj.full_name}</span>
-        <p>Fecha: {obj.date}</p>
+        <span>Alumno: {session.full_name}</span>
+        <p>Fecha: {session.date}</p>
       </div>,
       {
         icon: 'warning',
@@ -134,58 +145,61 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') patchSchedule(obj);
+      if (value === 'delete') patchSchedule(session);
     });
   }
 
-  async function patchSchedule(obj) {
+  async function patchSchedule(session) {
     setLoading(true);
     const values = { status: status.Canceled };
-    await patchApi(`${BASE_URL}/session`, values, obj.id);
+    await patchApi(`${BASE_URL}/session`, session.id, values);
     setLoading(false);
-    await showAlert('Sesión eliminada', `La sesión: ${obj.date} ha sido dada de baja`, 'success');
+    await showAlert('Sesión eliminada', `La sesión: ${session.date} ha sido dada de baja`, 'success');
     history.push(`/home`);
   }
 
-  async function handleDownloadMaterial(sessionData) {
-    const result = await getParametry(`${BASE_URL}/content`, { sessionID: sessionData.id });
+  async function handleDownloadMaterial(session) {
+    const result = await getParametry(`${BASE_URL}/content`, { sessionID: session.id });
     const materialList = result.map((material) => ({
       ...material,
       materialId: material.id,
-      ...sessionData,
-      start_date: convertDateTime(new Date(sessionData.start_datetime))
+      ...session,
+      start_date: convertDateTime(new Date(session.start_datetime))
     }));
 
     createMaterialActions(materialList);
     fillTableMaterial(materialList);
-    setModalData(sessionData);
+    setModalData(session);
     setShowModal({ downloadMaterial: true });
   }
 
-  function createMaterialActions(result) {
-    if (!result) return;
-    for (let i = 0; i < result.length; i++) {
-      result[i].date = convertDateTime(new Date(result[i].start_datetime));
-      result[i].actionsMaterials = (
+  function createMaterialActions(materials) {
+    if (!materials) return;
+    for (let i = 0; i < materials.length; i++) {
+      materials[i].date = convertDateTime(new Date(materials[i].start_datetime));
+      materials[i].actionsMaterials = (
         <div>
-          <i onClick={() => handleDownload(result[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          <i onClick={() => handleDeleteMaterial(result[i])} className='fas fa-trash mt-1 ml-2' title='Eliminar Material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
-          {result[i].author === sessionStorage.getItem('name') ? <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i> : <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i>}
+          <a href={materials[i].url} target='_blank' rel='noopener noreferrer' download>
+            <i onClick={() => handleDownload(materials[i])} className='fas fa-download mt-1' title='Descargar material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          </a>
+          <i onClick={() => handleDeleteMaterial(materials[i])} className='fas fa-trash mt-1 ml-2' title='Eliminar Material' style={{ cursor: 'pointer' }} aria-hidden='true'></i>
+          {materials[i].author === sessionStorage.getItem('name') ? <i className='fas fa-circle mt-1 ml-2' style={{ color: '#388e3c' }} aria-hidden='true'></i> : <i className='fas fa-circle mt-1 ml-2' style={{ color: 'orange' }} aria-hidden='true'></i>}
         </div>
       );
     }
   }
 
-  function handleDownload(obj) {
-    // Descargar PDF
+  function handleDownload(material) {
+    // Si fuese necesario descargar el material
+    // a traves de nu endpoint, implementarlo aquí
   }
 
-  function handleDeleteMaterial(obj) {
+  function handleDeleteMaterial(material) {
     swal(
       <div>
         <p className='h4 mt-4 mb-4'>¿Querés eliminar el material?</p>
-        <span>Alumno: {obj.full_name}</span>
-        <p>Documento: {obj.original_name}</p>
+        <span>Alumno: {material.full_name}</span>
+        <p>Documento: {material.original_name}</p>
       </div>,
       {
         icon: 'warning',
@@ -199,20 +213,20 @@ const Index = () => {
         }
       }
     ).then((value) => {
-      if (value === 'delete') deleteMaterial(obj);
+      if (value === 'delete') deleteMaterial(material);
     });
   }
 
-  async function deleteMaterial(obj) {
+  async function deleteMaterial(material) {
     setLoadingDownload(true);
-    await deleteResponseApi(`${BASE_URL}/document/${obj.materialId}`);
+    await deleteResponseApi(`${BASE_URL}/document/${material.materialId}`);
     setLoadingDownload(false);
-    await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${obj.date}`, 'success');
+    await showAlert('Material eliminado', `Se ha eliminado el material para el dia: ${material.date}`, 'success');
     handleClose('deleteInformation');
   }
 
-  function fillTableMaterial(materialList) {
-    if (materialList.length > 0) {
+  function fillTableMaterial(materials) {
+    if (materials.length > 0) {
       setTableMaterial({
         columns: [
           { label: '', field: 'actionsMaterials' },
@@ -222,7 +236,7 @@ const Index = () => {
           { label: 'Comentarios', field: 'comment' },
           { label: 'Fecha sesión', field: 'date' }
         ],
-        rows: materialList,
+        rows: materials,
         show: true
       });
       setErrorsMaterial({ show: false });
@@ -261,7 +275,16 @@ const Index = () => {
                   <DatePicker id='dateTo' minDate={new Date()} showYearDropdown scrollableMonthYearDropdown dateFormat='dd/MM/yyyy' placeholderText='Seleccione una fecha' selected={params.dateTo} todayButton='Hoy' onChange={(date) => setParams({ ...params, dateTo: date })} value={params.dateTo} className='form-control' locale='es' />
                 </div>
                 <div className='col-md-3 my-2'>
-                  <Dropdownlist title='Nombre del alumno' id='studentName' handleChange={handleChange} value={params.studentName} dropdownlist={dlStudents} disabledValue={false} className='form-control' />
+                  <Form.Group>
+                    <Form.Label> Nombre del alumno </Form.Label>
+                    <Form.Control id='studentName' onChange={handleChange} className='form-control' value={params.studentName} style={{ cursor: 'pointer' }} as='select' disabled={false}>
+                      {apis.dlStudents.map((file) => (
+                        <option key={file.id} value={file.fullName}>
+                          {file.fullName}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
                 </div>
                 <div className='col-md-3 my-2'>
                   <Dropdownlist title='Tipo de sesiones' id='type' handleChange={handleChange} value={params.type} dropdownlist={dlSessionType} disabledValue={false} className='form-control' />

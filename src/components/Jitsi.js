@@ -1,8 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Jitsi = forwardRef((props, ref) => {
-  let containerStyle = { height: props.height };
+const Jitsi = forwardRef((props, ref) => {  
   let api = {};
   const domain = 'meet.jit.si';
   let history = useHistory();
@@ -43,7 +42,7 @@ const Jitsi = forwardRef((props, ref) => {
   }));
 
   return (
-    <div style={containerStyle}>
+    <div id='jitsi-container'>
       <div id='jitsi-iframe' style={{ width: '100%', height: '100%' }} />
     </div>
   );

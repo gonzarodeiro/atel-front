@@ -5,6 +5,7 @@ import postResponseApi from '../../../utils/services/post/postResponseApi';
 import GeneralInformation from './steps/generalInformation';
 import SharedLink from './steps/sharedLink';
 import { BASE_URL } from '../../../config/environment';
+import getByFilters from '../../../utils/services/get/getByFilters';
 
 const Index = () => {
   const [session, setSession] = useState({ studentName: '', name: '', password: '' });
@@ -14,11 +15,20 @@ const Index = () => {
   const [showValidation, setShowValidation] = useState(false);
   const [modal, showModal] = useState({ notification: false });
   const [errors, setErrors] = useState({ show: false, message: '' });
+  const [apis, setApis] = useState({ dlStudents: [] });
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else loadStudents();
   }, []);
+
+  async function loadStudents() {
+    const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
+    let students = await getByFilters(`${BASE_URL}/student/search`, filters);
+    students.unshift({ id: 0, fullName: 'Seleccione' });
+    setApis({ dlStudents: students });
+  }
 
   const handleChangeStudent = (event) => {
     const { id, value } = event.target;
@@ -76,7 +86,7 @@ const Index = () => {
               Compartir sesiones con profesionales
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {steps.generalInformation && <GeneralInformation handleChangeStudent={handleChangeStudent} session={session} handleSubmit={handleSubmit} showValidation={showValidation} handleChange={handleChange} errors={errors} />}
+              {steps.generalInformation && <GeneralInformation apis={apis} handleChangeStudent={handleChangeStudent} session={session} handleSubmit={handleSubmit} showValidation={showValidation} handleChange={handleChange} errors={errors} />}
               {steps.sharedLink && <SharedLink setSteps={setSteps} handleCopy={handleCopy} link={link} modal={modal} setSession={setSession} />}
             </form>
           </div>

@@ -1,0 +1,30 @@
+.pic-stripe-container {
+  height: 208px;
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+  padding-bottom: 24px;
+
+  /* debug
+  border: 1px solid red; */
+}
+
+.pic-stripe {
+  min-width: 140px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid white;
+
+  /* debug
+  border: 1px solid red; */
+}
+
+.pic-stripe-item:first-child {
+  margin-left: 0px;
+}
+
+.pic-stripe-placeholder:not(:first-child) {
+  margin-left: 16px;
+}

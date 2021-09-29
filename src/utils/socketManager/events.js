@@ -14,7 +14,13 @@ const clientEvents = {
   showActivityWizard: 'show-activity-wizard',
   closeActivityWizard: 'close-activity-wizard',
   showCelebration: 'show-celebration',
-  closeCelebration: 'close-celebration'
+  closeCelebration: 'close-celebration',
+  elementPosition: 'element-position',
+  trays: 'trays',
+  setFilter: 'setFilter',
+  checkResults: 'check-results',
+  showPictogramStripe: 'show-pictogram-stripe',
+  inclusionLayout: 'inclusionLayout',
 };
 
 const serverEvents = {

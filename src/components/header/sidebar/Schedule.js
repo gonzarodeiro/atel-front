@@ -14,11 +14,8 @@ const Schedule = ({ sidebar, showItemMenu, redirectPage }) => {
       <div className={'menu-item ' + (history.location.pathname === '/pending-session' ? 'active' : '')} onClick={() => redirectPage('pending-session')}>
         <span className='sidebar-item'>Sesiones pendientes</span>
       </div>
-      {/* <div className={'menu-item ' + (history.location.pathname === '/historical-session' ? 'active' : '')} onClick={() => redirectPage('historical-session')}>
+      <div className={'menu-item ' + (history.location.pathname === '/historical-session' ? 'active' : '')} onClick={() => redirectPage('historical-session')}>
         <span className='sidebar-item'>Histórico de sesiones</span>
-      </div> */}
-      <div className={'menu-item ' + (history.location.pathname === '/share-session' ? 'active' : '')} onClick={() => redirectPage('share-session')}>
-        <span className='sidebar-item'>Compartir sesiones</span>
       </div>
       <Footer redirectPage={redirectPage} />
     </div>

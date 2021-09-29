@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import Jitsi from '../../../../../components/Jitsi';
+import React, { useState,useLayoutEffect } from 'react';
 import Activity from '../../../../../components/Activity/Alphabetical/studentLogic';
 import { v4 as uuidv4 } from 'uuid';
 import imgCherry from '../../../../../components/Activity/Alphabetical/images/fruits/fruit_cherry.png';
@@ -22,17 +21,25 @@ import voiceCat from '../../../../../components/Activity/Alphabetical/audio/anim
 import voiceGiraffe from '../../../../../components/Activity/Alphabetical/audio/animals/voice-giraffe.mp3';
 import voiceLion from '../../../../../components/Activity/Alphabetical/audio/animals/voice-lion.mp3';
 import voiceElephant from '../../../../../components/Activity/Alphabetical/audio/animals/voice-elephant.mp3';
+import handleJitsiResize from '../../../handleJitsiResize';
 // import { BASE_URL } from '../../../../../config/environment';
 // TODO: Completar cuando este corregido el el endpoint de imagenes
 /*
 import getByFilters from '../../../../utils/services/get/getByFilters';
 */
 
-const Alphabetical = () => {
+const Alphabetical = (props) => {
   // TODO: Completar cuando este corregido el el endpoint de imagenes
   /*
   const [images, setImages] = useState([]);
   */
+  useLayoutEffect(() => {
+    handleJitsiResize("#alphabetical-jitsi", props.onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize("#alphabetical-jitsi", props.onJitsiLayout));
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
+
   const [activityData, setActivityData] = useState({
     elements: [
       {
@@ -173,7 +180,7 @@ const Alphabetical = () => {
               Cámara del profesional
             </label>
           </div>
-          <Jitsi roomId={'LucasGomez-123'} userName={'qweqweq'} height='200px' />
+          <div id='alphabetical-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '200px' }}/>          
         </div>
       </div>
     </React.Fragment>

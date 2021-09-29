@@ -1,19 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Jitsi from '../../../../components/Jitsi';
 import getResponseByFilters from '../../../../utils/services/get/getByFilters/getResponseByFilters';
 import showAlert from '../../../../utils/commons/showAlert';
 import status from '../../../../utils/enums/sessionStatus';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
-import Pictogram from './tools/Pictogram';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
 import Celebration, { celebrationType } from '../../../../components/Celebration';
 import { BASE_URL } from '../../../../config/environment';
 import Loading from '../../../../components/Loading';
+import FloatingJitsi from '../../../../components/FloatingJitsi';
+import handleJitsiResize from '../../handleJitsiResize';
+import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
+import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -23,11 +26,27 @@ const StudentSession = (props) => {
   const [student, setStudent] = useState();
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
-  const [showJitsi, setShowJitsi] = useState();
+  const [showJitsi, setShowJitsi] = useState(true);
   const [session, setSession] = useState({ generalComments: '' });
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
+  const [sessionId, setSessionId] = useState(-1);
+  const [stripe, setStripe] = useState([]);
+  const [stripeVisible, setStripeVisible] = useState(false);
   let { roomId } = useParams();
+  const [showJitsiDiv, setShowJitsiDiv] = useState(true);
+  const [pictogramsVisible, showPictograms] = useState(false);
+
+  useLayoutEffect(() => {
+    handleJitsiResize('#init-jitsi', () => handleJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize('#init-jitsi', handleJitsiLayout));
+
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
+  useEffect(() => {
+    initializeJitsiDiv();
+  }, [showJitsiDiv]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -35,18 +54,30 @@ const StudentSession = (props) => {
     }, 3000);
     connect(roomId);
     registerEvent(() => {
+      setShowJitsiDiv(false);
       showMeeting({ begin: false });
       showTools({ alphabetical: true });
       showWizard(true);
     }, clientEvents.initAlphabetical);
 
     registerEvent(() => {
+      setShowJitsiDiv(false);
+      showMeeting({ begin: false });
+      showTools({ numerical: true });
+      showWizard(true);
+    }, clientEvents.initNumerical);
+
+    registerEvent(() => {
+      handleJitsiLayout();
+      setShowJitsi(false);
+      setShowJitsiDiv(false);
       showMeeting({ begin: false, end: true });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);
     }, clientEvents.finishSession);
 
     registerEvent(() => {
+      setShowJitsiDiv(true);
       showMeeting({ begin: true, end: false });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);
@@ -56,16 +87,27 @@ const StudentSession = (props) => {
       showWizard(false);
     }, clientEvents.closeActivityWizard);
 
+    registerEvent(({ stripe, visible }) => {
+      console.log('showPictogramStripe', stripe, visible);
+      setStripe(stripe);
+      setStripeVisible(visible);
+    }, clientEvents.showPictogramStripe);
+
     loadSessionStatus();
   }, []);
 
   function loadSessionStatus() {
     const fields = roomId.split('-');
     setStudent(fields[0]);
+    setSessionId(fields[1]);
     checkSessionCreated(fields);
     showMeeting({ begin: true });
     showTools({ alphabetical: false });
     setShowJitsi(true);
+  }
+
+  function initializeJitsiDiv() {
+    handleJitsiResize('#init-jitsi', handleJitsiLayout);
   }
 
   async function checkSessionCreated(fields) {
@@ -87,6 +129,33 @@ const StudentSession = (props) => {
     showWizard(false);
   }, []);
 
+  function handleJitsiLayout(layout) {
+    if (!layout) {
+      setShowJitsiDiv(false);
+      return;
+    }
+    const htmlElement = document.querySelector('#jitsi-iframe');
+    htmlElement.style.position = 'absolute';
+    htmlElement.style.left = `${layout.rect.x}px`;
+    htmlElement.style.top = `${layout.rect.y}px`;
+    htmlElement.style.width = `${layout.width}px`;
+    htmlElement.style.height = `${layout.height}px`;
+  }
+
+  function handleClosePictograms(mr, stripe) {
+    if (mr === modalResults.OK) {
+      setStripe(stripe);
+    }
+    showPictograms(false);
+    // showPictogramStripeToStudent(false);
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 0);
+  }
+
   return (
     <>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
@@ -100,24 +169,32 @@ const StudentSession = (props) => {
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
               ¡ Hola, Bienvenido {student} !
             </div>
-            {showJitsi && (
+            {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Jitsi roomId={roomId} userName={roomId} height='580px'></Jitsi>}
-                    {tools.alphabetical && <Alphabetical props={props} />}
-                    {tools.numerical && <Numerical props={props} />}
-                    {tools.pictogram && <Pictogram props={props} />}
+                    {showJitsiDiv && <div id='init-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '580px' }}></div>}
+                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
+                    {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>
               </form>
-            )}
+            }
           </div>
         </div>
       </div>
+      {showJitsi && <FloatingJitsi roomId={roomId} name={student} />}
+      {stripeVisible && (
+        <div className='fade-in' style={{ position: 'absolute', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)' }}>
+          {/* <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={() => setStripeVisible(false)} /> */}
+          <Stripe stripe={stripe} />
+        </div>
+      )}
       <Celebration type={celebrationType.RECEIVER} />
-      {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      <PictoFab onClick={() => showPictograms(true)} />
+      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.STUDENT} />
     </>
   );
 };

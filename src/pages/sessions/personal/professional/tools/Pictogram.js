@@ -5,7 +5,7 @@ import { Stage, Layer, Rect, Circle } from 'react-konva';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 
-const Pictogram = ({ props, handleChange, session, showTools, showMeeting }) => {
+const Pictogram = ({ props, handleChange, session, showTools, showMeeting, setCelebrationVisible }) => {
   function redirectTool(tool) {
     showTools({ [tool]: true });
   }
@@ -13,6 +13,7 @@ const Pictogram = ({ props, handleChange, session, showTools, showMeeting }) => 
   function redirectEnd() {
     showTools({ pictogram: false });
     showMeeting({ end: true });
+    setCelebrationVisible(false);
   }
 
   function restart() {}

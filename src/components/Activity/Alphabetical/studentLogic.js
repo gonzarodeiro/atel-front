@@ -76,7 +76,7 @@ const Alphabetical = ({ data, restartActivity }) => {
     const point = stageRef.current.getPointerPosition();
     const coords = Object.values(point);
     if (arrowEnable) {
-      var newArrowPoints = arrowPoints.slice(0, 2).concat(coords);
+      let newArrowPoints = arrowPoints.slice(0, 2).concat(coords);
       setArrowPoints(newArrowPoints);
       sendMessage(clientEvents.onMouseMove, newArrowPoints);
     }

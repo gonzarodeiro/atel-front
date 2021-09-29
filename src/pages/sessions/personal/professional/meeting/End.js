@@ -25,10 +25,9 @@ const End = ({ handleChange, session, props }) => {
       generalComments: session.generalComments,
       numericalComments: session.numericalComments,
       alphabeticalComments: session.alphabeticalComments,
-      pictogramComments: session.pictogramComments,
       status: status.Finished,
-      attention: parseInt(session.attention),
-      evaluation: parseInt(session.evaluation)
+      attention: session.attention,
+      evaluation: session.evaluation
     };
     cleanObject(values);
     return values;
@@ -44,10 +43,9 @@ const End = ({ handleChange, session, props }) => {
           <label>Duración: </label> 15 minutos
           <label className='ml-2 mr-2'> - </label>H. alfabética: 8 minutos
           <label className='ml-2 mr-2'> - </label>H. numérica: 3 minutos
-          <label className='ml-2 mr-2'> - </label>Pictogramas: 4 minutos
         </div>
       </div>
-      <div className='row'>
+      <div className='row mb-1 mt-1'>
         <div className='col-md-6 my-2'>
           <Dropdownlist title='Valoración de la sesión' id='evaluation' handleChange={handleChange} value={session.evaluation} dropdownlist={dlEvaluationSession} disabledValue={false} className='form-control' />
         </div>
@@ -55,17 +53,13 @@ const End = ({ handleChange, session, props }) => {
           <Dropdownlist title='Atención del alumno' id='attention' handleChange={handleChange} value={session.attention} dropdownlist={dlEvaluationSession} disabledValue={false} className='form-control' />
         </div>
       </div>
-      <div className='row mb-2'>
-        <div className='col-md-4 my-1'>
-          <label>Pictogramas</label>
-          <textarea id='pictogramComments' rows='4' onChange={handleChange} value={session.pictogramComments} type='text' className='form-control' />
-        </div>
-        <div className='col-md-4 my-1'>
-          <label>Numérica y lógica</label>
+      <div className='row mb-3'>
+        <div className='col-md-6 my-1'>
+          <label>Herramienta numérica</label>
           <textarea id='numericalComments' rows='4' onChange={handleChange} value={session.numericalComments} type='text' className='form-control' />
         </div>
-        <div className='col-md-4 my-1'>
-          <label>Alfabetización</label>
+        <div className='col-md-6 my-1'>
+          <label>Herramienta de alfabetización</label>
           <textarea id='alphabeticalComments' rows='4' onChange={handleChange} value={session.alphabeticalComments} type='alphabeticalComments' className='form-control' />
         </div>
       </div>

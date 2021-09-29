@@ -5,9 +5,10 @@ import getResponseByFilters from '../../../../utils/services/get/getByFilters/ge
 import showAlert from '../../../../utils/commons/showAlert';
 import status from '../../../../utils/enums/sessionStatus';
 import End from '../../personal/student/meeting/End';
-import { clientEvents, connect, registerEvent } from '../../../../utils/socketManager';
+import { clientEvents, registerEvent } from '../../../../utils/socketManager';
 import { BASE_URL } from '../../../../config/environment';
 import Loading from '../../../../components/Loading';
+import FloatingJitsi from '../../../../components/FloatingJitsi';
 
 const ZoomStudentSession = () => {
   const [roomZoom, setRoomZoom] = useState();
@@ -23,7 +24,6 @@ const ZoomStudentSession = () => {
     setTimeout(() => {
       setShowLoading(false);
     }, 3000);
-    connect(roomId);
     registerEvent(() => {
       showMeeting({ begin: false, end: true });
     }, clientEvents.finishSession);
@@ -60,15 +60,25 @@ const ZoomStudentSession = () => {
     setSession({ ...session, [id]: value });
   };
 
+  function handleJitsiLayout(layout) {
+    const htmlElement = document.querySelector('#jitsi-iframe');
+    if (!htmlElement) return;
+    htmlElement.style.position = 'absolute';
+    htmlElement.style.left = `${layout.rect.x}px`;
+    htmlElement.style.top = `${layout.rect.y}px`;
+    htmlElement.style.width = `${layout.width}px`;
+    htmlElement.style.height = `${layout.height}px`;
+  }
+
   return (
     <>
-      <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
+      <div className='card shadow-sm container overflow-hidden container-atel' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
           </div>
         )}
-        <div className='container'>
+        <div>
           <div className='card-body pb-3'>
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
               ¡ Hola, Bienvenido {student}!
@@ -77,7 +87,7 @@ const ZoomStudentSession = () => {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
-                    {meeting.begin && <Begin roomId={roomJitsi} roomZoom={roomZoom} />}
+                    {meeting.begin && roomJitsi && <Begin roomZoom={roomZoom} onJitsiLayout={handleJitsiLayout} roomJitsi={roomJitsi} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>
@@ -86,6 +96,11 @@ const ZoomStudentSession = () => {
           </div>
         </div>
       </div>
+      {roomJitsi && student && (
+        <div id='index-jitsi' display='none'>
+          <FloatingJitsi roomId={roomJitsi} name={student} />
+        </div>
+      )}
     </>
   );
 };

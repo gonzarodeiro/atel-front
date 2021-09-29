@@ -3,9 +3,8 @@ import { Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Cancel from '../../../../components/html/button/Cancel';
 import Submit from '../../../../components/html/button/Submit';
-import { dlStudents } from '../../../../utils/dropdownlists/index';
 
-const GeneralInformation = ({ session, handleSubmit, showValidation, handleChange, errors, handleChangeStudent }) => {
+const GeneralInformation = ({ session, handleSubmit, showValidation, handleChange, errors, handleChangeStudent, apis }) => {
   let history = useHistory();
 
   return (
@@ -14,11 +13,11 @@ const GeneralInformation = ({ session, handleSubmit, showValidation, handleChang
         <div className='row'>
           <div className='col-md-4 my-1'>
             <Form.Group>
-              <Form.Label> Alumno </Form.Label>
+              <Form.Label> Nombre del alumno </Form.Label>
               <Form.Control id='studentName' onChange={handleChangeStudent} className={'form-control ' + (!session.studentName && showValidation ? 'borderRed' : '')} value={session.studentName} style={{ cursor: 'pointer' }} as='select'>
-                {dlStudents.map((file) => (
-                  <option key={file.id} value={`${file.id}-${file.code}`}>
-                    {file.description}
+                {apis.dlStudents.map((file) => (
+                  <option key={file.id} value={`${file.id}-${file.fullName}`}>
+                    {file.fullName}
                   </option>
                 ))}
               </Form.Control>

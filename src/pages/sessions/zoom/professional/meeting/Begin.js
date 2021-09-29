@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
-import Jitsi from '../../../../../components/Jitsi';
 import Notification from '../../../../../components/html/Notification';
 import finishSession from '../../../personal/professional/finishSession';
 import Zoom from '../../../../../components/Zoom';
+import handleJitsiResize from '../../../handleJitsiResize';
 
-const Begin = ({ props, handleChange, modal, session, showMeeting, copyClipboard }) => {
+const Begin = ({ props, handleChange, modal, session, showMeeting, copyClipboard, onJitsiLayout }) => {
+  useEffect(() => {
+    handleJitsiResize('#begin-jitsi', onJitsiLayout);
+    const listener = window.addEventListener('resize', () => handleJitsiResize('#begin-jitsi', onJitsiLayout));
+    return () => window.removeEventListener('resize', listener);
+  }, []);
+
   function redirectEnd() {
     showMeeting({ begin: false, end: true });
   }
@@ -13,8 +19,8 @@ const Begin = ({ props, handleChange, modal, session, showMeeting, copyClipboard
   return (
     <React.Fragment>
       <div className='row'>
-        <div className='pb-2 col-md-6 mt-3 mb-2'>{props.location.state && <Zoom roomZoom={props.location.state.roomZoom} />}</div>
-        <div className='pb-2 col-md-6 mt-3 mb-2'>{props.location.state && <Jitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} userName={sessionStorage.getItem('name')} height='460px' />}</div>
+        <div className='pb-2 col-md-6 mt-3 mb-2'>{props.location.state && <Zoom roomZoom={props.location.state.roomZoom} height={'400px'} width={'550px'} />}</div>
+        <div id='begin-jitsi' className='pb-2 col-md-6 mt-3 mb-2' style={{ height: '400px' }}></div>
       </div>
       <div className='row mb-2'>
         <div className='col-md-6 my-1'>

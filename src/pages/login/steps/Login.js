@@ -1,18 +1,49 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { MDBInput, MDBBtn } from 'mdbreact';
+import { BASE_URL } from '../../../config/environment';
+import postResponseApi from '../../../utils/services/post/postResponseApi';
+import { HttpStatusCode } from '../../../utils/enums/httpConstants';
 
-const Login = ({ handleChange, user, handleLogin, setSteps, errorsLogin, setErrorsLogin }) => {
+const Login = ({ handleChange, user, setSteps, errorsLogin, setErrorsLogin, setLoading }) => {
+  let history = useHistory();
+
   function registration() {
     setSteps({ login: false, registration: true });
     setErrorsLogin({ show: false, message: '' });
+  }
+
+  function handleLogin(event) {
+    event.preventDefault();
+    setErrorsLogin({ message: '', show: false });
+    if (!user.user && !user.password) {
+      setErrorsLogin({ message: 'Debe ingresar usuario y contraseña', show: true });
+      setTimeout(() => {
+        setErrorsLogin({ message: '', show: false });
+      }, 3000);
+    } else checkUser();
+  }
+
+  async function checkUser() {
+    setLoading(true);
+    const response = await postResponseApi(`${BASE_URL}/login`, user);
+    if (response.statusText === HttpStatusCode.Ok) {
+      sessionStorage.setItem('name', response.data.name);
+      sessionStorage.setItem('idProfessional', response.data.idProfessional);
+      setLoading(false);
+      history.push(`/home`);
+    } else {
+      setLoading(false);
+      setErrorsLogin({ show: true, message: 'Usuario o contraseña incorrecta' });
+    }
   }
 
   return (
     <React.Fragment>
       <form action=''>
         <div className='tittle'>¡Hola! Bienvenido</div>
-        <div className='d-block mt-3' style={{ fontSize: '16px !important' }}>
-          <MDBInput label='Usuario' id='name' onChange={handleChange} value={user.name} group type='text' validate success='right' style={{ marginBottom: '25px' }} />
+        <div className='d-block' style={{ fontSize: '16px !important' }}>
+          <MDBInput label='Usuario' id='user' onChange={handleChange} value={user.user} group type='text' validate success='right' style={{ marginBottom: '25px' }} />
           <MDBInput label='Contraseña' id='password' onChange={handleChange} value={user.password} group type='password' validate='container' className='mb-4' />
         </div>
         <div className='text-center mt-3 black-text'>

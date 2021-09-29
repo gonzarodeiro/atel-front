@@ -1,0 +1,13 @@
+.pic-fab {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: rgb(22, 165, 190);
+  cursor: pointer;
+}

@@ -5,7 +5,7 @@ import Layout from '../../utils/layout/index';
 import Loading from '../../components/Loading';
 import Cancel from '../../components/html/button/Cancel';
 import Submit from '../../components/html/button/Submit';
-import { dlStudents, dlSessionType } from '../../utils/dropdownlists/index';
+import { dlSessionType } from '../../utils/dropdownlists/index';
 import showAlert from '../../utils/commons/showAlert';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -16,6 +16,7 @@ import postResponseApi from '../../utils/services/post/postResponseApi';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { BASE_URL } from '../../config/environment';
+import getByFilters from '../../utils/services/get/getByFilters';
 
 registerLocale('es', datepicker);
 
@@ -25,11 +26,20 @@ const Index = () => {
   const [showValidation, setShowValidation] = useState(false);
   const [errors, setErrors] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
+  const [apis, setApis] = useState({ dlStudents: [] });
   let history = useHistory();
 
   useEffect(() => {
     if (!sessionStorage.getItem('name')) history.push(`/login`);
+    else loadStudents();
   }, []);
+
+  async function loadStudents() {
+    const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
+    let students = await getByFilters(`${BASE_URL}/student/search`, filters);
+    students.unshift({ id: 0, fullName: 'Seleccione' });
+    setApis({ dlStudents: students });
+  }
 
   const handleChangeStudent = (event) => {
     const { id, value } = event.target;
@@ -113,9 +123,9 @@ const Index = () => {
                     <Form.Group>
                       <Form.Label> Nombre del alumno </Form.Label>
                       <Form.Control id='userName' onChange={handleChangeStudent} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
-                        {dlStudents.map((file) => (
-                          <option key={file.id} value={`${file.id}-${file.code}`}>
-                            {file.description}
+                        {apis.dlStudents.map((file) => (
+                          <option key={file.id} value={`${file.id}-${file.fullName}`}>
+                            {file.fullName}
                           </option>
                         ))}
                       </Form.Control>
