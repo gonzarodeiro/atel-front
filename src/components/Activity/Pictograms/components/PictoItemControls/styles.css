@@ -1,0 +1,21 @@
+.pic-picto-item-controls {
+  width: 120px;
+  height: 24px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 4px;
+  cursor: pointer;
+}
+
+.pic-picto-btn-up:hover,
+.pic-picto-btn-down:hover {
+  color: #3996f2;
+}
+
+.pic-picto-btn-up:active,
+.pic-picto-btn-down:active {
+  color: #0966b2;
+}

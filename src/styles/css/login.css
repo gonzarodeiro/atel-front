@@ -1,0 +1,24 @@
+#contactformpage .view {
+  background-image: url('./../images/login.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  min-height: 100vh;
+}
+
+#contactformpage h6 {
+  line-height: 1.7;
+}
+
+#contactformpage .form-check {
+  margin-bottom: 0 !important;
+}
+
+.hr-light {
+  border-top: 1px solid #e2e2e2 !important;
+}
+
+.rgba-black-strong,
+.rgba-black-strong:after {
+  background-color: rgb(19 17 17 / 53%) !important;
+}

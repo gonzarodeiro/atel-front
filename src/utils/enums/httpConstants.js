@@ -1,6 +1,7 @@
 const HttpStatusCode = {
-  Ok: 200,
-  Created: 201
+  Success: 200,
+  Created: 201,
+  Ok: 'OK'
 };
 
 const HttpStatusErrorCode = {
