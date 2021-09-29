@@ -5,5 +5,5 @@ The objective of the project is to design and implement a web application to col
 ## Devs
 
 - Gonzalo Rodeiro
-- Augusto Urrichio
+- Augusto Uricchio
 - Bruno Sendras
