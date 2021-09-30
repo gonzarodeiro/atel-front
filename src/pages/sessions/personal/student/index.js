@@ -17,6 +17,8 @@ import handleJitsiResize from '../../handleJitsiResize';
 import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
 import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
 import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
+import { Row } from 'react-bootstrap';
+import { MDBBtn } from 'mdbreact';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -31,11 +33,14 @@ const StudentSession = (props) => {
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
   const [sessionId, setSessionId] = useState(-1);
-  const [stripe, setStripe] = useState([]);
-  const [stripeVisible, setStripeVisible] = useState(false);
-  let { roomId } = useParams();
   const [showJitsiDiv, setShowJitsiDiv] = useState(true);
   const [pictogramsVisible, showPictograms] = useState(false);
+  const [localStripe, setLocalStripe] = useState([]);
+  const [remoteStripe, setRemoteStripe] = useState([]);
+  const [remoteStripeVisible, setRemoteStripeVisible] = useState(false);
+  const [isLocalStripeInForeground, setIsLocalStripeInForeground] = useState(false);
+  const [senderName, setSenderName] = useState('');
+  let { roomId } = useParams();
 
   useLayoutEffect(() => {
     handleJitsiResize('#init-jitsi', () => handleJitsiLayout);
@@ -87,10 +92,12 @@ const StudentSession = (props) => {
       showWizard(false);
     }, clientEvents.closeActivityWizard);
 
-    registerEvent(({ stripe, visible }) => {
-      console.log('showPictogramStripe', stripe, visible);
-      setStripe(stripe);
-      setStripeVisible(visible);
+    registerEvent(({ stripe, visible, sender }) => {
+      console.log('showPictogramStripe', stripe, visible, sender);
+      setRemoteStripe(stripe);
+      setRemoteStripeVisible(visible);
+      setIsLocalStripeInForeground(false);
+      setSenderName(sender);
     }, clientEvents.showPictogramStripe);
 
     loadSessionStatus();
@@ -144,10 +151,16 @@ const StudentSession = (props) => {
 
   function handleClosePictograms(mr, stripe) {
     if (mr === modalResults.OK) {
-      setStripe(stripe);
+      if (isLocalStripeInForeground) {
+        showPictogramStripeInForeground(false);
+      }
+      setLocalStripe(stripe);
+      scrollToBottom();
     }
     showPictograms(false);
-    // showPictogramStripeToStudent(false);
+  }
+
+  function scrollToBottom() {
     setTimeout(() => {
       window.scrollTo({
         top: document.body.scrollHeight,
@@ -156,9 +169,37 @@ const StudentSession = (props) => {
     }, 0);
   }
 
+  function handleShowPictogramsInForegroundClick() {
+    showPictogramStripeInForeground(!isLocalStripeInForeground);
+  }
+
+  function handleDiscardRemotePictogramsClick() {
+    if (isLocalStripeInForeground) {
+      showPictogramStripeInForeground(false);
+    } else {
+      setRemoteStripeVisible(false);
+    }
+  }
+
+  function handleDiscardPictogramsClick() {
+    if (isLocalStripeInForeground) {
+      showPictogramStripeInForeground(false);
+    }
+    setLocalStripe([]);
+  }
+
+  function showPictogramStripeInForeground(visible) {
+    const sender = student;
+    setSenderName(sender);
+    setRemoteStripe(localStripe);
+    setRemoteStripeVisible(visible);
+    setIsLocalStripeInForeground(visible);
+    sendMessage(clientEvents.showPictogramStripe, { stripe: localStripe, visible, sender });
+  }
+
   return (
     <>
-      <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
+      <div className='card shadow-sm container px-0 mb-4 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
@@ -185,15 +226,31 @@ const StudentSession = (props) => {
         </div>
       </div>
       {showJitsi && <FloatingJitsi roomId={roomId} name={student} />}
-      {stripeVisible && (
-        <div className='fade-in' style={{ position: 'absolute', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)' }}>
-          {/* <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={() => setStripeVisible(false)} /> */}
-          <Stripe stripe={stripe} />
+      {localStripe && localStripe.length > 0 && (
+        <div className='card shadow-sm container px-0 mb-4 pt-4' style={{ border: '1px solid #cecbcb' }}>
+          <Row style={{ justifyContent: 'center' }}>
+            <MDBBtn onClick={handleDiscardPictogramsClick} className='bg-light shadow-none btnOption mr-2 mt-2 ml-0' style={{ marginBottom: '10px !important', marginRight: '5px !important' }}>
+              <i className='fas fa-times-circle'></i>
+              <span className='ml-2'>Descartar</span>
+            </MDBBtn>
+            <MDBBtn onClick={handleShowPictogramsInForegroundClick} className={`${isLocalStripeInForeground ? 'red' : 'blue'} darken-2 shadow-none btnOption mr-2 mt-2 ml-0`} style={{ marginBottom: '10px !important', marginRight: '5px !important', backgroundColor: '#dd4b39 !important', color: '#FFF', borderColor: '#dd4b39' }}>
+              <i className={`fas ${isLocalStripeInForeground ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              <span className='ml-2'>{isLocalStripeInForeground ? 'Quitar de primer plano' : 'Poner en primer plano'}</span>
+            </MDBBtn>
+          </Row>
+          <Stripe stripe={localStripe} />
         </div>
       )}
       <Celebration type={celebrationType.RECEIVER} />
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
       <PictoFab onClick={() => showPictograms(true)} />
+      {remoteStripeVisible && (
+        <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={handleDiscardRemotePictogramsClick} />
+          <label style={{ color: 'white', fontSize: '16px', fontWeight: 'bold', alignSelf: 'center', marginTop: 16 }}>{senderName} dice</label>
+          <Stripe stripe={remoteStripe} />
+        </div>
+      )}
       <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.STUDENT} />
     </>
   );

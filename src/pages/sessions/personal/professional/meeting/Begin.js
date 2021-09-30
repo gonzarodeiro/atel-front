@@ -74,20 +74,6 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
           </div>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
-              Pictogramas
-            </label>
-          </div>
-          <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
-            <div className='row'>
-              <div className='col-md-12 mt-1 mb-1'>
-                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Seleccionar plantilla</span>
-                </MDBBtn>
-              </div>
-            </div>
-          </div>
-          <div data-test='col'>
-            <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Fin de la sesión
             </label>
           </div>
