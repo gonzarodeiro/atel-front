@@ -1,10 +1,10 @@
 import React from 'react';
 import './styles.css';
 
-const PictoFab = ({ onClick }) => {
+const PictoFab = ({ style, onClick }) => {
   return (
-    <div className='pic-fab' onClick={onClick}>
-      <i className='fas fa-image' style={{ fontSize: '28px', color: 'white' }} />
+    <div className='pic-fab' style={style} onClick={onClick}>
+      <i className='fas fa-smile' style={{ fontSize: '28px', color: 'white' }} />
     </div>
   );
 };

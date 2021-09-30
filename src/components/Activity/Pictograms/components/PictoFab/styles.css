@@ -1,7 +1,7 @@
 .pic-fab {
-  position: absolute;
-  right: 24px;
-  bottom: 24px;
+  position: fixed;
+  right: 28px;
+  bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
