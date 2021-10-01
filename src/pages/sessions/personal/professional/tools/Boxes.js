@@ -6,10 +6,8 @@ import Activity from '../../../../../components/Activity/Boxes/professionalLogic
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {  
-
-
-  useLayoutEffect(() => {    
+const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+  useLayoutEffect(() => {
     handleJitsiResize('#boxes-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#boxes-jitsi', onJitsiLayout));
     return () => window.removeEventListener('resize', listener);
@@ -26,7 +24,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
   }
 
   function restart() {
-   //todo
+    //todo
   }
 
   function beginSession() {
@@ -37,7 +35,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
 
   return (
     <React.Fragment>
-      <div className='row'>        
+      <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
           <Activity />
         </div>
@@ -54,7 +52,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
             </label>
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
-            <div className='row'>              
+            <div className='row'>
               <div className='col-md-12 mt-1 mb-1'>
                 <MDBBtn onClick={restart} size='lg' className='py-2 green darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Reiniciar</span>
@@ -63,6 +61,11 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Herramienta Alfabética</span>
+                </MDBBtn>
+              </div>
+              <div className='col-md-12 mt-2'>
+                <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Herramienta Númerica</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
@@ -100,7 +103,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
             </div>
           </div>
         </div>
-      </div>      
+      </div>
     </React.Fragment>
   );
 };

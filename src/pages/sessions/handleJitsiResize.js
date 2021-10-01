@@ -1,5 +1,4 @@
-
-function handleJitsiResize(htmlId, callback) {      
+function handleJitsiResize(htmlId, callback) {
   const htmlElement = document.querySelector(htmlId);
   if (!htmlElement) return;
   const rect = htmlElement.getBoundingClientRect();

@@ -17,7 +17,6 @@ import convertDateTime from '../../utils/commons/convertDateTime';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { BASE_URL } from '../../config/environment';
 import getByFilters from '../../utils/services/get/getByFilters';
-
 registerLocale('es', datepicker);
 
 const Index = () => {

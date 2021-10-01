@@ -5,7 +5,7 @@ import Begin from './meeting/Begin';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
-import Boxes from './tools/Boxes'
+import Boxes from './tools/Boxes';
 import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
