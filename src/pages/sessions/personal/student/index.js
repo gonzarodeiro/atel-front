@@ -15,6 +15,8 @@ import Loading from '../../../../components/Loading';
 import FloatingJitsi from '../../../../components/FloatingJitsi';
 import handleJitsiResize from '../../handleJitsiResize';
 import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
+import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -33,6 +35,7 @@ const StudentSession = (props) => {
   const [stripeVisible, setStripeVisible] = useState(false);
   let { roomId } = useParams();
   const [showJitsiDiv, setShowJitsiDiv] = useState(true);
+  const [pictogramsVisible, showPictograms] = useState(false);
 
   useLayoutEffect(() => {
     handleJitsiResize('#init-jitsi', () => handleJitsiLayout);
@@ -139,6 +142,20 @@ const StudentSession = (props) => {
     htmlElement.style.height = `${layout.height}px`;
   }
 
+  function handleClosePictograms(mr, stripe) {
+    if (mr === modalResults.OK) {
+      setStripe(stripe);
+    }
+    showPictograms(false);
+    // showPictogramStripeToStudent(false);
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 0);
+  }
+
   return (
     <>
       <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
@@ -176,6 +193,8 @@ const StudentSession = (props) => {
       )}
       <Celebration type={celebrationType.RECEIVER} />
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      <PictoFab onClick={() => showPictograms(true)} />
+      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.STUDENT} />
     </>
   );
 };

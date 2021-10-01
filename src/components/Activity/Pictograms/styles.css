@@ -78,6 +78,12 @@
   color: #0966c2;
 }
 
+.pic-title {
+  font-size: 24px;
+  align-self: center;
+  margin: 0;
+}
+
 .pic-stripe-outer-container {
   display: flex;
   flex-direction: row;

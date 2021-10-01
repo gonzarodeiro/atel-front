@@ -6,7 +6,7 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Boxes from './tools/Boxes'
-import Pictograms, { modalResults } from '../../../../components/Activity/Pictograms';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
@@ -153,7 +153,7 @@ const ProfessionalSession = (props) => {
       )}
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
-      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} />
+      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.PROFESSIONAL} />
     </Layout>
   );
 };

@@ -16,8 +16,13 @@ export const modalResults = {
   CANCEL: 2
 };
 
+export const pictogramModes = {
+  PROFESSIONAL: 0,
+  STUDENT: 1
+};
+
 let timer;
-const Pictograms = ({ show, idStudent, idProfessional, onClose }) => {
+const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
   const inputRef = useRef();
   const [loadingService, setLoadingService] = useState(false);
   const [loadingCustom, setLoadingCustom] = useState(false);
@@ -98,8 +103,14 @@ const Pictograms = ({ show, idStudent, idProfessional, onClose }) => {
         {/* buscador por palabras */}
         <div className='pic-tool-bar'>
           <div className='pic-input-container'>
-            <input class='pic-input-text' type='text' autoFocus placeholder='Escribe para buscar pictogramas' ref={inputRef} onKeyPress={handleKeyPress} />
-            <i className='fas fa-times pic-backspace-icon' onClick={handleBackspaceClick}></i>
+            {mode === pictogramModes.PROFESSIONAL ? (
+              <>
+                <input class='pic-input-text' type='text' autoFocus placeholder='Escribe para buscar pictogramas' ref={inputRef} onKeyPress={handleKeyPress} />
+                <i className='fas fa-times pic-backspace-icon' onClick={handleBackspaceClick}></i>
+              </>
+            ) : (
+              <p class='pic-title'>Tus pictogramas</p>
+            )}
           </div>
           <div className='pic-btn-container'>
             <Button className='pic-btn mt-2' variant='primary' onClick={() => onClose(modalResults.CANCEL)}>
@@ -108,7 +119,7 @@ const Pictograms = ({ show, idStudent, idProfessional, onClose }) => {
           </div>
         </div>
         {/* listas de pictogramas */}
-        <PictoList pictos={servicePictos} onItemClick={handlePictogramClick} labelText={'Búsqueda'} placeholderText={SERVICE_PH} loading={loadingService} />
+        {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={servicePictos} onItemClick={handlePictogramClick} labelText={'Búsqueda'} placeholderText={SERVICE_PH} loading={loadingService} />}
         <PictoList pictos={customPictos} onItemClick={handlePictogramClick} labelText={'Plantilla'} placeholderText={CUSTOM_PH} loading={loadingCustom} />
       </div>
     )
