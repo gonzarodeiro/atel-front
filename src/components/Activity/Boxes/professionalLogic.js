@@ -4,6 +4,8 @@ import Confites from '../../Confites';
 import bkgnd from './images/background.jpg';
 import constElements from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
+import Letters from './components/Letters';
+import { element } from 'prop-types';
 
 const Boxes = () => {
 
@@ -23,31 +25,52 @@ const Boxes = () => {
     setDimensions({ width: 700, height: 492 });
   }, []);
 
+  useEffect(() => {
+    if(!elements) return;
+    let celebrate = true;
+    debugger;
+    elements.forEach(element => {
+      if(!element.isCorrect)
+        celebrate = false;
+    });    
+    if(celebrate)
+      setShowConfites(true);
+    console.log(celebrate);
+  }, [elements])
+
   function setConfiguration(){
-     const newElements = getFourRandomElements(constElements);
-     debugger;
+     const newElements = getFourRandomElements(constElements);     
     setElements(newElements);
   }
 
+  function setCorrectElement(el){
+    setElements(elements.map((element) => {
+      
+      return ({
+        ...element,
+      isCorrect: el === element.name ? true : element.isCorrect
+      });
+    }))
+  }
+
   function getFourRandomElements(elements){
-    debugger;
+    
     let lengthForRandom = elements.length-1;
     let newElements = [];
-    let randomsGenerated = [];
+    let arr = [];
+
+    while(arr.length < 4){
+      var r = Math.round(Math.random() * lengthForRandom);
+      if(arr.indexOf(r) === -1) arr.push(r);
+    }
+
     for(let i = 0; i < 4; i++){
-      let number = Math.round(Math.random()*lengthForRandom);
-      if(randomsGenerated.find(x => x == number) === undefined){
-        randomsGenerated.push(number);
-      }else{
-        //deberia hacerlo recursivo, pero paja....
-        let number = Math.round(Math.random()*lengthForRandom);
-        randomsGenerated.push(number);
-      }
-        
+      let number =  arr[i];  
       newElements.push( { name: elements[number].name, src: elements[number].src, charArray: elements[number].name.split("")})
     }
     return newElements;
   }
+
 
   return (
     <div style={{ width: width, height: height, backgroundSize: 'cover', backgroundImage: `url("${bkgnd}")` }} ref={divRef}>
@@ -56,12 +79,13 @@ const Boxes = () => {
         {elements &&
             elements.map((element, index) => (
               <>                 
-                <KonvaImage  x={MARGIN} y={MARGIN_TOP + (MARGIN + 10) * index} id={'image' + element.name} image={imageFactory(element.src)} height={70} width={50} />                                
+                <KonvaImage  x={MARGIN} y={MARGIN_TOP + (MARGIN + 10) * index} id={'image' + element.name} image={imageFactory(element.src)} height={70} width={50} />                                                
+                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement}/>
               </>
             ))}
-        </Layer>
-        {showConfites && <Confites stageRef={stageRef} />}
-      </Stage>      
+        </Layer>        
+        {showConfites && <Confites stageRef={stageRef} />} 
+      </Stage>           
     </div>
   );
 };

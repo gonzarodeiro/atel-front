@@ -9,44 +9,51 @@ import ocho from "../images/numbers/ocho.png"
 import nueve from "../images/numbers/nueve.png"
 
 
-
-
 const constElements = [
   {
     name : "uno",
-    src : uno
+    src : uno,
+    isCorrect : false
   },
   {
     name : "dos",
-    src : dos
+    src : dos,
+    isCorrect : false
   },
   {
     name : "tres",
-    src : tres
+    src : tres,
+    isCorrect : false
   },
   {
     name : "cuatro",
-    src : cuatro
+    src : cuatro,
+    isCorrect : false
   },
   {
     name : "cinco",
-    src : cinco
+    src : cinco,
+    isCorrect : false
   },
   {
     name : "seis",
-    src : seis
+    src : seis,
+    isCorrect : false
   },
   {
     name : "siete",
-    src : siete
+    src : siete,
+    isCorrect : false
   },
   {
     name : "ocho",
-    src : ocho
+    src : ocho,
+    isCorrect : false
   },
   {
     name : "nueve",
-    src : nueve
+    src : nueve,
+    isCorrect : false
   }
 ]
 
