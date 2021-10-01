@@ -9,7 +9,7 @@ function getBadgeCount(pictos, loading) {
   if (loading) return 'Cargando...';
   return (pictos && pictos.length) || 0;
 }
-const PictoList = ({ className, pictos, onItemClick, loading, labelText, placeholderText }) => (
+const PictoList = ({ className, pictos, onItemClick, onItemClickAdd, loading, labelText, placeholderText, addItemVisible }) => (
   <div id='drawer' className={`${className}`}>
     {/* boton para abrir la lista de seleccion manual */}
     <div className='pic-drawer-grip-container'>
@@ -25,7 +25,7 @@ const PictoList = ({ className, pictos, onItemClick, loading, labelText, placeho
         </div>
       )}
       {!loading && (!pictos || !pictos.length) && <p className='pic-text-placeholder'>{placeholderText}</p>}
-      {!loading && pictos && pictos.map((p) => <PictoItem picto={p} onClick={onItemClick} />)}
+      {!loading && pictos && pictos.map((p) => <PictoItem picto={p} onClick={onItemClick} onClickAdd={onItemClickAdd} addItemVisible={addItemVisible} />)}
     </div>
   </div>
 );

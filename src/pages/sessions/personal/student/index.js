@@ -241,9 +241,9 @@ const StudentSession = (props) => {
           <Stripe stripe={localStripe} />
         </div>
       )}
+      <PictoFab onClick={() => showPictograms(true)} />
       <Celebration type={celebrationType.RECEIVER} />
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
-      <PictoFab onClick={() => showPictograms(true)} />
       {remoteStripeVisible && (
         <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={handleDiscardRemotePictogramsClick} />

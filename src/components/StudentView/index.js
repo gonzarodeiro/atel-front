@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { clientEvents, sendMessage } from '../../utils/socketManager';
 import initial from './images/default.jpeg';
 import therapist from './images/therapist.jpeg';
@@ -28,9 +29,11 @@ const StudentView = () => {
             ))}
           </div>
         )}
-        <div className='clb-desktop-btn' onClick={handleToggleList}>
-          <i className='fas fa-desktop' style={{ fontSize: '28px', color: 'white' }} title='Modificar vista del alumno' />
-        </div>
+        <OverlayTrigger overlay={<Tooltip id='tooltip-disabled'>Vista del alumno</Tooltip>} placement='left'>
+          <div className='clb-desktop-btn' onClick={handleToggleList}>
+            <i className='fas fa-desktop' style={{ fontSize: '28px', color: 'white' }} title='Modificar vista del alumno' />
+          </div>
+        </OverlayTrigger>
       </div>
     </>
   );

@@ -6,6 +6,7 @@ import p2 from './personaje2.gif';
 import p3 from './personaje3.gif';
 
 import './index.css';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const items = [p1, p2, p3];
 
@@ -85,9 +86,11 @@ const Celebration = ({ type }) => {
               ))}
             </div>
           )}
-          <div className='clb-btn' onClick={handleToggleList}>
-            <i className='fas fa-heart' style={{ fontSize: '28px', color: 'white' }} />
-          </div>
+          <OverlayTrigger overlay={<Tooltip id='tooltip-disabled'>Celebrar</Tooltip>} placement='left'>
+            <div className='clb-btn' onClick={handleToggleList}>
+              <i className='fas fa-heart' style={{ fontSize: '28px', color: 'white' }} />
+            </div>
+          </OverlayTrigger>
         </div>
       )}
       {showImage && <img src={image} className='clb-selected-img' alt='imagen' onClick={() => handleImageClick(image)} />}

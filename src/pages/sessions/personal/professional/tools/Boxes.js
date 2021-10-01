@@ -6,7 +6,7 @@ import Activity from '../../../../../components/Activity/Boxes/professionalLogic
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout }) => {
   useLayoutEffect(() => {
     handleJitsiResize('#boxes-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#boxes-jitsi', onJitsiLayout));
@@ -66,11 +66,6 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Herramienta Númerica</span>
-                </MDBBtn>
-              </div>
-              <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Pictogramas</span>
                 </MDBBtn>
               </div>
             </div>

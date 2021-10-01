@@ -20,7 +20,8 @@ const clientEvents = {
   setFilter: 'setFilter',
   checkResults: 'check-results',
   showPictogramStripe: 'show-pictogram-stripe',
-  inclusionLayout: 'inclusionLayout',
+  reloadPictogramsTemplate: 'reload-pictograms-template',
+  inclusionLayout: 'inclusionLayout'
 };
 
 const serverEvents = {
