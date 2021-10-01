@@ -6,6 +6,8 @@ import { searchText, normalizeStudentPictograms } from '../../../utils/pictogram
 import { BASE_URL } from '../../../config/environment';
 import getByFilters from '../../../utils/services/get/getByFilters/index';
 import './styles.css';
+import postApi from '../../../utils/services/post/postApi';
+import { clientEvents, registerEvent, sendMessage } from '../../../utils/socketManager';
 
 const MAX_STRIPE_LENGTH = 5;
 const SERVICE_PH = 'No hay resultados';
@@ -32,10 +34,20 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
 
   useEffect(() => {
     getPictosFromStudentTemplate();
+
+    registerEvent(() => {
+      // client events are received by all members
+      // in the room except the for sender
+      getPictosFromStudentTemplate();
+    }, clientEvents.reloadPictogramsTemplate);
   }, []);
 
   function handlePictogramClick(picto) {
     setStripe((stripe) => (stripe.length < MAX_STRIPE_LENGTH ? [...stripe, picto] : stripe));
+  }
+
+  function handlePictogramClickAdd(picto) {
+    postPictoToStudentTemplate(picto);
   }
 
   function handleKeyPress(event) {
@@ -66,6 +78,19 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
       console.log('error getting pictos from student template');
     }
     setLoadingCustom(false);
+  }
+
+  async function postPictoToStudentTemplate(picto) {
+    const source = picto.sources[0];
+    try {
+      if (!source) throw new Error('no source url');
+      const data = { pictograms: [source] };
+      await postApi(`${BASE_URL}/pictogram?id_student=${idProfessional}&id_professional=${idStudent}`, data);
+      sendMessage(clientEvents.reloadPictogramsTemplate);
+      getPictosFromStudentTemplate();
+    } catch {
+      console.log('error posting pictos from student template');
+    }
   }
 
   async function getPictosFromSearch() {
@@ -119,7 +144,7 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
           </div>
         </div>
         {/* listas de pictogramas */}
-        {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={servicePictos} onItemClick={handlePictogramClick} labelText={'Búsqueda'} placeholderText={SERVICE_PH} loading={loadingService} />}
+        {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={servicePictos} onItemClick={handlePictogramClick} onItemClickAdd={handlePictogramClickAdd} labelText={'Búsqueda'} placeholderText={SERVICE_PH} loading={loadingService} addItemVisible />}
         <PictoList pictos={customPictos} onItemClick={handlePictogramClick} labelText={'Plantilla'} placeholderText={CUSTOM_PH} loading={loadingCustom} />
       </div>
     )

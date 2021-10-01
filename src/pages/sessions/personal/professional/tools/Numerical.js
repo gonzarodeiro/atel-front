@@ -8,7 +8,7 @@ import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
 
@@ -93,11 +93,6 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Herramienta Alfabética</span>
-                </MDBBtn>
-              </div>
-              <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Pictogramas</span>
                 </MDBBtn>
               </div>
             </div>
