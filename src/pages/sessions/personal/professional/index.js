@@ -5,6 +5,7 @@ import Begin from './meeting/Begin';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
+import Boxes from './tools/Boxes'
 import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
@@ -22,7 +23,7 @@ const wizardButtonText = 'CONTINUAR';
 
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
-  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
+  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false, boxes: false });
   const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
   const [wizardVisible, showWizard] = useState(false);
@@ -128,6 +129,7 @@ const ProfessionalSession = (props) => {
               {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
+              {tools.boxes && <Boxes props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
