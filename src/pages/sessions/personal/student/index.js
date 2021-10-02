@@ -38,6 +38,7 @@ const StudentSession = () => {
   const [remoteStripeVisible, setRemoteStripeVisible] = useState(false);
   const [isLocalStripeInForeground, setIsLocalStripeInForeground] = useState(false);
   const [senderName, setSenderName] = useState('');
+  const [actions, showActions] = useState(true);
   let { roomId } = useParams();
 
   useLayoutEffect(() => {
@@ -77,6 +78,7 @@ const StudentSession = () => {
       showMeeting({ begin: false, end: true });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);
+      showActions(false);
     }, clientEvents.finishSession);
 
     registerEvent(() => {
@@ -212,8 +214,8 @@ const StudentSession = () => {
         </div>
       </div>
       {showJitsi && <FloatingJitsi roomId={roomId} name={student} />}
-      <PictoFab onClick={() => showPictograms(true)} />
-      <Celebration type={celebrationType.RECEIVER} />
+      {actions && <PictoFab onClick={() => showPictograms(true)} />}
+      {actions && <Celebration type={celebrationType.RECEIVER} />}
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
       {remoteStripeVisible && (
         <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
