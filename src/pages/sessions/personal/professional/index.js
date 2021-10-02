@@ -183,7 +183,7 @@ const ProfessionalSession = (props) => {
           <Stripe stripe={localStripe} />
         </div>
       )}
-      <PictoFab style={{ bottom: 96 }} onClick={() => showPictograms(true)} />
+      {celebrationVisible && <PictoFab style={{ bottom: 96 }} onClick={() => showPictograms(true)} />}
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
       {remoteStripeVisible && (

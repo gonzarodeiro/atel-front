@@ -46,8 +46,8 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
             </label>
           </div>
           <div id='boxes-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '200px' }}></div>
-          <div data-test='col' style={{ paddingTop: '12px' }}>
-            <label className='mb-1' style={{ fontSize: '13px', fontWeight: 'bold' }}>
+          <div data-test='col' style={{ paddingTop: '58px' }}>
+            <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones
             </label>
           </div>
