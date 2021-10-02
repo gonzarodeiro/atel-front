@@ -177,7 +177,7 @@ const ProfessionalSession = (props) => {
             </MDBBtn>
             <MDBBtn onClick={handleShowPictogramsInForegroundClick} className={`${isLocalStripeInForeground ? 'red' : 'blue'} darken-2 shadow-none btnOption mr-2 mt-2 ml-0`} style={{ marginBottom: '10px !important', marginRight: '5px !important', backgroundColor: '#dd4b39 !important', color: '#FFF', borderColor: '#dd4b39' }}>
               <i className={`fas ${isLocalStripeInForeground ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-              <span className='ml-2'>{isLocalStripeInForeground ? 'Quitar de primer plano' : 'Poner en primer plano'}</span>
+              <span className='ml-2'>{isLocalStripeInForeground ? 'Ocultar' : 'Mostrar'}</span>
             </MDBBtn>
           </Row>
           <Stripe stripe={localStripe} />
