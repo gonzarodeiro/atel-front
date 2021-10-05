@@ -9,9 +9,10 @@ import 'jspdf-autotable';
 const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime }) => {
   async function exportPDF() {
     const doc = new jsPDF('p', 'pt', 'A4', true);
+    const title = `Detalles de la sesión con: ${obj.fullName}`;
     doc.setFontSize(14);
-    doc.text('Detalles de la sesión', 40, 40);
-    const textWidth = doc.getTextWidth('Detalles de la sesión');
+    doc.text(title, 40, 40);
+    const textWidth = doc.getTextWidth(title);
     doc.line(40, 45, 40 + textWidth, 45);
     createHeader(doc, obj);
     showInfoTools(doc);
@@ -20,87 +21,61 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
 
   function createHeader(doc, obj) {
     doc.setFontSize(12);
-    doc.text('Alumno:', 40, 75); // axis x, axis y
-    doc.text(obj.fullName, 87, 75);
-    doc.text('Fecha:', 180, 75);
-    doc.text(date, 220, 75);
-    doc.text('Evaluación:', 332, 75);
-    doc.text(obj.evaluation ? obj.evaluation : '-', 398, 75);
-    doc.text('Atención:', 475, 75);
-    doc.text(obj.attention ? obj.attention : '-', 528, 75);
-    doc.text('Observaciones generales:', 40, 105);
-    doc.text(40, 124, obj.observation ? obj.observation : '-', { maxWidth: 520, align: 'justify' });
+    doc.text('Fecha:', 40, 75);
+    doc.text(date, 85, 75);
+    doc.text('Evaluación:', 260, 75);
+    doc.text(obj.evaluation ? obj.evaluation : '-', 330, 75);
+    doc.text('Atención:', 440, 75);
+    doc.text(obj.attention ? obj.attention : '-', 495, 75);
+    doc.text('Observaciones generales:', 40, 110);
+    doc.text(40, 130, obj.observation ? obj.observation : '-', { maxWidth: 520, align: 'justify' });
   }
 
   function showInfoTools(doc) {
     if (obj.alphabetical) {
-      showAlphabeticalHeader(doc);
+      showToolHeader(doc, 'Herramienta alfabética', 180, 204, obj.alphabetical.observation, 225);
       doc.addPage();
     }
 
     if (obj.numerical) {
-      showNumericalHeader(doc);
-      // showNumericalTool(doc, aritmeticTable, ['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']);
-      // showNumericalTool(doc, matchesTable, ['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']);
+      showToolHeader(doc, 'Herramienta numérica y lógica', 75, 106, obj.alphabetical.observation, 128);
+      if (Object.keys(obj.numerical.statistics.aritmetic).length > 0) showNumericalTool(doc, aritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 160);
+      if (Object.keys(obj.numerical.statistics.matches).length > 0) showNumericalTool(doc, matchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 315);
     }
   }
 
-  function showAlphabeticalHeader(doc) {
-    const title = 'Herramienta alfabética';
+  function showToolHeader(doc, title, startY, observationLabel, observationObj, observationText) {
     doc.setFontSize(14);
-    doc.text(title, 40, 180);
+    doc.text(title, 40, startY);
     const textWidth = doc.getTextWidth(title);
-    doc.line(40, 185, 40 + textWidth, 185);
+    doc.line(40, startY + 5, 40 + textWidth, startY + 5);
     doc.setFontSize(12);
-    doc.text('Observaciones:', 40, 205); // axis x, axis y
-    doc.text(obj.alphabetical.observation ? obj.alphabetical.observation : '-', 40, 225);
-
-    // const headers = [['Campo', 'Nombre', 'Valor']];
-    // const result = obj.alphabetical.map((p) => [p.name, p.attempts, p.success, p.fail, p.percentage]);
-    // let content = {
-    //   startY: 150,
-    //   head: headers,
-    //   body: result,
-    //   headStyles: { fillColor: ['#ee4040', 0, 0] },
-    //   theme: 'grid',
-    //   columnStyles: {
-    //     0: { cellWidth: 65 },
-    //     1: { cellWidth: 185 },
-    //     2: { cellWidth: 280 }
-    //   }
-    // };
-    // doc.autoTable(content);
+    doc.text('Observaciones:', 40, observationLabel); // axis x, axis y
+    doc.text(observationObj ? observationObj : '-', 40, observationText);
   }
 
-  function showNumericalHeader(doc, startAritmetic) {
-    const title = 'Herramienta numérica y lógica';
-    doc.setFontSize(14);
-    doc.text(title, 40, startAritmetic - 7);
-    const textWidth = doc.getTextWidth(title);
-    doc.line(40, startAritmetic, 40 + textWidth, startAritmetic);
-    doc.setFontSize(12);
-    doc.text('Observaciones:', 40, startAritmetic + 23); // axis x, axis y
-    doc.text(obj.alphabetical.observation ? obj.alphabetical.observation : '-', 40, startAritmetic + 40);
+  function showNumericalTool(doc, data, head, startY) {
+    const result = data.rows.map((p) => [p.name, p.attempts, p.success, p.fail, p.percentage]);
+    let content = {
+      startY: startY,
+      head: head,
+      body: result,
+      styles: {
+        fontSize: 11,
+        halign: 'center'
+      },
+      headStyles: { fillColor: ['#1976d2', 0, 0] },
+      theme: 'grid',
+      columnStyles: {
+        0: { cellWidth: 120 },
+        1: { cellWidth: 100 },
+        2: { cellWidth: 100 },
+        3: { cellWidth: 100 },
+        4: { cellWidth: 100 }
+      }
+    };
+    doc.autoTable(content);
   }
-
-  // function showNumericalTool(doc, data, head, startY) {
-  //   const result = data.map((p) => [p.name, p.attempts, p.success, p.fail, p.percentage]);
-  //   let content = {
-  //     startY: startY,
-  //     head: head,
-  //     body: result,
-  //     headStyles: { fillColor: ['#ee4040', 0, 0] },
-  //     theme: 'grid',
-  //     columnStyles: {
-  //       0: { cellWidth: 65 },
-  //       1: { cellWidth: 185 },
-  //       2: { cellWidth: 280 },
-  //       3: { cellWidth: 350 },
-  //       4: { cellWidth: 400 }
-  //     }
-  //   };
-  //   doc.autoTable(content);
-  // }
 
   return (
     <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
