@@ -53,8 +53,8 @@ const Index = () => {
     <div className='dashboard'>
       <div className='content'>
         <div className='section-title'>
-          <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>Hola, {sessionStorage.getItem('name')}</h1>
-          <div className='dates' style={{ fontSize: '17.4px', marginTop: '2px', marginRight: '14px', cursor: 'pointer', marginBottom: '28px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)', marginLeft: '6px' }}>Hola, {sessionStorage.getItem('name')}</h1>
+          <div className='dates' style={{ fontSize: '17.4px', marginTop: '2px', marginRight: '21px', cursor: 'pointer', marginBottom: '32px', fontWeight: '600', color: 'rgb(44 62 80 / 93%)' }}>
             <div className='actual-date' onClick={loadSession} title='Unirse'>
               <row className='row'>
                 {nextSession}
@@ -63,14 +63,19 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid rgb(206, 203, 203)' }}>
-          <h2 className='text-center' style={{ margin: '52px', fontSize: '22px', marginBottom: '55px', fontWeight: '600', color: '#34495ee0' }}>
+        <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid rgb(206, 203, 203)', borderRadius: '15px' }}>
+          <h2 className='text-center' style={{ margin: '49px', fontSize: '22.4px', marginBottom: '54px', fontWeight: '600', color: '#34495ee0' }}>
             ¿Qué operación quiere realizar?
           </h2>
-          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '20px', marginRight: '20px' }}>
-            <Card title='Sesiones' module='sessions' colorStyle='#ec407a' description='Generar nuevas reuniones' iconItem='fas fa-video' />
-            <Card title='Alumnos' module='students' colorStyle='rgb(50 174 220)' description='Ver más información' iconItem='fas fa-user-friends' />
-            <Card title='Agenda' module='schedule' colorStyle='#ff7043' description='Consulta de sesiones' iconItem='far fa-calendar-alt' />
+          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '67px', marginRight: '67px' }}>
+            <Card title='Sesiones' module='sessions' colorStyle='#ec407a' description='Crear nuevas reuniones' iconItem='fas fa-video' />
+            <Card title='Alumnos' module='students' colorStyle='#ff7043' description='Ver más información' iconItem='fas fa-graduation-cap' />
+            <Card title='Agenda' module='schedule' colorStyle='rgb(50 174 220)' description='Consulta de sesiones' iconItem='far fa-calendar-alt' />
+          </div>
+          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '67px', marginRight: '67px' }}>
+            <Card title='Materiales' module='materials' colorStyle='#303f9f' colorClass='indigo' description='Compartir sesiones' iconItem='fas fa-share-alt' />
+            <Card title='Pictogramas' module='pictograms' colorStyle='#2aa446' colorClass='green' description='Configurar plantilla' iconItem='far fa-smile-beam' />
+            <Card title='Profesional' module='professional' colorStyle='#cc0000c7' colorClass='red' description='Modificar datos' iconItem='fas fa-user-tie' />
           </div>
         </div>
       </div>

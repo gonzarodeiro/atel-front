@@ -59,8 +59,8 @@ const global = createGlobalStyle`
   }
 
   .card .card-circle {
-    width: 7rem;
-    height: 7rem;
+    width: 91px;
+    height: 91px;
     border: 2px solid #e0e0e0;
     border-radius: 50%;
   }
@@ -213,7 +213,7 @@ const global = createGlobalStyle`
     width: 70%;
     min-width: 290px;
     max-width: 1150px;
-    margin: 44px auto;
+    margin: 38px auto;
   }
 
   .collapsible-sidebar {
