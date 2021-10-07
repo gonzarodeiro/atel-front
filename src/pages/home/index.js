@@ -67,12 +67,12 @@ const Index = () => {
           <h2 className='text-center' style={{ margin: '49px', fontSize: '22.4px', marginBottom: '54px', fontWeight: '600', color: '#34495ee0' }}>
             ¿Qué operación quiere realizar?
           </h2>
-          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '67px', marginRight: '67px' }}>
+          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '50px', marginRight: '50px' }}>
             <Card title='Sesiones' module='sessions' colorStyle='#ec407a' description='Crear nuevas reuniones' iconItem='fas fa-video' />
             <Card title='Alumnos' module='students' colorStyle='#ff7043' description='Ver más información' iconItem='fas fa-graduation-cap' />
             <Card title='Agenda' module='schedule' colorStyle='rgb(50 174 220)' description='Consulta de sesiones' iconItem='far fa-calendar-alt' />
           </div>
-          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '67px', marginRight: '67px' }}>
+          <div data-test='row justify-content-md-center' className='row justify-content-md-center' style={{ marginBottom: '40px', marginLeft: '50px', marginRight: '50px' }}>
             <Card title='Materiales' module='materials' colorStyle='#303f9f' colorClass='indigo' description='Compartir sesiones' iconItem='fas fa-share-alt' />
             <Card title='Pictogramas' module='pictograms' colorStyle='#2aa446' colorClass='green' description='Configurar plantilla' iconItem='far fa-smile-beam' />
             <Card title='Profesional' module='professional' colorStyle='#cc0000c7' colorClass='red' description='Modificar datos' iconItem='fas fa-user-tie' />
