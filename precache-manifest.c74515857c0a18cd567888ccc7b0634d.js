@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5c5af2a6fc31aa8d3b493ea8bc1d28c5",
+    "revision": "08496c50ef7208c43230e6b02bb5c0ed",
     "url": "/atel-front/index.html"
   },
   {
