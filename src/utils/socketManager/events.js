@@ -2,6 +2,7 @@ const clientEvents = {
   initAlphabetical: 'init-alphabetical',
   initNumerical: 'init-numerical',
   initPictograms: 'init-pictograms',
+  initBoxes: 'init-boxes',
   resetActivity: 'resetActivity',
   beginSession: 'beginSession',
   finishSession: 'finishSession',
@@ -21,7 +22,9 @@ const clientEvents = {
   checkResults: 'check-results',
   showPictogramStripe: 'show-pictogram-stripe',
   reloadPictogramsTemplate: 'reload-pictograms-template',
-  inclusionLayout: 'inclusionLayout'
+  inclusionLayout: 'inclusionLayout',
+
+
 };
 
 const serverEvents = {

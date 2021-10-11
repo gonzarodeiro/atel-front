@@ -17,6 +17,7 @@ import handleJitsiResize from '../../handleJitsiResize';
 import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
 import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
 import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
+import Boxes from './tools/Boxes';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -25,7 +26,7 @@ const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
 const StudentSession = () => {
   const [student, setStudent] = useState();
   const [meeting, showMeeting] = useState({ begin: false, end: false });
-  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
+  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false, boxes: false });
   const [showJitsi, setShowJitsi] = useState(true);
   const [session, setSession] = useState({ generalComments: '' });
   const [wizardVisible, showWizard] = useState(false);
@@ -70,6 +71,13 @@ const StudentSession = () => {
       showTools({ numerical: true });
       showWizard(true);
     }, clientEvents.initNumerical);
+
+    registerEvent(() => {
+      setShowJitsiDiv(false);
+      showMeeting({ begin: false });
+      showTools({ boxes: true });
+      showWizard(true);
+    }, clientEvents.initBoxes);
 
     registerEvent(() => {
       handleJitsiLayout();
@@ -205,6 +213,7 @@ const StudentSession = () => {
                     {showJitsiDiv && <div id='init-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '580px' }}></div>}
                     {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
+                    {tools.boxes && <Boxes sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>

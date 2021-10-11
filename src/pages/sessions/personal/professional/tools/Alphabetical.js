@@ -17,6 +17,7 @@ const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, sh
   }, []);
 
   function redirectTool(tool) {
+    sendMessage(clientEvents.initBoxes);
     showTools({ [tool]: true });
   }
 
