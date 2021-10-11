@@ -5,7 +5,7 @@ import bkgnd from './images/background.jpg';
 import constElements from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import Letters from './components/Letters';
-import { clientEvents, sendMessage } from '../../../utils/socketManager';
+import { clientEvents, registerEvent, sendMessage } from '../../../utils/socketManager';
 
 const Boxes = () => {
   const MARGIN = 80;
@@ -19,6 +19,7 @@ const Boxes = () => {
 
   useEffect(() => {
     setConfiguration();
+    registerEvents();
     setDimensions({ width: 700, height: 492 });
   }, []);
 
@@ -30,6 +31,13 @@ const Boxes = () => {
     });
     if (celebrate) setShowConfites(true);
   }, [elements]);
+
+  function registerEvents(){
+    registerEvent(() => {
+      setConfiguration();  
+    },clientEvents.resetActivity);
+  }
+
 
   function setConfiguration() {
     const newElements = getFourRandomElements(constElements);

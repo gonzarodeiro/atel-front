@@ -25,7 +25,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
   }
 
   function restart() {
-    //todo
+    sendMessage(clientEvents.resetActivity);
   }
 
   function beginSession() {
