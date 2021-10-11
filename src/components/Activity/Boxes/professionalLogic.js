@@ -3,7 +3,7 @@ import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import Confites from '../../Confites';
 import bkgnd from './images/background.jpg';
 import { imageFactory } from './commons/imageFactory';
-import Letters from './components/Letters';
+import Letters from './components/professionalLetters';
 import { clientEvents, registerEvent } from '../../../utils/socketManager';
 
 const Boxes = () => {
@@ -48,22 +48,7 @@ const Boxes = () => {
     );
   }
 
-  function getFourRandomElements(elements) {
-    let lengthForRandom = elements.length - 1;
-    let newElements = [];
-    let arr = [];
 
-    while (arr.length < 4) {
-      let r = Math.round(Math.random() * lengthForRandom);
-      if (arr.indexOf(r) === -1) arr.push(r);
-    }
-
-    for (let i = 0; i < 4; i++) {
-      let number = arr[i];
-      newElements.push({ name: elements[number].name, src: elements[number].src, charArray: elements[number].name.split('') });
-    }
-    return newElements;
-  }
 
   return (
     <div style={{ width: width, height: height, backgroundSize: 'cover', backgroundImage: `url("${bkgnd}")` }} ref={divRef}>
@@ -73,7 +58,7 @@ const Boxes = () => {
             elements.map((element, index) => (
               <>
                 <KonvaImage x={MARGIN} y={MARGIN_TOP + (MARGIN + 10) * index} id={'image' + element.name} image={imageFactory(element.src)} height={70} width={50} />
-                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement} />
+                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement} userRole="professional" />
               </>
             ))}
         </Layer>

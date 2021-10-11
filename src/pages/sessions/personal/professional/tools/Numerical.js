@@ -26,6 +26,7 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
   function redirectEnd() {
     showTools({ numerical: false });
     showMeeting({ end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 

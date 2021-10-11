@@ -5,13 +5,15 @@ import correctLetter from '../images/correctLetter.png';
 import incorrectLetter from '../images/incorrectLetter.png';
 import emptyLetter from '../images/emptyLetter.png';
 import Konva from 'konva';
+import { clientEvents, registerEvent } from '../../../../utils/socketManager';
 
 const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef, userRole }) => {
   const MARGIN = 80,
     MARGIN_TOP = 80;
   const [lettersState, setLettersState] = useState();
 
-  useEffect(() => {    
+  useEffect(() => {
+    
     const lettersState = letters.map((element) => {
       return {
         letter: element,
@@ -22,7 +24,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef, 
     });
     setLettersState(lettersState);
   }, []);
-  
+
 
   const handleOnMouseOver = (i) => {
     setLettersState(

@@ -23,6 +23,7 @@ const clientEvents = {
   showPictogramStripe: 'show-pictogram-stripe',
   reloadPictogramsTemplate: 'reload-pictograms-template',
   inclusionLayout: 'inclusionLayout',
+  setLetter: 'setLetter'
 
 
 };

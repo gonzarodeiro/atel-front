@@ -21,6 +21,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
   function redirectEnd() {
     showTools({ boxes: false });
     showMeeting({ end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 
