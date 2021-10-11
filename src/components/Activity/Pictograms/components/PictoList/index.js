@@ -1,7 +1,5 @@
 import React from 'react';
-import Loading from '../../../../Loading';
-
-import PictoItem from '../PictoItem';
+import PictoBasicList from '../PictoBasicList';
 
 import './styles.css';
 
@@ -9,7 +7,7 @@ function getBadgeCount(pictos, loading) {
   if (loading) return 'Cargando...';
   return (pictos && pictos.length) || 0;
 }
-const PictoList = ({ className, pictos, onItemClick, onItemClickAdd, loading, labelText, placeholderText, addItemVisible }) => (
+const PictoList = ({ className, pictos, onItemClick, onItemClickAdd, onItemClickRemove, loading, labelText, placeholderText, addItemVisible, removeItemVisible }) => (
   <div id='drawer' className={`${className}`}>
     {/* boton para abrir la lista de seleccion manual */}
     <div className='pic-drawer-grip-container'>
@@ -18,15 +16,7 @@ const PictoList = ({ className, pictos, onItemClick, onItemClickAdd, loading, la
       <i className='fas fa-chevron-right' style={{ color: 'grey' }}></i>
     </div>
     {/* lista de seleccion manual */}
-    <div id='list' className='pic-drawer'>
-      {loading && (
-        <div className='loading'>
-          <Loading />
-        </div>
-      )}
-      {!loading && (!pictos || !pictos.length) && <p className='pic-text-placeholder'>{placeholderText}</p>}
-      {!loading && pictos && pictos.map((p) => <PictoItem picto={p} onClick={onItemClick} onClickAdd={onItemClickAdd} addItemVisible={addItemVisible} />)}
-    </div>
+    <PictoBasicList id='list' pictos={pictos} onItemClick={onItemClick} onItemClickAdd={onItemClickAdd} onItemClickRemove={onItemClickRemove} addItemVisible={addItemVisible} removeItemVisible={removeItemVisible} placeholderText={placeholderText} loading={loading} />
   </div>
 );
 

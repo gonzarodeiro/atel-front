@@ -8,6 +8,11 @@
   align-items: center;
   margin: 4px;
   cursor: pointer;
+  position: relative;
+}
+
+.pic-controls-zero-height {
+  height: 0;
 }
 
 .pic-picto-btn-up:hover,
@@ -18,4 +23,22 @@
 .pic-picto-btn-up:active,
 .pic-picto-btn-down:active {
   color: #0966b2;
+}
+
+.pic-picto-btn-corner {
+  background-color: white;
+  border-radius: 50%;
+  border: 2px solid white;
+  font-size: 24px;
+  position: absolute;
+  bottom: -134px;
+  right: -6px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.color-add {
+  color: forestgreen;
+}
+.color-remove {
+  color: crimson;
 }
