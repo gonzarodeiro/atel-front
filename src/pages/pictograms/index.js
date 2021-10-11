@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../../utils/layout/index';
-import Loading from '../../components/Loading';
-import Footer from '../../components/html/Footer';
 import { BASE_URL } from '../../config/environment';
 import { Form } from 'react-bootstrap';
 import getByFilters from '../../utils/services/get/getByFilters/index';
+import PictogramTemplateEditor from '../../components/Activity/Pictograms/PictogramTemplateEditor';
 
 const Index = () => {
-  const [params, setParams] = useState({ dateFrom: new Date(), dateTo: new Date(), studentName: '', type: '' });
-  const [error, setErrors] = useState({ show: false, message: '' });
-  const [loading, setLoading] = useState(false);
+  const [params, setParams] = useState({ id: '', studentName: '' });
+  const [student, setStudent] = useState({ id: '', name: '' });
   const [apis, setApis] = useState({ dlStudents: [] });
   let history = useHistory();
 
@@ -22,6 +20,7 @@ const Index = () => {
   async function loadStudents() {
     const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
     let students = await getByFilters(`${BASE_URL}/student/search`, filters);
+    console.log(students);
     students.unshift({ id: 0, fullName: 'Seleccione' });
     setApis({ dlStudents: students });
   }
@@ -29,23 +28,22 @@ const Index = () => {
   const handleChange = (event) => {
     const { id, value } = event.target;
     setParams({ ...params, [id]: value });
+    const student = decodeOptionValue(value);
+    setStudent(student);
   };
 
-  function handleSubmit() {
-    setLoading(true);
-    // get pictogramas
-    setLoading(false);
+  function encodeOptionValue(idStudent, fullName) {
+    return JSON.stringify({ id: idStudent, name: fullName });
+  }
+
+  function decodeOptionValue(value) {
+    return JSON.parse(value);
   }
 
   return (
     <Layout>
       <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
-          {loading && (
-            <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
-              <Loading />
-            </div>
-          )}
           <div className='card-body pb-3'>
             <div className='card-title pb-3 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
               Seleccionar plantilla de pictogramas
@@ -56,17 +54,17 @@ const Index = () => {
                   <Form.Group>
                     <Form.Label> Nombre del alumno </Form.Label>
                     <Form.Control id='studentName' onChange={handleChange} className='form-control' value={params.studentName} style={{ cursor: 'pointer' }} as='select' disabled={false}>
-                      {apis.dlStudents.map((file) => (
-                        <option key={file.id} value={file.fullName}>
-                          {file.fullName}
+                      {apis.dlStudents.map((s) => (
+                        <option key={s.id} value={encodeOptionValue(s.id, s.fullName)}>
+                          {s.fullName}
                         </option>
                       ))}
                     </Form.Control>
                   </Form.Group>
                 </div>
               </div>
-              <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
             </form>
+            {student.id > 0 && <PictogramTemplateEditor idProfessional={sessionStorage.getItem('idProfessional')} idStudent={student.id} studentName={student.name} onCancel={() => history.push(`/home`)} />}
           </div>
         </div>
       </div>

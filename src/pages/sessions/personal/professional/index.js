@@ -6,7 +6,7 @@ import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import Boxes from './tools/Boxes';
-import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms/PictogramTool';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
@@ -193,7 +193,7 @@ const ProfessionalSession = (props) => {
           <Stripe stripe={remoteStripe} />
         </div>
       )}
-      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.PROFESSIONAL} />
+      {props.location.state && <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={props.location.state.idStudent} idProfessional={sessionStorage.getItem('idProfessional')} mode={pictogramModes.PROFESSIONAL} />}
     </Layout>
   );
 };
