@@ -19,6 +19,7 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
   }, []);
 
   function redirectTool(tool) {
+    sendMessage('init-' + tool);
     showTools({ [tool]: true });
   }
 

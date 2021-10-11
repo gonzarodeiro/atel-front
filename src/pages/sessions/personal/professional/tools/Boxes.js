@@ -14,6 +14,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
   }, []);
 
   function redirectTool(tool) {
+    sendMessage('init-' + tool);
     showTools({ [tool]: true });
   }
 
