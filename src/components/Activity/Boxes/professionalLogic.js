@@ -2,9 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import Confites from '../../Confites';
 import bkgnd from './images/background.jpg';
-import constElements from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import Letters from './components/Letters';
+import { clientEvents, registerEvent } from '../../../utils/socketManager';
 
 const Boxes = () => {
   const MARGIN = 80;
@@ -21,7 +21,7 @@ const Boxes = () => {
     setDimensions({ width: 700, height: 492 });
   }, []);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (!elements) return;
     let celebrate = true;
     elements.forEach((element) => {
@@ -30,9 +30,11 @@ const Boxes = () => {
     if (celebrate) setShowConfites(true);
   }, [elements]);
 
-  function setConfiguration() {
-    const newElements = getFourRandomElements(constElements);
-    setElements(newElements);
+  function setConfiguration() {    
+    registerEvent( (obj) => {
+      setElements(obj.elements);
+    }, 
+    clientEvents.setConfiguration);
   }
 
   function setCorrectElement(el) {

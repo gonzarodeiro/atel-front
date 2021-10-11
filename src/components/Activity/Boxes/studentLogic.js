@@ -5,6 +5,7 @@ import bkgnd from './images/background.jpg';
 import constElements from './commons/elements';
 import { imageFactory } from './commons/imageFactory';
 import Letters from './components/Letters';
+import { clientEvents, sendMessage } from '../../../utils/socketManager';
 
 const Boxes = () => {
   const MARGIN = 80;
@@ -33,6 +34,7 @@ const Boxes = () => {
   function setConfiguration() {
     const newElements = getFourRandomElements(constElements);
     setElements(newElements);
+    sendMessage(clientEvents.setConfiguration, { elements: newElements });
   }
 
   function setCorrectElement(el) {
