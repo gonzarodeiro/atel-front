@@ -92,6 +92,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
 
     let interval = window.setInterval(function () {
       document.addEventListener('click', (event) => {
+        document.removeEventListener('keydown', inputLetter);
         window.clearInterval(interval);
         target.clearCache();
         target.filters([]);
