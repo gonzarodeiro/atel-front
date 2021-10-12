@@ -17,7 +17,7 @@ const Boxes = () => {
   const [elements, setElements] = useState();
 
   useEffect(() => {
-    setConfiguration();
+    registerEvents();    
     setDimensions({ width: 700, height: 492 });
   }, []);
 
@@ -29,6 +29,10 @@ const Boxes = () => {
     });
     if (celebrate) setShowConfites(true);
   }, [elements]);
+
+  function registerEvents(){
+    setConfiguration();    
+  }
 
   function setConfiguration() {    
     registerEvent( (obj) => {
@@ -58,7 +62,7 @@ const Boxes = () => {
             elements.map((element, index) => (
               <>
                 <KonvaImage x={MARGIN} y={MARGIN_TOP + (MARGIN + 10) * index} id={'image' + element.name} image={imageFactory(element.src)} height={70} width={50} />
-                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement} userRole="professional" />
+                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement} />
               </>
             ))}
         </Layer>

@@ -5,8 +5,9 @@ import correctLetter from '../images/correctLetter.png';
 import incorrectLetter from '../images/incorrectLetter.png';
 import emptyLetter from '../images/emptyLetter.png';
 import Konva from 'konva';
+import { clientEvents, sendMessage } from '../../../../utils/socketManager';
 
-const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef, userRole }) => {
+const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }) => {
   const MARGIN = 80,
     MARGIN_TOP = 80;
   const [lettersState, setLettersState] = useState();
@@ -54,27 +55,27 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef, 
       let key = event.key;
       if (/[a-zA-Z]/.test(key) && key.length <= 1) {
         let wordIsCorrect = true;
-        setLettersState(
-          lettersState.map((element, index) => {
-            let newSrc = emptyLetter;
-            if (i !== index) {
-              if (element.letter.toUpperCase() !== element.letterInput.toUpperCase()) wordIsCorrect = false;
+        const newLettersState = lettersState.map((element, index) => {
+          let newSrc = emptyLetter;
+          if (i !== index) {
+            if (element.letter.toUpperCase() !== element.letterInput.toUpperCase()) wordIsCorrect = false;
+          } else {
+            if (key.toUpperCase() !== element.letter.toUpperCase()) {
+              newSrc = incorrectLetter;
+              wordIsCorrect = false;
             } else {
-              if (key.toUpperCase() !== element.letter.toUpperCase()) {
-                newSrc = incorrectLetter;
-                wordIsCorrect = false;
-              } else {
-                newSrc = correctLetter;
-              }
+              newSrc = correctLetter;
             }
+          }
 
-            return {
-              ...element,
-              letterInput: i === index ? key.toUpperCase() : element.letterInput,
-              src: i === index ? newSrc : element.src
-            };
-          })
-        );
+          return {
+            ...element,
+            letterInput: i === index ? key.toUpperCase() : element.letterInput,
+            src: i === index ? newSrc : element.src
+          };
+        })
+        sendMessage(clientEvents.setLetter + indexElement, newLettersState);
+        setLettersState(newLettersState);
 
         let word = lettersState.map((x) => x.letter).join('');
         if (wordIsCorrect) setCorrectElement(word);
