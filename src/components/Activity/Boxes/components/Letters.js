@@ -48,6 +48,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
   };
 
   const handleOnClick = (e, i) => {
+    sendMessage(clientEvents.clickLetter + indexElement, i)
     let target = e.currentTarget.children[0];
     let greenIncrement = 5;
 

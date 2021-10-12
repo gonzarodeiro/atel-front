@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Group, Image as KonvaImage, Text } from 'react-konva';
 import { imageFactory } from '../commons/imageFactory';
 import emptyLetter from '../images/emptyLetter.png';
-
 import { clientEvents, registerEvent } from '../../../../utils/socketManager';
+import Konva from 'konva';
+
+let intervals = [];
 
 const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }) => {
   const MARGIN = 80,
@@ -11,10 +13,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
   const [lettersState, setLettersState] = useState();
 
   useEffect(() => {
-    registerEvent( (letters) => {
-      setLettersState(letters);
-    }, clientEvents.setLetter + indexElement );
-
+    registerEvents();    
     const lettersState = letters.map((element) => {
       return {
         letter: element,
@@ -26,6 +25,39 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
     setLettersState(lettersState);
   }, []);
 
+  function registerEvents(){
+    registerEvent( (letters) => {
+      setLettersState(letters);
+    }, clientEvents.setLetter + indexElement );
+
+    registerEvent( (i) => {
+      clearIntervals();
+      let word = letters.map((x) => x).join('');        
+      let target = stageRef.current.find((el) => el.attrs.id === 'group' + word + i)[0];        
+      let greenIncrement = 5;
+      let interval = window.setInterval(function () {              
+        target.cache();
+        target.filters([Konva.Filters.RGB]);
+        target.blue(255);
+        target.red(131);
+        target.green(Math.sin((greenIncrement += 0.1)) * 15 + 190);
+      }, 10);
+      
+      intervals.push(interval);
+      
+    }, clientEvents.clickLetter + indexElement );
+  }
+
+  function clearIntervals(){
+    for ( var i = 0; i < intervals.length; ++i ){
+      clearInterval( intervals[i] );      
+    }
+    let targets = stageRef.current.find((el) => el.attrs.id && el.attrs.id.startsWith('group'));        
+    targets.forEach(x => {
+      x.clearCache();
+      x.filters([]);
+    });
+  }
 
   return (
     <>
