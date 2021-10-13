@@ -1,15 +1,18 @@
 import { Button } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
-import PictoList from './components/PictoList';
-import Stripe from './components/Stripe';
-import { searchText, normalizeStudentPictograms } from '../../../utils/pictogramManager';
-import { BASE_URL } from '../../../config/environment';
-import getByFilters from '../../../utils/services/get/getByFilters/index';
+import PictoList from '../components/PictoList';
+import Stripe from '../components/Stripe';
+import { searchText, normalizeStudentPictograms } from '../../../../utils/pictogramManager';
+import { BASE_URL } from '../../../../config/environment';
+import getByFilters from '../../../../utils/services/get/getByFilters/index';
 import './styles.css';
+import postApi from '../../../../utils/services/post/postApi';
+import { clientEvents, registerEvent, sendMessage } from '../../../../utils/socketManager';
+import deleteResponseApi from '../../../../utils/services/delete/deleteResponseApi';
 
 const MAX_STRIPE_LENGTH = 5;
-const SERVICE_PH = 'No hay resultados';
-const CUSTOM_PH = 'No hay pictogramas en la plantilla del alumno';
+const SEARCH_PH = 'No hay resultados';
+const TEMAPLATE_PH = 'No hay pictogramas en la plantilla del alumno';
 
 export const modalResults = {
   OK: 1,
@@ -24,18 +27,32 @@ export const pictogramModes = {
 let timer;
 const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
   const inputRef = useRef();
-  const [loadingService, setLoadingService] = useState(false);
-  const [loadingCustom, setLoadingCustom] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+  const [loadingTemplate, setLoadingTemplate] = useState(false);
   const [stripe, setStripe] = useState([]);
-  const [servicePictos, setServicePictograms] = useState();
-  const [customPictos, setCustomPictograms] = useState();
+  const [searchPictos, setSearchPictograms] = useState();
+  const [templatePictos, setTemplatePictograms] = useState();
 
   useEffect(() => {
     getPictosFromStudentTemplate();
+
+    registerEvent(() => {
+      // client events are received by all members
+      // in the room except the for sender
+      getPictosFromStudentTemplate();
+    }, clientEvents.reloadPictogramsTemplate);
   }, []);
 
   function handlePictogramClick(picto) {
     setStripe((stripe) => (stripe.length < MAX_STRIPE_LENGTH ? [...stripe, picto] : stripe));
+  }
+
+  function handlePictogramClickAdd(picto) {
+    postPictoToStudentTemplate(picto);
+  }
+
+  function handlePictogramClickRemove(picto) {
+    deletePictoFromStudentTemplate(picto);
   }
 
   function handleKeyPress(event) {
@@ -56,35 +73,60 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
   }
 
   async function getPictosFromStudentTemplate() {
-    setLoadingCustom(true);
+    setLoadingTemplate(true);
     try {
       const filters = { id_professional: idProfessional, id_student: idStudent };
       const response = await getByFilters(`${BASE_URL}/pictogram/`, filters);
       const newPictos = normalizeStudentPictograms(response);
-      setCustomPictograms(newPictos);
+      setTemplatePictograms(newPictos);
     } catch {
       console.log('error getting pictos from student template');
     }
-    setLoadingCustom(false);
+    setLoadingTemplate(false);
+  }
+
+  async function postPictoToStudentTemplate(picto) {
+    const source = picto.sources[0];
+    try {
+      if (!source) throw new Error('no source url');
+      const data = { pictograms: [source] };
+      await postApi(`${BASE_URL}/pictogram?id_student=${idStudent}&id_professional=${idProfessional}`, data);
+      sendMessage(clientEvents.reloadPictogramsTemplate);
+      getPictosFromStudentTemplate();
+    } catch {
+      console.log('error posting pictos from student template');
+    }
+  }
+
+  async function deletePictoFromStudentTemplate(picto) {
+    const source = picto.sources[0];
+    try {
+      if (!source) throw new Error('no source url');
+      await deleteResponseApi(`${BASE_URL}/pictogram?id_student=${idStudent}&id_professional=${idProfessional}&pictogram_url=${source}`);
+      sendMessage(clientEvents.reloadPictogramsTemplate);
+      getPictosFromStudentTemplate();
+    } catch {
+      console.log('error deleting picto from student template');
+    }
   }
 
   async function getPictosFromSearch() {
     if (!inputRef.current) return;
-    setLoadingService(true);
+    setLoadingSearch(true);
     try {
       let value = inputRef.current.value;
       let search = value.trim();
       if (!search) {
-        setServicePictograms([]);
+        setSearchPictograms([]);
       } else {
         const response = await searchText(search);
         const newPictos = response.words;
-        setServicePictograms(newPictos);
+        setSearchPictograms(newPictos);
       }
     } catch {
       console.log('error getting pictos from student template');
     }
-    setLoadingService(false);
+    setLoadingSearch(false);
   }
 
   return (
@@ -119,8 +161,8 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
           </div>
         </div>
         {/* listas de pictogramas */}
-        {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={servicePictos} onItemClick={handlePictogramClick} labelText={'Búsqueda'} placeholderText={SERVICE_PH} loading={loadingService} />}
-        <PictoList pictos={customPictos} onItemClick={handlePictogramClick} labelText={'Plantilla'} placeholderText={CUSTOM_PH} loading={loadingCustom} />
+        {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={searchPictos} onItemClick={handlePictogramClick} onItemClickAdd={handlePictogramClickAdd} labelText={'Búsqueda'} placeholderText={SEARCH_PH} loading={loadingSearch} addItemVisible />}
+        {mode === pictogramModes.PROFESSIONAL ? <PictoList pictos={templatePictos} onItemClick={handlePictogramClick} onItemClickRemove={handlePictogramClickRemove} labelText={'Plantilla'} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} removeItemVisible /> : <PictoList pictos={templatePictos} onItemClick={handlePictogramClick} labelText={'Plantilla'} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} />}
       </div>
     )
   );

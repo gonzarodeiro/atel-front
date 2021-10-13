@@ -16,6 +16,7 @@ import SessionPending from './pages/schedule/pending/index';
 import HistoricalSession from './pages/schedule/historical/index';
 import ShareSession from './pages/schedule/share/index';
 import MaterialToBeAdapted from './pages/schedule/materialToAdapt/index';
+import Pictograms from './pages/pictograms/index';
 import NoExist from './pages/noExists';
 import GlobalStyle from './styles/css/globalStyles';
 import IdleTimer from 'react-idle-timer';
@@ -69,7 +70,7 @@ class App extends Component {
             debounce={250}
           />
         )}
-        <Route path='/(home|user|professionalSession|students|historical-session|pending-session|new-student|meeting-instantly|meeting-for-later|share-session|zoom-session)/' component={Header} />
+        <Route path='/(home|user|professionalSession|students|historical-session|pending-session|new-student|meeting-instantly|meeting-for-later|share-session|zoom-session|pictograms)/' component={Header} />
         <Switch>
           <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
           <Route exact path='/home' component={Home} />
@@ -86,6 +87,7 @@ class App extends Component {
           <Route exact path='/meeting-for-later' component={MeetingForLater} />
           <Route exact path='/share-session' component={ShareSession} />
           <Route exact path='/material-to-be-adapted/:roomId' component={MaterialToBeAdapted} />
+          <Route exact path='/pictograms' component={Pictograms} />
           <Route exact component={NoExist} />
         </Switch>
         <GlobalStyle />

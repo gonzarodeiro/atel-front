@@ -1,0 +1,42 @@
+.pic-editor-input-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #66696b;
+  margin-bottom: 12px;
+}
+
+.pic-editor-input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.pic-basic-list {
+  padding: 16px;
+  background-color: #fafafa;
+  height: 100%;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.pic-basic-list-mb {
+  margin-bottom: 32px;
+}
+
+.pic-editor-input-text-search {
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.pic-editor-input-btn-search {
+  margin: 0;
+  padding: 0;
+  flex: 0;
+}
+
+.pic-editor-btn-cancel {
+  display: flex;
+  justify-content: flex-end;
+}

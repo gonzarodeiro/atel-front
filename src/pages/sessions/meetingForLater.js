@@ -17,7 +17,6 @@ import convertDateTime from '../../utils/commons/convertDateTime';
 import Dropdownlist from '../../components/html/Dropdownlist';
 import { BASE_URL } from '../../config/environment';
 import getByFilters from '../../utils/services/get/getByFilters';
-
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -43,10 +42,18 @@ const Index = () => {
 
   const handleChangeStudent = (event) => {
     const { id, value } = event.target;
-    const fields = value.split('-');
     setSession({ ...session, [id]: value });
-    setStudent({ id: fields[0], name: fields[1] });
+    const student = decodeOptionValue(value);
+    setStudent(student);
   };
+
+  function encodeOptionValue(idStudent, fullName) {
+    return JSON.stringify({ id: idStudent, name: fullName });
+  }
+
+  function decodeOptionValue(value) {
+    return JSON.parse(value);
+  }
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -123,9 +130,9 @@ const Index = () => {
                     <Form.Group>
                       <Form.Label> Nombre del alumno </Form.Label>
                       <Form.Control id='userName' onChange={handleChangeStudent} className={'form-control ' + (!session.userName && showValidation ? 'borderRed' : '')} value={session.userName} style={{ cursor: 'pointer' }} as='select'>
-                        {apis.dlStudents.map((file) => (
-                          <option key={file.id} value={`${file.id}-${file.fullName}`}>
-                            {file.fullName}
+                        {apis.dlStudents.map((s) => (
+                          <option key={s.id} value={encodeOptionValue(s.id, s.fullName)}>
+                            {s.fullName}
                           </option>
                         ))}
                       </Form.Control>

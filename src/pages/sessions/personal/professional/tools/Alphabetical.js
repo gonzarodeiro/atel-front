@@ -7,7 +7,7 @@ import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, showModal, showWizard, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, showModal, showWizard, setCelebrationVisible, onJitsiLayout }) => {
   useEffect(() => {
     showModal({ notification: false });
     handleJitsiResize('#alphabetical-jitsi', onJitsiLayout);
@@ -63,13 +63,13 @@ const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, sh
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Herramienta Númerica</span>
+                <MDBBtn onClick={() => redirectTool(tools.boxes)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Casilleros</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
-                <MDBBtn onClick={() => showPictograms(true)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Pictogramas</span>
+                <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Herramienta Númerica</span>
                 </MDBBtn>
               </div>
             </div>

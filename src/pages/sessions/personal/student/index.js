@@ -15,15 +15,16 @@ import Loading from '../../../../components/Loading';
 import FloatingJitsi from '../../../../components/FloatingJitsi';
 import handleJitsiResize from '../../handleJitsiResize';
 import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
-import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms/PictogramTool';
 import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
 const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
 
-const StudentSession = (props) => {
-  const [student, setStudent] = useState();
+const StudentSession = () => {
+  const [student, setStudent] = useState({ id: '', name: '' });
+  const [professional, setProfessional] = useState({ id: '', name: '' });
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
   const [showJitsi, setShowJitsi] = useState(true);
@@ -31,11 +32,15 @@ const StudentSession = (props) => {
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
   const [sessionId, setSessionId] = useState(-1);
-  const [stripe, setStripe] = useState([]);
-  const [stripeVisible, setStripeVisible] = useState(false);
-  let { roomId } = useParams();
   const [showJitsiDiv, setShowJitsiDiv] = useState(true);
   const [pictogramsVisible, showPictograms] = useState(false);
+  const [localStripe, setLocalStripe] = useState([]);
+  const [remoteStripe, setRemoteStripe] = useState([]);
+  const [remoteStripeVisible, setRemoteStripeVisible] = useState(false);
+  const [isLocalStripeInForeground, setIsLocalStripeInForeground] = useState(false);
+  const [senderName, setSenderName] = useState('');
+  const [actions, showActions] = useState(true);
+  let { roomId } = useParams();
 
   useLayoutEffect(() => {
     handleJitsiResize('#init-jitsi', () => handleJitsiLayout);
@@ -74,6 +79,7 @@ const StudentSession = (props) => {
       showMeeting({ begin: false, end: true });
       showTools({ alphabetical: false, numerical: false, pictogram: false });
       showWizard(false);
+      showActions(false);
     }, clientEvents.finishSession);
 
     registerEvent(() => {
@@ -87,10 +93,12 @@ const StudentSession = (props) => {
       showWizard(false);
     }, clientEvents.closeActivityWizard);
 
-    registerEvent(({ stripe, visible }) => {
-      console.log('showPictogramStripe', stripe, visible);
-      setStripe(stripe);
-      setStripeVisible(visible);
+    registerEvent(({ stripe, visible, sender }) => {
+      console.log('showPictogramStripe', stripe, visible, sender);
+      setRemoteStripe(stripe);
+      setRemoteStripeVisible(visible);
+      setIsLocalStripeInForeground(false);
+      setSenderName(sender);
     }, clientEvents.showPictogramStripe);
 
     loadSessionStatus();
@@ -98,8 +106,9 @@ const StudentSession = (props) => {
 
   function loadSessionStatus() {
     const fields = roomId.split('-');
-    setStudent(fields[0]);
+    setStudent({ id: '', name: fields[0] });
     setSessionId(fields[1]);
+    getSessionMembers(fields[1]);
     checkSessionCreated(fields);
     showMeeting({ begin: true });
     showTools({ alphabetical: false });
@@ -117,6 +126,12 @@ const StudentSession = (props) => {
       await showAlert('Error en la sesión', result.data.message, 'error');
       setShowJitsi(false);
     } else setShowJitsi(true);
+  }
+
+  async function getSessionMembers(sessionId) {
+    let result = await getResponseByFilters(`${BASE_URL}/session/members/${sessionId}`);
+    setStudent(result.data.student);
+    setProfessional(result.data.professional);
   }
 
   const handleChange = (event) => {
@@ -142,23 +157,45 @@ const StudentSession = (props) => {
     htmlElement.style.height = `${layout.height}px`;
   }
 
+  useLayoutEffect(() => {
+    if (!loading) {
+      showPictogramStripeInForeground(true);
+      setTimeout(() => {
+        showPictogramStripeInForeground(false);
+      }, 5000);
+    }
+  }, [localStripe]);
+
   function handleClosePictograms(mr, stripe) {
     if (mr === modalResults.OK) {
-      setStripe(stripe);
+      if (isLocalStripeInForeground) {
+        showPictogramStripeInForeground(false);
+      }
+      setLocalStripe([...stripe]);
     }
     showPictograms(false);
-    // showPictogramStripeToStudent(false);
-    setTimeout(() => {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
-    }, 0);
+  }
+
+  function handleDiscardRemotePictogramsClick() {
+    if (isLocalStripeInForeground) {
+      showPictogramStripeInForeground(false);
+    } else {
+      setRemoteStripeVisible(false);
+    }
+  }
+
+  function showPictogramStripeInForeground(visible) {
+    const sender = student.name;
+    setSenderName(sender);
+    setRemoteStripe(localStripe);
+    setRemoteStripeVisible(visible);
+    setIsLocalStripeInForeground(visible);
+    sendMessage(clientEvents.showPictogramStripe, { stripe: localStripe, visible, sender });
   }
 
   return (
     <>
-      <div className='card shadow-sm container px-0 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
+      <div className='card shadow-sm container px-0 mb-4 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
         {loading && (
           <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
             <Loading />
@@ -167,15 +204,15 @@ const StudentSession = (props) => {
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              ¡ Hola, Bienvenido {student} !
+              ¡ Hola, Bienvenido {student.name} !
             </div>
             {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
                     {showJitsiDiv && <div id='init-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '580px' }}></div>}
-                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
-                    {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
+                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student.name} onJitsiLayout={handleJitsiLayout} />}
+                    {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student.name} onJitsiLayout={handleJitsiLayout} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
                   </div>
                 </div>
@@ -184,17 +221,18 @@ const StudentSession = (props) => {
           </div>
         </div>
       </div>
-      {showJitsi && <FloatingJitsi roomId={roomId} name={student} />}
-      {stripeVisible && (
-        <div className='fade-in' style={{ position: 'absolute', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)' }}>
-          {/* <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={() => setStripeVisible(false)} /> */}
-          <Stripe stripe={stripe} />
+      {showJitsi && <FloatingJitsi roomId={roomId} name={student.name} />}
+      {actions && <PictoFab onClick={() => showPictograms(true)} />}
+      {actions && <Celebration type={celebrationType.RECEIVER} />}
+      {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      {remoteStripeVisible && (
+        <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={handleDiscardRemotePictogramsClick} />
+          <label style={{ color: 'white', fontSize: '16px', fontWeight: 'bold', alignSelf: 'center', marginTop: 16 }}>{senderName} dice</label>
+          <Stripe stripe={remoteStripe} />
         </div>
       )}
-      <Celebration type={celebrationType.RECEIVER} />
-      {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
-      <PictoFab onClick={() => showPictograms(true)} />
-      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.STUDENT} />
+      {student.id && professional.id && <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={student.id} idProfessional={professional.id} mode={pictogramModes.STUDENT} />}
     </>
   );
 };

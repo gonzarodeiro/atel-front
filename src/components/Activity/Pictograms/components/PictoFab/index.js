@@ -1,11 +1,14 @@
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './styles.css';
 
-const PictoFab = ({ onClick }) => {
+const PictoFab = ({ style, onClick }) => {
   return (
-    <div className='pic-fab' onClick={onClick}>
-      <i className='fas fa-image' style={{ fontSize: '28px', color: 'white' }} />
-    </div>
+    <OverlayTrigger overlay={<Tooltip id='tooltip-disabled'>Pictogramas</Tooltip>} placement='left'>
+      <div className='pic-fab' type='button' style={style} onClick={onClick}>
+        <i className='fas fa-smile' style={{ fontSize: '28px', color: 'white' }} />
+      </div>
+    </OverlayTrigger>
   );
 };
 

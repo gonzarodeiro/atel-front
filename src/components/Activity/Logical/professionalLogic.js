@@ -71,6 +71,7 @@ const Logical = ({ validate }) => {
     }, clientEvents.trays);
 
     registerEvent((obj) => {
+      if (!stageRef.current) return;
       let element = stageRef.current.find((x) => x.attrs.id === obj.id)[0];
       if (obj.filter) {
         element.cache();
@@ -87,6 +88,7 @@ const Logical = ({ validate }) => {
   }
 
   function setElementPosition(id, point) {
+    if (!stageRef.current) return;
     let element = stageRef.current.find((el) => el.attrs.id === id)[0];
     element.x(point.x);
     element.y(point.y);

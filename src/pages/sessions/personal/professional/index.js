@@ -5,7 +5,8 @@ import Begin from './meeting/Begin';
 import End from './meeting/End';
 import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
-import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
+import Boxes from './tools/Boxes';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms/PictogramTool';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
 import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
@@ -15,6 +16,7 @@ import FloatingJitsi from '../../../../components/FloatingJitsi';
 import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
 import { Row } from 'react-bootstrap';
 import { MDBBtn } from 'mdbreact';
+import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
 
 const wizardTitle = 'Esperando al alumno';
 const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';
@@ -22,7 +24,7 @@ const wizardButtonText = 'CONTINUAR';
 
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
-  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false });
+  const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false, boxes: false });
   const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', evaluation: '', attention: '' });
   const [modal, showModal] = useState({ notification: false });
   const [wizardVisible, showWizard] = useState(false);
@@ -30,8 +32,11 @@ const ProfessionalSession = (props) => {
   const [celebrationVisible, setCelebrationVisible] = useState(true);
   const [showJitsi, setShowJitsi] = useState(true);
   const [pictogramsVisible, showPictograms] = useState(false);
-  const [stripe, setStripe] = useState([]);
-  const [stripeVisible, setStripeVisible] = useState(false);
+  const [localStripe, setLocalStripe] = useState([]);
+  const [remoteStripe, setRemoteStripe] = useState([]);
+  const [remoteStripeVisible, setRemoteStripeVisible] = useState(false);
+  const [isLocalStripeInForeground, setIsLocalStripeInForeground] = useState(false);
+  const [senderName, setSenderName] = useState('');
   let history = useHistory();
 
   useEffect(() => {
@@ -47,6 +52,14 @@ const ProfessionalSession = (props) => {
     registerEvent(() => {
       showWizard(false);
     }, clientEvents.closeActivityWizard);
+
+    registerEvent(({ stripe, visible, sender }) => {
+      console.log('showPictogramStripe', stripe, visible);
+      setRemoteStripe(stripe);
+      setRemoteStripeVisible(visible);
+      setIsLocalStripeInForeground(false);
+      setSenderName(sender);
+    }, clientEvents.showPictogramStripe);
   }, []);
 
   const handleChange = (event) => {
@@ -82,10 +95,16 @@ const ProfessionalSession = (props) => {
 
   function handleClosePictograms(mr, stripe) {
     if (mr === modalResults.OK) {
-      setStripe(stripe);
+      if (isLocalStripeInForeground) {
+        showPictogramStripeInForeground(false);
+      }
+      setLocalStripe(stripe);
+      scrollToBottom();
     }
     showPictograms(false);
-    showPictogramStripeToStudent(false);
+  }
+
+  function scrollToBottom() {
     setTimeout(() => {
       window.scrollTo({
         top: document.body.scrollHeight,
@@ -94,18 +113,32 @@ const ProfessionalSession = (props) => {
     }, 0);
   }
 
-  function handleShowPictogramsToStudentClick() {
-    showPictogramStripeToStudent(!stripeVisible);
+  function handleShowPictogramsInForegroundClick() {
+    showPictogramStripeInForeground(!isLocalStripeInForeground);
   }
 
   function handleDiscardPictogramsClick() {
-    showPictogramStripeToStudent(false);
-    setStripe([]);
+    if (isLocalStripeInForeground) {
+      showPictogramStripeInForeground(false);
+    }
+    setLocalStripe([]);
   }
 
-  function showPictogramStripeToStudent(visible) {
-    setStripeVisible(visible);
-    sendMessage(clientEvents.showPictogramStripe, { stripe, visible });
+  function handleDiscardRemotePictogramsClick() {
+    if (isLocalStripeInForeground) {
+      showPictogramStripeInForeground(false);
+    } else {
+      setRemoteStripeVisible(false);
+    }
+  }
+
+  function showPictogramStripeInForeground(visible) {
+    const sender = sessionStorage.getItem('name');
+    setSenderName(sender);
+    setRemoteStripe(localStripe);
+    setRemoteStripeVisible(visible);
+    setIsLocalStripeInForeground(visible);
+    sendMessage(clientEvents.showPictogramStripe, { stripe: localStripe, visible, sender });
   }
   return (
     <Layout>
@@ -128,30 +161,39 @@ const ProfessionalSession = (props) => {
               {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
+              {tools.boxes && <Boxes props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
             </form>
           </div>
         </div>
       </div>
       <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />}</div>
-      {stripe && stripe.length > 0 && (
+      {celebrationVisible && localStripe && localStripe.length > 0 && (
         <div className='card shadow-sm container px-0 mb-4 pt-4' style={{ border: '1px solid #cecbcb' }}>
           <Row style={{ justifyContent: 'center' }}>
             <MDBBtn onClick={handleDiscardPictogramsClick} className='bg-light shadow-none btnOption mr-2 mt-2 ml-0' style={{ marginBottom: '10px !important', marginRight: '5px !important' }}>
               <i className='fas fa-times-circle'></i>
               <span className='ml-2'>Descartar</span>
             </MDBBtn>
-            <MDBBtn onClick={handleShowPictogramsToStudentClick} className={`${stripeVisible ? 'red' : 'blue'} darken-2 shadow-none btnOption mr-2 mt-2 ml-0`} style={{ marginBottom: '10px !important', marginRight: '5px !important', backgroundColor: '#dd4b39 !important', color: '#FFF', borderColor: '#dd4b39' }}>
-              <i className={`fas ${stripeVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-              <span className='ml-2'>{stripeVisible ? 'Dejar de mostrar al alumno' : 'Mostrar al alumno'}</span>
+            <MDBBtn onClick={handleShowPictogramsInForegroundClick} className={`${isLocalStripeInForeground ? 'red' : 'blue'} darken-2 shadow-none btnOption mr-2 mt-2 ml-0`} style={{ marginBottom: '10px !important', marginRight: '5px !important', backgroundColor: '#dd4b39 !important', color: '#FFF', borderColor: '#dd4b39' }}>
+              <i className={`fas ${isLocalStripeInForeground ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              <span className='ml-2'>{isLocalStripeInForeground ? 'Ocultar' : 'Mostrar'}</span>
             </MDBBtn>
           </Row>
-          <Stripe stripe={stripe} />
+          <Stripe stripe={localStripe} />
         </div>
       )}
+      {celebrationVisible && <PictoFab style={{ bottom: 96 }} onClick={() => showPictograms(true)} />}
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
       {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
-      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.PROFESSIONAL} />
+      {remoteStripeVisible && (
+        <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={handleDiscardRemotePictogramsClick} />
+          <label style={{ color: 'white', fontSize: '16px', fontWeight: 'bold', alignSelf: 'center', marginTop: 16 }}>{senderName} dice</label>
+          <Stripe stripe={remoteStripe} />
+        </div>
+      )}
+      {props.location.state && <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={props.location.state.idStudent} idProfessional={sessionStorage.getItem('idProfessional')} mode={pictogramModes.PROFESSIONAL} />}
     </Layout>
   );
 };
