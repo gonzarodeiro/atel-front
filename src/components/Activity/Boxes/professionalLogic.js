@@ -1,10 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Image as KonvaImage } from 'react-konva';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { Stage, Layer, Image as KonvaImage, Shape } from 'react-konva';
 import Confites from '../../Confites';
 import bkgnd from './images/background.jpg';
 import { imageFactory } from './commons/imageFactory';
 import Letters from './components/professionalLetters';
-import { clientEvents, registerEvent } from '../../../utils/socketManager';
+import { clientEvents, registerEvent, sendMessage } from '../../../utils/socketManager';
 
 const Boxes = () => {
   const MARGIN = 80;
@@ -15,6 +15,7 @@ const Boxes = () => {
   const [{ width, height }, setDimensions] = useState({});
   const [showConfites, setShowConfites] = useState(false);
   const [elements, setElements] = useState();
+  const [studentPointerPosition, setStudentPointerPosition] = useState({ x: -20, y: -20 });
 
   useEffect(() => {
     registerEvents();    
@@ -32,6 +33,9 @@ const Boxes = () => {
 
   function registerEvents(){
     setConfiguration();    
+    registerEvent((obj) => {
+      setStudentPointerPosition(obj);
+    }, clientEvents.studentPointer);
   }
 
   function setConfiguration() {    
@@ -52,11 +56,15 @@ const Boxes = () => {
     );
   }
 
-
+  const onMouseMove = useCallback(() => {
+    const point = stageRef.current.getPointerPosition();
+    const coords = Object.values(point);
+    sendMessage(clientEvents.studentPointer, { x: coords[0], y: coords[1] });
+  });
 
   return (
     <div style={{ width: width, height: height, backgroundSize: 'cover', backgroundImage: `url("${bkgnd}")` }} ref={divRef}>
-      <Stage width={width} height={height} ref={stageRef}>
+      <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
         <Layer ref={layerRef}>
           {elements &&
             elements.map((element, index) => (
@@ -66,7 +74,27 @@ const Boxes = () => {
               </>
             ))}
         </Layer>
+        <Layer>
+          <Shape
+            sceneFunc={(context, shape) => {
+              context.beginPath();
+              context.moveTo(70, 20);
+              context.lineTo(200, 80);
+              context.quadraticCurveTo(150, 100, 100, 150);
+              context.closePath();
+              context.fillStrokeShape(shape);
+              shape.scaleX(0.1);
+              shape.scaleY(0.1);
+              shape.x(studentPointerPosition.x);
+              shape.y(studentPointerPosition.y);
+            }}
+            fill='#FFFFFFF'
+            stroke='black'
+            strokeWidth={0}
+          />
+        </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
+        
       </Stage>
     </div>
   );

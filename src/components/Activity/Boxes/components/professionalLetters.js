@@ -30,6 +30,11 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
   }, [element]);
 
   function registerEvents(){    
+
+    registerEvent( () => {
+      clearIntervals();
+    }, clientEvents.clearIntervals );
+
     registerEvent( (letters) => {            
       setLettersState(letters);
     }, clientEvents.setLetter + indexElement );

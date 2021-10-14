@@ -24,9 +24,8 @@ const clientEvents = {
   reloadPictogramsTemplate: 'reload-pictograms-template',
   inclusionLayout: 'inclusionLayout',
   setLetter: 'setLetter',
-  clickLetter: 'clickLetter'
-
-
+  clickLetter: 'clickLetter',
+  clearIntervals: 'clearIntervals'
 };
 
 const serverEvents = {
