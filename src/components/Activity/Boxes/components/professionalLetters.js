@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Group, Image as KonvaImage, Text } from 'react-konva';
 import { imageFactory } from '../commons/imageFactory';
 import emptyLetter from '../images/emptyLetter.png';
-import { clientEvents, registerEvent } from '../../../../utils/socketManager';
+import { clientEvents, registerEvent, removeEventListener } from '../../../../utils/socketManager';
 import Konva from 'konva';
 
 let intervals = [];
+let intents = 0;
+
 
 const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }) => {
   const MARGIN = 80,
     MARGIN_TOP = 80;
   const [lettersState, setLettersState] = useState();
 
-  useEffect(() => {
+  useEffect(() => {    
+    removeEventListener(clientEvents.clickLetter + indexElement);
     registerEvents();    
     const lettersState = letters.map((element) => {
       return {
@@ -22,17 +25,20 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
         src: emptyLetter
       };
     });
+    
     setLettersState(lettersState);
-  }, []);
+  }, [element]);
 
-  function registerEvents(){
-    registerEvent( (letters) => {
+  function registerEvents(){    
+    registerEvent( (letters) => {            
       setLettersState(letters);
     }, clientEvents.setLetter + indexElement );
 
+    console.log("registro");
     registerEvent( (i) => {
       clearIntervals();
       let word = letters.map((x) => x).join('');        
+      debugger;
       let target = stageRef.current.find((el) => el.attrs.id === 'group' + word + i)[0];        
       let greenIncrement = 5;
       let interval = window.setInterval(function () {              

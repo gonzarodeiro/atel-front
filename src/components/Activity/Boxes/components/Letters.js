@@ -12,7 +12,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
     MARGIN_TOP = 80;
   const [lettersState, setLettersState] = useState();
 
-  useEffect(() => {    
+  useEffect(() => {        
     const lettersState = letters.map((element) => {
       return {
         letter: element,
@@ -21,8 +21,9 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
         src: emptyLetter
       };
     });
-    setLettersState(lettersState);
-  }, []);
+    setLettersState(lettersState);  
+    sendMessage(clientEvents.setLetter + indexElement, lettersState);
+  }, [letters,indexElement]);
   
 
   const handleOnMouseOver = (i) => {
