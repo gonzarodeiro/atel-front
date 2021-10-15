@@ -28,14 +28,14 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
   
 
   const handleOnMouseOver = (i) => {
-    setLettersState(
-      lettersState.map((element, index) => {
-        return {
-          ...element,
-          isOnMouseUp: i === index
-        };
-      })
-    );
+    const newLettersState = lettersState.map((element, index) => {
+      return {
+        ...element,
+        isOnMouseUp: i === index
+      };
+    })      
+    setLettersState(newLettersState);
+    sendMessage(clientEvents.setLetter + indexElement, newLettersState);
   };
 
   const handleOnMouseOut = (e) => {
