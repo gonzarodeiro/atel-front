@@ -45,6 +45,7 @@ const Alphabetical = (props) => {
       {
         id: uuidv4(),
         name: 'CEREZA',
+        type: 'FRUTAS',
         src: imgCherry,
         voice: voiceCherry,
         width: 90,
@@ -55,6 +56,7 @@ const Alphabetical = (props) => {
       {
         id: uuidv4(),
         name: 'UVA',
+        type: 'FRUTAS',
         src: imgGrape,
         voice: voiceGrape,
         width: 90,
@@ -65,6 +67,7 @@ const Alphabetical = (props) => {
       {
         id: uuidv4(),
         name: 'MANZANA',
+        type: 'FRUTAS',
         src: imgApple,
         voice: voiceApple,
         width: 90,
@@ -75,6 +78,7 @@ const Alphabetical = (props) => {
       {
         id: uuidv4(),
         name: 'LIMÓN',
+        type: 'FRUTAS',
         src: imgLemon,
         voice: voiceLemon,
         width: 90,
@@ -85,6 +89,7 @@ const Alphabetical = (props) => {
       {
         id: uuidv4(),
         name: 'BANANA',
+        type: 'FRUTAS',
         src: imgBanana,
         voice: voiceBanana,
         width: 90,
@@ -102,6 +107,7 @@ const Alphabetical = (props) => {
         {
           id: uuidv4(),
           name: 'GATO',
+          type: 'ANIMALES',
           src: imgCat,
           voice: voiceCat,
           width: 90,
@@ -112,6 +118,7 @@ const Alphabetical = (props) => {
         {
           id: uuidv4(),
           name: 'JIRAFA',
+          type: 'ANIMALES',
           src: imgGiraffe,
           voice: voiceGiraffe,
           width: 90,
@@ -122,6 +129,7 @@ const Alphabetical = (props) => {
         {
           id: uuidv4(),
           name: 'LEÓN',
+          type: 'ANIMALES',
           voice: voiceLion,
           src: imgLion,
           width: 90,
@@ -132,6 +140,7 @@ const Alphabetical = (props) => {
         {
           id: uuidv4(),
           name: 'PERRO',
+          type: 'ANIMALES',
           src: imgDog,
           voice: voiceDog,
           width: 90,
@@ -142,6 +151,7 @@ const Alphabetical = (props) => {
         {
           id: uuidv4(),
           name: 'ELEFANTE',
+          type: 'ANIMALES',
           voice: voiceElephant,
           src: imgElephant,
           width: 90,
@@ -172,7 +182,7 @@ const Alphabetical = (props) => {
     <React.Fragment>
       <div className='row'>
         <div className='pb-3 mt-2 col-md-8'>
-          <Activity data={activityData} restartActivity={restartActivity} />
+          <Activity data={activityData} restartActivity={restartActivity} sessionId={props.sessionId} />
         </div>
         <div className='col-md-4' style={{ marginTop: '3px' }}>
           <div data-test='col'>

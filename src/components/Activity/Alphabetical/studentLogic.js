@@ -6,8 +6,33 @@ import correctBanner from './images/others/correctBanner.png';
 import { sendMessage, clientEvents, registerEvent } from '../../../utils/socketManager';
 import { imageFactory, oposedColor, playAudio } from './commons/index';
 import Confites from '../../Confites';
+import postResponseApi from '../../../utils/services/post/postResponseApi';
+import { BASE_URL } from '../../../config/environment';
 
-const Alphabetical = ({ data, restartActivity }) => {
+
+let metrics = { metricActivity: [] };
+let currentActivityMetrics;
+function addNewMetrics(elements) {
+  let metricalMath = [];
+  elements.forEach((element) => {
+    metricalMath.push({
+      name: element.name,
+      type: element.type,
+      fails: 0,
+      success: 0,
+      total:0
+    });
+  });
+  return {        
+    activitySuccess: false,
+    initialDTime: Date.now(),
+    finishTime: null,
+    diffTime: null,
+    metricMatch: metricalMath
+  };
+}
+
+const Alphabetical = ({ data, restartActivity, sessionId }) => {
   const CONTAINER_SIZE = '100%',
     MARGIN = 20,
     MARGIN_TOP = 20,
@@ -38,13 +63,25 @@ const Alphabetical = ({ data, restartActivity }) => {
       setArrowPoints([]);
       restartActivity();
     }, clientEvents.resetActivity);
+
+
+    return async () => {
+      await saveMetrics();
+    }
   }, []);
 
-  useEffect(() => {
+  useEffect(() => {    
     setResolution();
     setShowConfites(false);
     setConfiguration();
   }, [data]);
+
+  async function saveMetrics() {
+    debugger;
+    const dateNow = Date.now();
+    if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
+    await postResponseApi(`${BASE_URL}/statistics/alphabetical/session/` + sessionId, metrics);
+  }
 
   function setResolution() {
     const width = 700;
@@ -52,13 +89,17 @@ const Alphabetical = ({ data, restartActivity }) => {
     setDimensions({ width, height });
   }
 
-  function setConfiguration() {
+  function setConfiguration() {        
     const elementsLeft = getRandomItems(data.elements);
     const elementsRigth = getRandomItems(elementsLeft);
     const color = getRandomItems(data.colors)[1];
     setItemGroupLeft(elementsLeft);
     setItemGroupRight(elementsRigth);
     setColor(color);
+    const dateNow = Date.now();
+    if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
+    currentActivityMetrics = addNewMetrics(data.elements);
+    
     sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
   }
 
@@ -92,20 +133,31 @@ const Alphabetical = ({ data, restartActivity }) => {
   }, [itemLeftSelected]);
 
   function checkTargetMatch(element) {
+    let match = false;
     if (element && itemLeftSelected.name === element.attrs.text) {
-      setShowConfites(true);
-      checkMatch();
+      match = true;
+      setShowConfites(true);    
+      updateMatch();
       playAudio(itemLeftSelected.voice, setPlaying, audioRef);
       if (!checkFinishActivity()) {
         sendMessage(clientEvents.targetMatch, { itemGroupRight });
       }
       sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
     }
+
+    currentActivityMetrics.metricMatch.map((metric) => {      
+      if (metric.name !== itemLeftSelected.name) return { ...metric };
+      if (match) {
+        return { ...metric, success: ++metric.success, total: ++metric.total };
+      } else {
+        return { ...metric, fails: ++metric.fails, total: ++metric.total };
+      }
+    })
   }
 
-  function checkMatch() {
+  function updateMatch() {
     for (let i in itemGroupRight) {
-      if (itemGroupRight[i].name === itemLeftSelected.name) {
+      if (itemGroupRight[i].name === itemLeftSelected.name) {          
         let tempItemGroupRight = [...itemGroupRight];
         tempItemGroupRight[i].matched = true;
         setItemGroupRight(tempItemGroupRight);
@@ -115,7 +167,7 @@ const Alphabetical = ({ data, restartActivity }) => {
   }
 
   function checkFinishActivity() {
-    let finish = true;
+    let finish = true;    
     for (let i in itemGroupLeft) {
       if (itemGroupLeft[i].matched === false) {
         finish = false;
@@ -123,6 +175,7 @@ const Alphabetical = ({ data, restartActivity }) => {
       }
     }
     if (finish) {
+      currentActivityMetrics.activitySuccess = true;
       restartActivity();
       reset();
     }
