@@ -26,6 +26,7 @@ const Index = () => {
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [numericalAritmeticTable, setNumericalAritmeticTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [numericalMatchesTable, setNumericalMatchesTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [alphabeticalAritmeticTable, setAlphabeticalAritmeticTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [alphabeticalMatchesTable, setAlphabeticalTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [sessionDetails, setSessionDetails] = useState();
@@ -101,17 +102,24 @@ const Index = () => {
       fillOperationsTable(alphabeticalRows, setAlphabeticalTable);
     }
 
+    if (Object.keys(result[0].alphabetical.statistics.typeMatches).length > 0) {
+      const matchesRows = convertMatches(result[0].alphabetical.statistics.typeMatches);
+      fillOperationsTable(matchesRows, setAlphabeticalAritmeticTable);
+    }
+
     if (Object.keys(result[0].numerical.statistics.aritmetic).length > 0) {
       const aritmeticsRows = convertAritmetic(result[0].numerical.statistics.aritmetic);
       fillOperationsTable(aritmeticsRows, setNumericalAritmeticTable);
     }
+
     if (Object.keys(result[0].numerical.statistics.matches).length > 0) {
       const matchesRows = convertMatches(result[0].numerical.statistics.matches);
       fillMatchesTable(matchesRows);
     }
+
     setDateDetails(convertDateTime(new Date(result[0].startDateTime)));
-    if (result[0].alphabetical.statistics.avgTime) setAvgTime(convertMStoMinutes(result[0].alphabetical.statistics.avgTime));
-    if (result[0].numerical.statistics.avgTime) setAvgAlphabeticalTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
+    if (result[0].alphabetical.statistics.avgTime) setAvgAlphabeticalTime(convertMStoMinutes(result[0].alphabetical.statistics.avgTime));
+    if (result[0].numerical.statistics.avgTime) setAvgTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
     setShowModal({ details: true });
   }
 
@@ -264,7 +272,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} alphabeticalMatchesTable={alphabeticalMatchesTable} avgAlphabeticalTime={avgAlphabeticalTime} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} alphabeticalMatchesTable={alphabeticalMatchesTable} avgAlphabeticalTime={avgAlphabeticalTime} alphabeticalAritmeticTable={alphabeticalAritmeticTable} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>

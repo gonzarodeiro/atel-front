@@ -6,7 +6,7 @@ import Table from '../../../../components/html/Table';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime, alphabeticalMatchesTable, avgAlphabeticalTime }) => {
+const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime, alphabeticalMatchesTable, avgAlphabeticalTime, alphabeticalAritmeticTable }) => {
   async function exportPDF() {
     const doc = new jsPDF('p', 'pt', 'A4', true);
     const title = `Detalles de la sesión con: ${obj.fullName}`;
@@ -34,7 +34,8 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
   function showInfoTools(doc) {
     if (obj.alphabetical) {
       showToolHeader(doc, 'Herramienta alfabética', 180, 204, obj.alphabetical.observation, 225);
-      if (Object.keys(obj.alphabetical.statistics.specificMatches).length > 0) showNumericalTool(doc, alphabeticalMatchesTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 250);
+      if (Object.keys(obj.alphabetical.statistics.typeMatches).length > 0) showNumericalTool(doc, alphabeticalAritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 250);
+      if (Object.keys(obj.alphabetical.statistics.specificMatches).length > 0) showNumericalTool(doc, alphabeticalMatchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 350);
       doc.addPage();
     }
 
@@ -125,6 +126,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
               </Accordion.Toggle>
               <Accordion.Collapse eventKey='0'>
                 <Card.Body>
+                  {alphabeticalAritmeticTable.show && <Table data={alphabeticalAritmeticTable} paging={true} />}
                   {alphabeticalMatchesTable.show && <Table data={alphabeticalMatchesTable} />}
                   <div className='row pb-2'>
                     {obj.alphabetical.observation && (
