@@ -14,17 +14,19 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
   }, []);
 
   function redirectTool(tool) {
+    sendMessage('init-' + tool);
     showTools({ [tool]: true });
   }
 
   function redirectEnd() {
     showTools({ boxes: false });
     showMeeting({ end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 
   function restart() {
-    //todo
+    sendMessage(clientEvents.resetActivity);
   }
 
   function beginSession() {

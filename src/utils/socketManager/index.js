@@ -24,4 +24,8 @@ function registerEvent(callback, eventName) {
   });
 }
 
-export { connect, disconnect, sendMessage, registerEvent, clientEvents, serverEvents };
+function removeEventListener(eventName){
+  _socket.off(eventName);
+}
+
+export { connect, disconnect, sendMessage, registerEvent, clientEvents, serverEvents, removeEventListener };

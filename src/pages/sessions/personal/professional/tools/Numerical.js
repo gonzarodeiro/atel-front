@@ -19,12 +19,14 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
   }, []);
 
   function redirectTool(tool) {
+    sendMessage('init-' + tool);
     showTools({ [tool]: true });
   }
 
   function redirectEnd() {
     showTools({ numerical: false });
     showMeeting({ end: true });
+    onJitsiLayout();
     setCelebrationVisible(false);
   }
 

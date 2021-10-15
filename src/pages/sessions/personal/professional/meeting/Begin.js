@@ -19,6 +19,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
     let mapToolToEvent = {
       [tools.alphabetical]: clientEvents.initAlphabetical,
       [tools.numerical]: clientEvents.initNumerical,
+      [tools.boxes]: clientEvents.initBoxes,
       [tools.pictograms]: clientEvents.initPictograms
     };
     return mapToolToEvent[tool];
