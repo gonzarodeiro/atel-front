@@ -26,9 +26,11 @@ const Index = () => {
   const [table, setTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [numericalAritmeticTable, setNumericalAritmeticTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [numericalMatchesTable, setNumericalMatchesTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [alphabeticalMatchesTable, setAlphabeticalTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [error, setErrors] = useState({ show: false, message: '' });
   const [sessionDetails, setSessionDetails] = useState();
   const [avgTime, setAvgTime] = useState();
+  const [avgAlphabeticalTime, setAvgAlphabeticalTime] = useState();
   const [dateDetails, setDateDetails] = useState();
   const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
@@ -94,16 +96,22 @@ const Index = () => {
     let result = await getResponseById(`${BASE_URL}/session/details`, response.id);
     setSessionDetails(result[0]);
 
+    if (Object.keys(result[0].alphabetical.statistics.specificMatches).length > 0) {
+      const alphabeticalRows = convertMatches(result[0].alphabetical.statistics.specificMatches);
+      fillOperationsTable(alphabeticalRows, setAlphabeticalTable);
+    }
+
     if (Object.keys(result[0].numerical.statistics.aritmetic).length > 0) {
       const aritmeticsRows = convertAritmetic(result[0].numerical.statistics.aritmetic);
-      fillAritmeticTable(aritmeticsRows);
+      fillOperationsTable(aritmeticsRows, setNumericalAritmeticTable);
     }
     if (Object.keys(result[0].numerical.statistics.matches).length > 0) {
       const matchesRows = convertMatches(result[0].numerical.statistics.matches);
       fillMatchesTable(matchesRows);
     }
     setDateDetails(convertDateTime(new Date(result[0].startDateTime)));
-    if (result[0].numerical.statistics.avgTime) setAvgTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
+    if (result[0].alphabetical.statistics.avgTime) setAvgTime(convertMStoMinutes(result[0].alphabetical.statistics.avgTime));
+    if (result[0].numerical.statistics.avgTime) setAvgAlphabeticalTime(convertMStoMinutes(result[0].numerical.statistics.avgTime));
     setShowModal({ details: true });
   }
 
@@ -128,7 +136,7 @@ const Index = () => {
       if (attempts) percentage = (obj[k].success * 100) / attempts;
 
       return {
-        name: mapKeys[k],
+        name: k.charAt(0).toUpperCase() + k.slice(1),
         attempts: attempts,
         fail: obj[k].fails,
         success: obj[k].success,
@@ -155,9 +163,9 @@ const Index = () => {
     return rows;
   }
 
-  function fillAritmeticTable(obj) {
+  function fillOperationsTable(obj, setObj) {
     if (obj) {
-      setNumericalAritmeticTable({
+      setObj({
         columns: [
           { label: 'Operación', field: 'name' },
           { label: 'Intentos', field: 'attempts' },
@@ -169,7 +177,7 @@ const Index = () => {
         show: true
       });
     } else {
-      setNumericalAritmeticTable({ show: false });
+      setObj({ show: false });
     }
   }
 
@@ -256,7 +264,7 @@ const Index = () => {
                 </div>
               </div>
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} />}
+              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} alphabeticalMatchesTable={alphabeticalMatchesTable} avgAlphabeticalTime={avgAlphabeticalTime} />}
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>

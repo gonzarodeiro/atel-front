@@ -9,7 +9,6 @@ import Confites from '../../Confites';
 import postResponseApi from '../../../utils/services/post/postResponseApi';
 import { BASE_URL } from '../../../config/environment';
 
-
 let metrics = { metricActivity: [] };
 let currentActivityMetrics;
 function addNewMetrics(elements) {
@@ -20,10 +19,10 @@ function addNewMetrics(elements) {
       type: element.type,
       fails: 0,
       success: 0,
-      total:0
+      total: 0
     });
   });
-  return {        
+  return {
     activitySuccess: false,
     initialDTime: Date.now(),
     finishTime: null,
@@ -64,20 +63,18 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
       restartActivity();
     }, clientEvents.resetActivity);
 
-
     return async () => {
       await saveMetrics();
-    }
+    };
   }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     setResolution();
     setShowConfites(false);
     setConfiguration();
   }, [data]);
 
   async function saveMetrics() {
-    debugger;
     const dateNow = Date.now();
     if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
     await postResponseApi(`${BASE_URL}/statistics/alphabetical/session/` + sessionId, metrics);
@@ -89,7 +86,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     setDimensions({ width, height });
   }
 
-  function setConfiguration() {        
+  function setConfiguration() {
     const elementsLeft = getRandomItems(data.elements);
     const elementsRigth = getRandomItems(elementsLeft);
     const color = getRandomItems(data.colors)[1];
@@ -99,7 +96,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     const dateNow = Date.now();
     if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
     currentActivityMetrics = addNewMetrics(data.elements);
-    
+
     sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
   }
 
@@ -136,7 +133,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     let match = false;
     if (element && itemLeftSelected.name === element.attrs.text) {
       match = true;
-      setShowConfites(true);    
+      setShowConfites(true);
       updateMatch();
       playAudio(itemLeftSelected.voice, setPlaying, audioRef);
       if (!checkFinishActivity()) {
@@ -145,19 +142,19 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
       sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
     }
 
-    currentActivityMetrics.metricMatch.map((metric) => {      
+    currentActivityMetrics.metricMatch.map((metric) => {
       if (metric.name !== itemLeftSelected.name) return { ...metric };
       if (match) {
         return { ...metric, success: ++metric.success, total: ++metric.total };
       } else {
         return { ...metric, fails: ++metric.fails, total: ++metric.total };
       }
-    })
+    });
   }
 
   function updateMatch() {
     for (let i in itemGroupRight) {
-      if (itemGroupRight[i].name === itemLeftSelected.name) {          
+      if (itemGroupRight[i].name === itemLeftSelected.name) {
         let tempItemGroupRight = [...itemGroupRight];
         tempItemGroupRight[i].matched = true;
         setItemGroupRight(tempItemGroupRight);
@@ -167,7 +164,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
   }
 
   function checkFinishActivity() {
-    let finish = true;    
+    let finish = true;
     for (let i in itemGroupLeft) {
       if (itemGroupLeft[i].matched === false) {
         finish = false;

@@ -18,11 +18,11 @@ const Boxes = () => {
   const [studentPointerPosition, setStudentPointerPosition] = useState({ x: -20, y: -20 });
 
   useEffect(() => {
-    registerEvents();    
+    registerEvents();
     setDimensions({ width: 700, height: 492 });
   }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (!elements) return;
     let celebrate = true;
     elements.forEach((element) => {
@@ -31,18 +31,17 @@ const Boxes = () => {
     if (celebrate) setShowConfites(true);
   }, [elements]);
 
-  function registerEvents(){
-    setConfiguration();    
+  function registerEvents() {
+    setConfiguration();
     registerEvent((obj) => {
       setStudentPointerPosition(obj);
     }, clientEvents.studentPointer);
   }
 
-  function setConfiguration() {    
-    registerEvent( (obj) => {
+  function setConfiguration() {
+    registerEvent((obj) => {
       setElements(obj.elements);
-    }, 
-    clientEvents.setConfiguration);
+    }, clientEvents.setConfiguration);
   }
 
   function setCorrectElement(el) {
@@ -94,7 +93,6 @@ const Boxes = () => {
           />
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
-        
       </Stage>
     </div>
   );

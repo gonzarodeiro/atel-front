@@ -54,7 +54,6 @@ const ProfessionalSession = (props) => {
     }, clientEvents.closeActivityWizard);
 
     registerEvent(({ stripe, visible, sender }) => {
-      console.log('showPictogramStripe', stripe, visible);
       setRemoteStripe(stripe);
       setRemoteStripeVisible(visible);
       setIsLocalStripeInForeground(false);

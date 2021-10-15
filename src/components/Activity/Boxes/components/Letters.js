@@ -7,13 +7,12 @@ import emptyLetter from '../images/emptyLetter.png';
 import Konva from 'konva';
 import { clientEvents, sendMessage } from '../../../../utils/socketManager';
 
-
 const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }) => {
   const MARGIN = 80,
     MARGIN_TOP = 80;
   const [lettersState, setLettersState] = useState();
 
-  useEffect(() => {        
+  useEffect(() => {
     const lettersState = letters.map((element) => {
       return {
         letter: element,
@@ -22,10 +21,9 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
         src: emptyLetter
       };
     });
-    setLettersState(lettersState);  
+    setLettersState(lettersState);
     sendMessage(clientEvents.setLetter + indexElement, lettersState);
-  }, [letters,indexElement]);
-  
+  }, [letters, indexElement]);
 
   const handleOnMouseOver = (i) => {
     const newLettersState = lettersState.map((element, index) => {
@@ -33,7 +31,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
         ...element,
         isOnMouseUp: i === index
       };
-    })      
+    });
     setLettersState(newLettersState);
     sendMessage(clientEvents.setLetter + indexElement, newLettersState);
   };
@@ -49,8 +47,8 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
     );
   };
 
-  const handleOnClick = (e, i) => {    
-    sendMessage(clientEvents.clickLetter + indexElement, i)    
+  const handleOnClick = (e, i) => {
+    sendMessage(clientEvents.clickLetter + indexElement, i);
     let target = e.currentTarget.children[0];
     let greenIncrement = 5;
 
@@ -66,9 +64,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
             if (key.toUpperCase() !== element.letter.toUpperCase()) {
               newSrc = incorrectLetter;
               wordIsCorrect = false;
-            } else {
-              newSrc = correctLetter;
-            }
+            } else newSrc = correctLetter;
           }
 
           return {
@@ -76,7 +72,7 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
             letterInput: i === index ? key.toUpperCase() : element.letterInput,
             src: i === index ? newSrc : element.src
           };
-        })
+        });
         sendMessage(clientEvents.setLetter + indexElement, newLettersState);
         setLettersState(newLettersState);
 
@@ -95,17 +91,16 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
     }
     document.addEventListener('keydown', inputLetter);
 
-    const clickEvent = (event) => {      
-        //sendMessage(clientEvents.clearIntervals);
-        document.removeEventListener('keydown', inputLetter);
-        window.clearInterval(interval);
-        target.clearCache();
-        target.filters([]);
-        document.removeEventListener('click',clickEvent);        
-    }
+    const clickEvent = (event) => {
+      document.removeEventListener('keydown', inputLetter);
+      window.clearInterval(interval);
+      target.clearCache();
+      target.filters([]);
+      document.removeEventListener('click', clickEvent);
+    };
 
     let interval = window.setInterval(function () {
-      document.addEventListener('click',clickEvent);
+      document.addEventListener('click', clickEvent);
       target.cache();
       target.filters([Konva.Filters.RGB]);
       target.blue(255);
@@ -121,8 +116,8 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
           return (
             <Group id={'group' + element.name + index} onClick={(e) => handleOnClick(e, index)} onMouseOut={() => handleOnMouseOut()} onMouseOver={() => handleOnMouseOver(index)}>
               <KonvaImage scaleX={letter.isOnMouseUp ? 1.2 : 1} scaleY={letter.isOnMouseUp ? 1.2 : 1} x={MARGIN + 50 + 60 * index} y={MARGIN_TOP + (MARGIN + 10) * indexElement} id={'letterImage' + element.name + letter} image={imageFactory(letter.src)} height={70} width={50} />
-              <Text id={'letterImage' + element.name + letter} text={letter.letterInput} x={MARGIN + 55 + 60 * index} y={MARGIN_TOP + 10 + (MARGIN + 10) * indexElement} fontVariant='bold' fontSize={42} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} />              
-            </Group>          
+              <Text id={'letterImage' + element.name + letter} text={letter.letterInput} x={MARGIN + 55 + 60 * index} y={MARGIN_TOP + 10 + (MARGIN + 10) * indexElement} fontVariant='bold' fontSize={42} align='center' verticalAlign='middle' strokeWidth={1} fill='black' shadowColor='white' shadowBlur={10} />
+            </Group>
           );
         })}
     </>

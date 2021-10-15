@@ -102,7 +102,6 @@ const StudentSession = () => {
     }, clientEvents.closeActivityWizard);
 
     registerEvent(({ stripe, visible, sender }) => {
-      console.log('showPictogramStripe', stripe, visible, sender);
       setRemoteStripe(stripe);
       setRemoteStripeVisible(visible);
       setIsLocalStripeInForeground(false);

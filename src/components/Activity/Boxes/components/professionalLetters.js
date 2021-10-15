@@ -6,17 +6,15 @@ import { clientEvents, registerEvent, removeEventListener } from '../../../../ut
 import Konva from 'konva';
 
 let intervals = [];
-let intents = 0;
-
 
 const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }) => {
   const MARGIN = 80,
     MARGIN_TOP = 80;
   const [lettersState, setLettersState] = useState();
 
-  useEffect(() => {    
+  useEffect(() => {
     removeEventListener(clientEvents.clickLetter + indexElement);
-    registerEvents();    
+    registerEvents();
     const lettersState = letters.map((element) => {
       return {
         letter: element,
@@ -25,46 +23,42 @@ const Letters = ({ element, indexElement, letters, setCorrectElement, stageRef }
         src: emptyLetter
       };
     });
-    
+
     setLettersState(lettersState);
   }, [element]);
 
-  function registerEvents(){    
-
-    registerEvent( () => {
+  function registerEvents() {
+    registerEvent(() => {
       clearIntervals();
-    }, clientEvents.clearIntervals );
+    }, clientEvents.clearIntervals);
 
-    registerEvent( (letters) => {            
+    registerEvent((letters) => {
       setLettersState(letters);
-    }, clientEvents.setLetter + indexElement );
+    }, clientEvents.setLetter + indexElement);
 
-    console.log("registro");
-    registerEvent( (i) => {
+    registerEvent((i) => {
       clearIntervals();
-      let word = letters.map((x) => x).join('');        
-      debugger;
-      let target = stageRef.current.find((el) => el.attrs.id === 'group' + word + i)[0];        
+      let word = letters.map((x) => x).join('');
+      let target = stageRef.current.find((el) => el.attrs.id === 'group' + word + i)[0];
       let greenIncrement = 5;
-      let interval = window.setInterval(function () {              
+      let interval = window.setInterval(function () {
         target.cache();
         target.filters([Konva.Filters.RGB]);
         target.blue(255);
         target.red(131);
         target.green(Math.sin((greenIncrement += 0.1)) * 15 + 190);
       }, 10);
-      
+
       intervals.push(interval);
-      
-    }, clientEvents.clickLetter + indexElement );
+    }, clientEvents.clickLetter + indexElement);
   }
 
-  function clearIntervals(){
-    for ( var i = 0; i < intervals.length; ++i ){
-      clearInterval( intervals[i] );      
+  function clearIntervals() {
+    for (var i = 0; i < intervals.length; ++i) {
+      clearInterval(intervals[i]);
     }
-    let targets = stageRef.current.find((el) => el.attrs.id && el.attrs.id.startsWith('group'));        
-    targets.forEach(x => {
+    let targets = stageRef.current.find((el) => el.attrs.id && el.attrs.id.startsWith('group'));
+    targets.forEach((x) => {
       x.clearCache();
       x.filters([]);
     });

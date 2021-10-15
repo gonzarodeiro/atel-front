@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState,useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Stage, Layer, Image as KonvaImage, Shape } from 'react-konva';
 import Confites from '../../Confites';
 import bkgnd from './images/background.jpg';
@@ -33,16 +33,15 @@ const Boxes = () => {
     if (celebrate) setShowConfites(true);
   }, [elements]);
 
-  function registerEvents(){
+  function registerEvents() {
     registerEvent(() => {
-      setConfiguration();  
-    },clientEvents.resetActivity);
+      setConfiguration();
+    }, clientEvents.resetActivity);
 
     registerEvent((obj) => {
       setStudentPointerPosition(obj);
     }, clientEvents.studentPointer);
   }
-
 
   function setConfiguration() {
     const newElements = getFourRandomElements(constElements);
@@ -84,7 +83,6 @@ const Boxes = () => {
     sendMessage(clientEvents.studentPointer, { x: coords[0], y: coords[1] });
   });
 
-
   return (
     <div style={{ width: width, height: height, backgroundSize: 'cover', backgroundImage: `url("${bkgnd}")` }} ref={divRef}>
       <Stage width={width} height={height} ref={stageRef} onMouseMove={onMouseMove}>
@@ -93,7 +91,7 @@ const Boxes = () => {
             elements.map((element, index) => (
               <>
                 <KonvaImage x={MARGIN} y={MARGIN_TOP + (MARGIN + 10) * index} id={'image' + element.name} image={imageFactory(element.src)} height={70} width={50} />
-                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement}  />
+                <Letters stageRef={stageRef} element={element} indexElement={index} letters={element.charArray} setCorrectElement={setCorrectElement} />
               </>
             ))}
         </Layer>

@@ -6,7 +6,7 @@ import Table from '../../../../components/html/Table';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime }) => {
+const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime, alphabeticalMatchesTable, avgAlphabeticalTime }) => {
   async function exportPDF() {
     const doc = new jsPDF('p', 'pt', 'A4', true);
     const title = `Detalles de la sesión con: ${obj.fullName}`;
@@ -34,6 +34,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
   function showInfoTools(doc) {
     if (obj.alphabetical) {
       showToolHeader(doc, 'Herramienta alfabética', 180, 204, obj.alphabetical.observation, 225);
+      if (Object.keys(obj.alphabetical.statistics.specificMatches).length > 0) showNumericalTool(doc, alphabeticalMatchesTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 250);
       doc.addPage();
     }
 
@@ -116,7 +117,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
             </Accordion.Collapse>
           </Card>
         </Accordion>
-        {obj.alphabetical.observation && (
+        {obj.alphabetical.statistics.avgTime && (
           <Accordion className='pb-4'>
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
@@ -124,10 +125,17 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
               </Accordion.Toggle>
               <Accordion.Collapse eventKey='0'>
                 <Card.Body>
+                  {alphabeticalMatchesTable.show && <Table data={alphabeticalMatchesTable} />}
                   <div className='row pb-2'>
-                    <div className='col-md-12 my-2'>
-                      <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
-                      {obj.alphabetical.observation}
+                    {obj.alphabetical.observation && (
+                      <div className='col-md-8 my-2 text-justify'>
+                        <label style={{ fontWeight: 'bold' }}>Observaciones realizadas: </label> <br />
+                        {obj.alphabetical.observation}
+                      </div>
+                    )}
+                    <div className='col-md-4 my-2'>
+                      <label style={{ fontWeight: 'bold' }}>Tiempo promedio: </label> <br />
+                      {avgAlphabeticalTime}
                     </div>
                   </div>
                 </Card.Body>

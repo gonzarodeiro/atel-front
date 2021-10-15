@@ -20,7 +20,6 @@ const Index = () => {
   async function loadStudents() {
     const filters = { idProfessional: parseInt(sessionStorage.getItem('idProfessional')) };
     let students = await getByFilters(`${BASE_URL}/student/search`, filters);
-    console.log(students);
     students.unshift({ id: 0, fullName: 'Seleccione' });
     setApis({ dlStudents: students });
   }
