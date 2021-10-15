@@ -219,7 +219,7 @@ const StudentSession = () => {
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
                     {showJitsiDiv && <div id='init-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '580px' }}></div>}
-                    {tools.alphabetical && <Alphabetical roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
+                    {tools.alphabetical && <Alphabetical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {tools.boxes && <Boxes sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {meeting.end && <End session={session} handleChange={handleChange} />}
