@@ -15,7 +15,7 @@ import Loading from '../../../../components/Loading';
 import FloatingJitsi from '../../../../components/FloatingJitsi';
 import handleJitsiResize from '../../handleJitsiResize';
 import Stripe from '../../../../components/Activity/Pictograms/components/Stripe';
-import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms';
+import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms/PictogramTool';
 import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
 import Boxes from './tools/Boxes';
 
@@ -24,7 +24,8 @@ const wizardButtonText = 'COMENZAR';
 const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
 
 const StudentSession = () => {
-  const [student, setStudent] = useState();
+  const [student, setStudent] = useState({ id: '', name: '' });
+  const [professional, setProfessional] = useState({ id: '', name: '' });
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false, boxes: false });
   const [showJitsi, setShowJitsi] = useState(true);
@@ -113,8 +114,9 @@ const StudentSession = () => {
 
   function loadSessionStatus() {
     const fields = roomId.split('-');
-    setStudent(fields[0]);
+    setStudent({ id: '', name: fields[0] });
     setSessionId(fields[1]);
+    getSessionMembers(fields[1]);
     checkSessionCreated(fields);
     showMeeting({ begin: true });
     showTools({ alphabetical: false });
@@ -132,6 +134,12 @@ const StudentSession = () => {
       await showAlert('Error en la sesión', result.data.message, 'error');
       setShowJitsi(false);
     } else setShowJitsi(true);
+  }
+
+  async function getSessionMembers(sessionId) {
+    let result = await getResponseByFilters(`${BASE_URL}/session/members/${sessionId}`);
+    setStudent(result.data.student);
+    setProfessional(result.data.professional);
   }
 
   const handleChange = (event) => {
@@ -185,7 +193,7 @@ const StudentSession = () => {
   }
 
   function showPictogramStripeInForeground(visible) {
-    const sender = student;
+    const sender = student.name;
     setSenderName(sender);
     setRemoteStripe(localStripe);
     setRemoteStripeVisible(visible);
@@ -204,7 +212,7 @@ const StudentSession = () => {
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-2 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              ¡ Hola, Bienvenido {student} !
+              ¡ Hola, Bienvenido {student.name} !
             </div>
             {
               <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
@@ -222,7 +230,7 @@ const StudentSession = () => {
           </div>
         </div>
       </div>
-      {showJitsi && <FloatingJitsi roomId={roomId} name={student} />}
+      {showJitsi && <FloatingJitsi roomId={roomId} name={student.name} />}
       {actions && <PictoFab onClick={() => showPictograms(true)} />}
       {actions && <Celebration type={celebrationType.RECEIVER} />}
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
@@ -233,7 +241,7 @@ const StudentSession = () => {
           <Stripe stripe={remoteStripe} />
         </div>
       )}
-      <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={1} idProfessional={1} mode={pictogramModes.STUDENT} />
+      {student.id && professional.id && <Pictograms show={pictogramsVisible} onClose={handleClosePictograms} idStudent={student.id} idProfessional={professional.id} mode={pictogramModes.STUDENT} />}
     </>
   );
 };

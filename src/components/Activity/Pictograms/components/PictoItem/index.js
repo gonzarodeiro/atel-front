@@ -3,7 +3,7 @@ import PictoItemControls from '../PictoItemControls';
 import noImage from './img_placeholder.jpeg';
 import './styles.css';
 
-const PictoItem = ({ className, picto, addItemVisible, onClick, onClickAdd }) => {
+const PictoItem = ({ className, picto, addItemVisible, removeItemVisible, onClick, onClickAdd, onClickRemove }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState(false);
 
@@ -27,7 +27,9 @@ const PictoItem = ({ className, picto, addItemVisible, onClick, onClickAdd }) =>
       word: selected.word,
       sources: [source]
     };
-    onClick(selectedPicto);
+    if (onClick) {
+      onClick(selectedPicto);
+    }
   }
 
   function handleClickAdd(selected) {
@@ -36,16 +38,37 @@ const PictoItem = ({ className, picto, addItemVisible, onClick, onClickAdd }) =>
       word: selected.word,
       sources: [source]
     };
-    onClickAdd(selectedPicto);
+    if (onClickAdd) {
+      onClickAdd(selectedPicto);
+    }
   }
 
-  function shouldShowControls() {
+  function handleClickRemove(selected) {
+    const source = selected.sources[currentIndex] || '';
+    const selectedPicto = {
+      word: selected.word,
+      sources: [source]
+    };
+    if (onClickRemove) {
+      onClickRemove(selectedPicto);
+    }
+  }
+
+  function shouldShowArrowControls() {
     return picto && picto.sources && picto.sources.length > 1;
+  }
+
+  function shouldShowAddControls() {
+    return picto && picto.sources && picto.sources.length > 0 && addItemVisible;
+  }
+
+  function shouldShowRemoveControls() {
+    return removeItemVisible;
   }
 
   return (
     <div className={`pic-picto-item-container ${className}`}>
-      <PictoItemControls arrowsVisible={shouldShowControls()} plusVisible={addItemVisible} onClickLeft={handleClickLeft} onClickRight={handleClickRigth} onClickAdd={() => handleClickAdd(picto)} />
+      <PictoItemControls arrowsVisible={shouldShowArrowControls()} plusVisible={shouldShowAddControls()} removeVisible={shouldShowRemoveControls()} onClickLeft={handleClickLeft} onClickRight={handleClickRigth} onClickAdd={() => handleClickAdd(picto)} onClickRemove={() => handleClickRemove(picto)} />
       <div className='pic-picto-item' onClick={() => handleItemClick(picto)}>
         {shouldShowText() && (
           <div className='pic-picto-fallback-text'>
