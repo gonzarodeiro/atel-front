@@ -6,7 +6,7 @@ import Activity from '../../../../../components/Activity/Boxes/professionalLogic
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout }) => {
+const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
   useLayoutEffect(() => {
     handleJitsiResize('#boxes-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#boxes-jitsi', onJitsiLayout));
@@ -19,6 +19,7 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
   }
 
   function redirectEnd() {
+    setEndTimeSession(new Date());
     showTools({ boxes: false });
     showMeeting({ end: true });
     onJitsiLayout();

@@ -8,7 +8,7 @@ import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout }) => {
+const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
 
@@ -24,6 +24,7 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
   }
 
   function redirectEnd() {
+    setEndTimeSession(new Date());
     showTools({ numerical: false });
     showMeeting({ end: true });
     onJitsiLayout();

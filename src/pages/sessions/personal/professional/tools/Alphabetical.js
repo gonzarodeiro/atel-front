@@ -7,7 +7,7 @@ import Notification from '../../../../../components/html/Notification';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, showModal, showWizard, setCelebrationVisible, onJitsiLayout }) => {
+const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, showModal, showWizard, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
   useEffect(() => {
     showModal({ notification: false });
     handleJitsiResize('#alphabetical-jitsi', onJitsiLayout);
@@ -22,6 +22,7 @@ const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, sh
   }
 
   function redirectEnd() {
+    setEndTimeSession(new Date());
     showTools({ alphabetical: false });
     showMeeting({ end: true });
     onJitsiLayout();

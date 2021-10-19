@@ -25,7 +25,7 @@ const wizardButtonText = 'CONTINUAR';
 const ProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
   const [tools, showTools] = useState({ alphabetical: false, numerical: false, pictogram: false, boxes: false });
-  const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', evaluation: '', attention: '' });
+  const [session, setSession] = useState({ generalComments: '', numericalComments: '', alphabeticalComments: '', evaluation: '', attention: '', startSession: new Date() });
   const [modal, showModal] = useState({ notification: false });
   const [wizardVisible, showWizard] = useState(false);
   const [loading, setShowLoading] = useState(true);
@@ -37,6 +37,7 @@ const ProfessionalSession = (props) => {
   const [remoteStripeVisible, setRemoteStripeVisible] = useState(false);
   const [isLocalStripeInForeground, setIsLocalStripeInForeground] = useState(false);
   const [senderName, setSenderName] = useState('');
+  const [endTimeSession, setEndTimeSession] = useState();
   let history = useHistory();
 
   useEffect(() => {
@@ -157,11 +158,11 @@ const ProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
-              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
-              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
-              {tools.boxes && <Boxes props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} />}
-              {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {tools.boxes && <Boxes props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {meeting.end && <End handleChange={handleChange} session={session} props={props} endTimeSession={endTimeSession} />}
             </form>
           </div>
         </div>

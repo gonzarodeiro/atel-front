@@ -6,7 +6,7 @@ import tools from '../../../../../utils/enums/tools';
 import finishSession from '../finishSession';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, showPictograms, onJitsiLayout }) => {
+const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, copyClipboard, setCelebrationVisible, showPictograms, onJitsiLayout, setEndTimeSession }) => {
   useLayoutEffect(() => {
     handleJitsiResize('#begin-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#begin-jitsi', onJitsiLayout));
@@ -32,6 +32,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
   }
 
   function redirectEnd() {
+    setEndTimeSession(new Date());
     showMeeting({ begin: false, end: true });
     onJitsiLayout();
     setCelebrationVisible(false);
@@ -70,7 +71,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
                   <span>Alfabetización</span>
                 </MDBBtn>
-              </div>              
+              </div>
             </div>
           </div>
           <div data-test='col'>
