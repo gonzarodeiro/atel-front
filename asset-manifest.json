@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/atel-front/static/css/main.4ee1ada6.chunk.css",
-    "main.js": "/atel-front/static/js/main.68778f0e.chunk.js",
-    "main.js.map": "/atel-front/static/js/main.68778f0e.chunk.js.map",
+    "main.js": "/atel-front/static/js/main.1a96d615.chunk.js",
+    "main.js.map": "/atel-front/static/js/main.1a96d615.chunk.js.map",
     "runtime-main.js": "/atel-front/static/js/runtime-main.bdabcbb8.js",
     "runtime-main.js.map": "/atel-front/static/js/runtime-main.bdabcbb8.js.map",
     "static/css/2.c2774f4f.chunk.css": "/atel-front/static/css/2.c2774f4f.chunk.css",
-    "static/js/2.6ce8b489.chunk.js": "/atel-front/static/js/2.6ce8b489.chunk.js",
-    "static/js/2.6ce8b489.chunk.js.map": "/atel-front/static/js/2.6ce8b489.chunk.js.map",
+    "static/js/2.8359473d.chunk.js": "/atel-front/static/js/2.8359473d.chunk.js",
+    "static/js/2.8359473d.chunk.js.map": "/atel-front/static/js/2.8359473d.chunk.js.map",
     "static/js/3.f137c740.chunk.js": "/atel-front/static/js/3.f137c740.chunk.js",
     "static/js/3.f137c740.chunk.js.map": "/atel-front/static/js/3.f137c740.chunk.js.map",
     "static/js/4.2b56873b.chunk.js": "/atel-front/static/js/4.2b56873b.chunk.js",
@@ -15,11 +15,11 @@
     "static/js/5.e7bc21c5.chunk.js": "/atel-front/static/js/5.e7bc21c5.chunk.js",
     "static/js/5.e7bc21c5.chunk.js.map": "/atel-front/static/js/5.e7bc21c5.chunk.js.map",
     "index.html": "/atel-front/index.html",
-    "precache-manifest.1b58125cbf5648f117152685af3d0db0.js": "/atel-front/precache-manifest.1b58125cbf5648f117152685af3d0db0.js",
+    "precache-manifest.54c2e729ad1dc856222267bb31e51337.js": "/atel-front/precache-manifest.54c2e729ad1dc856222267bb31e51337.js",
     "service-worker.js": "/atel-front/service-worker.js",
     "static/css/2.c2774f4f.chunk.css.map": "/atel-front/static/css/2.c2774f4f.chunk.css.map",
     "static/css/main.4ee1ada6.chunk.css.map": "/atel-front/static/css/main.4ee1ada6.chunk.css.map",
-    "static/js/2.6ce8b489.chunk.js.LICENSE.txt": "/atel-front/static/js/2.6ce8b489.chunk.js.LICENSE.txt",
+    "static/js/2.8359473d.chunk.js.LICENSE.txt": "/atel-front/static/js/2.8359473d.chunk.js.LICENSE.txt",
     "static/js/3.f137c740.chunk.js.LICENSE.txt": "/atel-front/static/js/3.f137c740.chunk.js.LICENSE.txt",
     "static/js/4.2b56873b.chunk.js.LICENSE.txt": "/atel-front/static/js/4.2b56873b.chunk.js.LICENSE.txt",
     "static/js/5.e7bc21c5.chunk.js.LICENSE.txt": "/atel-front/static/js/5.e7bc21c5.chunk.js.LICENSE.txt",
@@ -81,8 +81,8 @@
   "entrypoints": [
     "static/js/runtime-main.bdabcbb8.js",
     "static/css/2.c2774f4f.chunk.css",
-    "static/js/2.6ce8b489.chunk.js",
+    "static/js/2.8359473d.chunk.js",
     "static/css/main.4ee1ada6.chunk.css",
-    "static/js/main.68778f0e.chunk.js"
+    "static/js/main.1a96d615.chunk.js"
   ]
 }
