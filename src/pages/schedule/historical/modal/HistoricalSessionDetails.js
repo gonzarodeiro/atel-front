@@ -88,18 +88,18 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
         <Accordion className='pb-4 mt-2'>
           <Card>
             <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-              Información del alumno
+              Información del alumno: {obj.fullName}
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
               <Card.Body>
                 <div className='row pb-2'>
                   <div className='col-md-3 my-2'>
-                    <label style={{ fontWeight: 'bold' }}>Alumno: </label> <br />
-                    {obj.fullName}
-                  </div>
-                  <div className='col-md-3 my-2'>
                     <label style={{ fontWeight: 'bold' }}>Fecha de la sesión: </label> <br />
                     {date}
+                  </div>
+                  <div className='col-md-3 my-2'>
+                    <label style={{ fontWeight: 'bold' }}>Duración: </label> <br />
+                    {obj.duration}
                   </div>
                   {obj.evaluation && (
                     <div className='col-md-3 my-2'>

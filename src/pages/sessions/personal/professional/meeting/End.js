@@ -41,7 +41,8 @@ const End = ({ handleChange, session, props, endTimeSession }) => {
       alphabeticalComments: session.alphabeticalComments,
       status: status.Finished,
       attention: session.attention,
-      evaluation: session.evaluation
+      evaluation: session.evaluation,
+      duration: duration
     };
     cleanObject(values);
     return values;

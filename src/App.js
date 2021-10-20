@@ -17,6 +17,7 @@ import HistoricalSession from './pages/schedule/historical/index';
 import ShareSession from './pages/schedule/share/index';
 import MaterialToBeAdapted from './pages/schedule/materialToAdapt/index';
 import Pictograms from './pages/pictograms/index';
+import Landing from './pages/landing/index';
 import NoExist from './pages/noExists';
 import GlobalStyle from './styles/css/globalStyles';
 import IdleTimer from 'react-idle-timer';
@@ -72,7 +73,8 @@ class App extends Component {
         )}
         <Route path='/(home|user|professionalSession|students|historical-session|pending-session|new-student|meeting-instantly|meeting-for-later|share-session|zoom-session|pictograms)/' component={Header} />
         <Switch>
-          <Route exact path='(/login|/)' render={(props) => <Login {...props} />} />
+          <Route exact path='(/landing|/)' render={(props) => <Landing {...props} />} />
+          <Route exact path='/login' component={Login} />
           <Route exact path='/home' component={Home} />
           <Route exact path='/professionalSession' component={ProfessionalSession} />
           <Route exact path='/studentSession/:roomId' component={StudentSession} />
