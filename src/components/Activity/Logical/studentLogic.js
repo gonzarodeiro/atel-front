@@ -189,6 +189,7 @@ const Logical = ({ sessionId }) => {
   }
 
   function moveTop(index) {
+    if (!stageRef.current) return;
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
@@ -199,6 +200,7 @@ const Logical = ({ sessionId }) => {
   }
 
   function updateTrayQuantity(index) {
+    if (!stageRef.current) return;
     const point = stageRef.current.getPointerPosition();
     const intersections = stageRef.current.getAllIntersections(point);
     const currentElement = intersections.find((element) => element.attrs.id === 'element-' + index);
