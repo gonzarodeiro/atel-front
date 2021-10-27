@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { MDBBtn } from 'mdbreact';
 
-const Body = ({ title, colorStyle, colorClass, iconItem }) => {
+const Body = ({ title, colorStyle, colorClass, iconItem, setEvaluation }) => {
   const [icon, setIcon] = useState();
+
   useEffect(() => {
     setIcon(iconItem);
   }, []);
 
-  function handleSubmit() {
-    //call bd
-  }
-
   return (
     <React.Fragment>
-      <div data-test='col' className='col-md-12 col-lg-4 mb-lg-0 mb-4' onClick={() => handleSubmit()} style={{ cursor: 'pointer' }}>
+      <div data-test='col' className='col-md-12 col-lg-4 mb-lg-0 mb-4' onClick={() => setEvaluation(title)} style={{ cursor: 'pointer' }}>
         <div data-test='card' className='card' style={{ borderRadius: '20px' }} id='hvr-float'>
           <div data-test='card-body' className='card-body'>
             <div className='d-flex justify-content-center'>
