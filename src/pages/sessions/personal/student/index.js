@@ -221,7 +221,7 @@ const StudentSession = () => {
                     {tools.alphabetical && <Alphabetical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {tools.numerical && <Numerical sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
                     {tools.boxes && <Boxes sessionId={sessionId} roomId={roomId} userName={student} onJitsiLayout={handleJitsiLayout} />}
-                    {meeting.end && <End session={session} handleChange={handleChange} />}
+                    {meeting.end && <End session={session} handleChange={handleChange} sessionId={sessionId} />}
                   </div>
                 </div>
               </form>

@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import postResponseApi from '../../../../../utils/services/post/postResponseApi';
 import showAlert from '../../../../../utils/commons/showAlert';
 
-const End = ({ handleChange, session }) => {
+const End = ({ handleChange, session, sessionId }) => {
   const [sessionEvaluation, setSessionEvaluation] = useState();
   let history = useHistory();
 
@@ -16,8 +16,7 @@ const End = ({ handleChange, session }) => {
 
   async function handleSubmit() {
     const values = { sessionEvaluation: sessionEvaluation, narrative: session.generalComments };
-    console.log(values);
-    // await postResponseApi(`${BASE_URL}/student`, values);
+    await postResponseApi(`${BASE_URL}/session/assessment/student/` + sessionId, values);
     await showAlert('Sesión finalizada', 'La sesión con el profesional ha finalizado', 'success');
     history.push(`/landing`);
   }
@@ -37,7 +36,7 @@ const End = ({ handleChange, session }) => {
       </div>
       <div className='row align-items-center d-flex flex-column-reverse flex-md-row'>
         <div className='col-md-12 d-flex justify-content-center justify-content-md-end my-2'>
-          <Submit onClick={handleSubmit} title='Salir' />
+          <Submit onClick={handleSubmit} title='Finalizar' />
         </div>
       </div>
     </React.Fragment>
