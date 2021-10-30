@@ -64,7 +64,7 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
             <div className='row'>
               <div className='col-md-12'>
                 <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Númerica y lógica</span>
+                  <span>Numérica</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>

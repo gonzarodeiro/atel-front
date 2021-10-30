@@ -63,12 +63,12 @@ const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVi
               </div>
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Herramienta Alfabética</span>
+                  <span>Unir con flechas</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Herramienta Númerica</span>
+                  <span>Herramienta Numérica</span>
                 </MDBBtn>
               </div>
             </div>

@@ -71,7 +71,7 @@ const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, sh
               </div>
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Herramienta Númerica</span>
+                  <span>Herramienta Numérica</span>
                 </MDBBtn>
               </div>
             </div>
