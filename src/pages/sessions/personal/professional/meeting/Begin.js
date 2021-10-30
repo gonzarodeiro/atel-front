@@ -57,19 +57,19 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
           </div>
           <div data-test='col'>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
-              Herramientas didácticas
+              Actividades
             </label>
           </div>
           <div data-test='container' className='container-fluid section mb-3 border p-3 col-md-12'>
             <div className='row'>
               <div className='col-md-12'>
                 <MDBBtn onClick={() => redirectTool(tools.numerical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Numérica</span>
+                  <span>Herramienta Numérica</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Alfabetización</span>
+                  <span>Herramienta Alfabetización</span>
                 </MDBBtn>
               </div>
             </div>

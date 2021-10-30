@@ -18,7 +18,7 @@ const End = ({ handleChange, session, sessionId }) => {
     const values = { sessionEvaluation: sessionEvaluation, narrative: session.generalComments };
     await postResponseApi(`${BASE_URL}/session/assessment/student/` + sessionId, values);
     await showAlert('Sesión finalizada', 'La sesión con el profesional ha finalizado', 'success');
-    history.push(`/landing`);
+    history.push(`/home`);
   }
 
   return (
