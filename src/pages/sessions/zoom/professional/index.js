@@ -10,10 +10,11 @@ import FloatingJitsi from '../../../../components/FloatingJitsi';
 
 const ZoomProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
-  const [session, setSession] = useState({ generalComments: '', evaluation: '', attention: '' });
+  const [session, setSession] = useState({ generalComments: '', evaluation: '', attention: '', startSession: new Date() });
   const [modal, showModal] = useState({ notification: false });
   const [loading, setShowLoading] = useState(true);
   const [showJitsi, setShowJitsi] = useState(true);
+  const [endTimeSession, setEndTimeSession] = useState();
   let history = useHistory();
 
   useEffect(() => {
@@ -72,8 +73,8 @@ const ZoomProfessionalSession = (props) => {
               )}
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
-              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showMeeting={showMeeting} copyClipboard={copyClipboard} onJitsiLayout={handleJitsiLayout} />}
-              {meeting.end && <End handleChange={handleChange} session={session} props={props} />}
+              {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showMeeting={showMeeting} copyClipboard={copyClipboard} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {meeting.end && <End handleChange={handleChange} session={session} props={props} endTimeSession={endTimeSession} />}
             </form>
           </div>
         </div>

@@ -5,7 +5,7 @@ import finishSession from '../../../personal/professional/finishSession';
 import Zoom from '../../../../../components/Zoom';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Begin = ({ props, handleChange, modal, session, showMeeting, copyClipboard, onJitsiLayout }) => {
+const Begin = ({ props, handleChange, modal, session, showMeeting, copyClipboard, onJitsiLayout, setEndTimeSession }) => {
   useEffect(() => {
     handleJitsiResize('#begin-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#begin-jitsi', onJitsiLayout));
@@ -13,6 +13,7 @@ const Begin = ({ props, handleChange, modal, session, showMeeting, copyClipboard
   }, []);
 
   function redirectEnd() {
+    setEndTimeSession(new Date());
     showMeeting({ begin: false, end: true });
   }
 
