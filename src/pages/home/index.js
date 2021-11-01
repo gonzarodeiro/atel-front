@@ -7,6 +7,7 @@ import showAlert from '../../utils/commons/showAlert';
 import convertDate from '../../utils/commons/convertDate';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import patchApi from '../../utils/services/patch/patchResponseApi';
+import status from '../../utils/enums/sessionStatus';
 
 const Index = () => {
   const [nextSession, setNextSession] = useState();
@@ -44,7 +45,14 @@ const Index = () => {
     } else {
       history.push({
         pathname: 'professionalSession',
-        state: { roomId: session.roomName, userName: session.roomName, date: date, sessionId: session.id }
+        state: {
+          id_student: session.idStudent,
+          id_professional: session.idProfessional,
+          status: status.Created,
+          start_datetime: date,
+          room_name: session.roomName,
+          type: session.type
+        }
       });
     }
   }
@@ -58,7 +66,7 @@ const Index = () => {
             <div className='actual-date' onClick={loadSession} title='Unirse'>
               <row className='row'>
                 {nextSession}
-                <i className='fas fa-sign-in-alt ml-2' style={{ fontSize: '22px', color: '#4685eeeb', marginTop: '3px' }} />
+                <i className='fas fa-sign-in-alt ml-2' style={{ fontSize: '21px', color: '#4685eeeb', marginTop: '5px' }} />
               </row>
             </div>
           </div>

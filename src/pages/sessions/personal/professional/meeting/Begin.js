@@ -69,7 +69,12 @@ const Begin = ({ props, handleChange, modal, session, showTools, showMeeting, co
               </div>
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Herramienta Alfabetización</span>
+                  <span>Unir con flechas</span>
+                </MDBBtn>
+              </div>
+              <div className='col-md-12 mt-2'>
+                <MDBBtn onClick={() => redirectTool(tools.boxes)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Completar palabras</span>
                 </MDBBtn>
               </div>
             </div>

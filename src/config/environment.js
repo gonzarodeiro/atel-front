@@ -23,7 +23,7 @@ const [ENV, BASE_URL] = (function (opt) {
    * Setear [DEV | STG | PRD]
    * manualmente por ahora
    * */
-  STG
+  DEV
 );
 
 export { ENV, BASE_URL };

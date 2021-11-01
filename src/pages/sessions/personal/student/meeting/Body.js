@@ -10,12 +10,12 @@ const Body = ({ title, colorStyle, colorClass, iconItem, setEvaluation }) => {
 
   return (
     <React.Fragment>
-      <div data-test='col' className='col-md-12 col-lg-4 mb-lg-0 mb-4' onClick={() => setEvaluation(title)} style={{ cursor: 'pointer' }}>
+      <div data-test='col' className='col-md-12 col-lg-4 mb-lg-0 mb-4 mr-1' onClick={() => setEvaluation(title)} style={{ cursor: 'pointer' }}>
         <div data-test='card' className='card' style={{ borderRadius: '20px' }} id='hvr-float'>
           <div data-test='card-body' className='card-body'>
             <div className='d-flex justify-content-center'>
               <div className='justify-content-center align-items-center'>
-                <i data-test='fa' className={icon} style={{ color: colorStyle, fontSize: '125px' }}></i>
+                <i data-test='fa' className={icon} style={{ color: colorStyle, fontSize: '100px' }}></i>
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>

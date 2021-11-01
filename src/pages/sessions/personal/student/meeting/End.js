@@ -23,19 +23,22 @@ const End = ({ handleChange, session, sessionId }) => {
 
   return (
     <React.Fragment>
-      <div className='d-flex justify-content-center align-items-center' style={{ marginBottom: '25px', marginTop: '25px', marginLeft: '20px', marginRight: '20px' }}>
+      <div className='col-md-11 mt-1' style={{ marginLeft: '33px', fontSize: '15px' }}>
+        <label>¿Cómo te sentiste hoy?</label>
+      </div>
+      <div className='d-flex justify-content-center align-items-center' style={{ marginBottom: '19px', marginLeft: '36px', marginRight: '36px', marginTop: '12px' }}>
         <Body title='Excelente' colorStyle='#33a74d ' colorClass='green' iconItem='far fa-smile-beam' setEvaluation={setEvaluation} />
         <Body title='Regular' colorStyle='#ffc107db' colorClass='yellow' iconItem='far fa-tired' setEvaluation={setEvaluation} />
         <Body title='Mal' colorStyle='rgb(211 47 47 / 95%)' colorClass='red' iconItem='far fa-angry' setEvaluation={setEvaluation} />
       </div>
-      <div className='row mb-2'>
-        <div className='col-md-12 my-2'>
+      <div className='row mb-2 justify-content-center'>
+        <div className='col-md-11 my-2' style={{ fontSize: '14px' }}>
           <label>Comentarios de la sesión</label>
           <textarea id='generalComments' rows='4' onChange={handleChange} value={session.generalComments} type='text' className='form-control' />
         </div>
       </div>
       <div className='row align-items-center d-flex flex-column-reverse flex-md-row'>
-        <div className='col-md-12 d-flex justify-content-center justify-content-md-end my-2'>
+        <div className='col-md-11 d-flex my-2 justify-content-md-end' style={{ marginLeft: '48px' }}>
           <Submit onClick={handleSubmit} title='Finalizar' />
         </div>
       </div>

@@ -77,7 +77,7 @@ const Index = () => {
     return {
       id_professional: parseInt(sessionStorage.getItem('idProfessional')),
       status: status.Pending,
-      studentName: params.studentName,
+      studentName: params.studentName === 'Seleccione' ? '' : params.studentName,
       type: params.type,
       dateTo: convertDate(params.dateTo),
       dateFrom: convertDate(params.dateFrom)
