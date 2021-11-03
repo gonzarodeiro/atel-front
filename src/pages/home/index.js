@@ -66,7 +66,7 @@ const Index = () => {
             <div className='actual-date' onClick={loadSession} title='Unirse'>
               <row className='row'>
                 {nextSession}
-                <i className='fas fa-sign-in-alt ml-2' style={{ fontSize: '21px', color: '#4685eeeb', marginTop: '5px' }} />
+                <i className='fas fa-sign-in-alt ml-2' style={{ fontSize: '21px', color: '#4685eeeb', marginTop: '3px' }} />
               </row>
             </div>
           </div>
