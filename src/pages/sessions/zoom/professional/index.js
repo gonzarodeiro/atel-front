@@ -86,7 +86,7 @@ const ZoomProfessionalSession = (props) => {
           <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} mode={jitsiModes.PROFESSIONAL} />
         </div>
       )}
-      <StudentView />
+      {!meeting.end && <StudentView />}
     </Layout>
   );
 };
