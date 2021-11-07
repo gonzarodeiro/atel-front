@@ -45,7 +45,7 @@ function saveDropTry(type, success) {
     if (success) {
       return { ...metric, success: ++metric.success, total: ++metric.total };
     } else {
-      return { ...metric, success: ++metric.fails, total: ++metric.total };
+      return { ...metric, fails: ++metric.fails, total: ++metric.total };
     }
   });
 }

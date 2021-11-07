@@ -121,7 +121,7 @@ const generateElementsFromSettings = (settings) => {
  * @param {object} settings user selected configuration
  * @returns {object} data to render in the activity
  */
-const getDataFromSettings = (settings) => {
+const getDataFromSettings = (settings) => {    
   const operation = settings.operation;
   const trays = generateTraysFromSettings(settings);
   const elements = generateElementsFromSettings(settings);

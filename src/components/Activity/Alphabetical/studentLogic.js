@@ -173,7 +173,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     }
     if (finish) {
       currentActivityMetrics.activitySuccess = true;
-      restartActivity();
+      //restartActivity();
       reset();
     }
     return finish;
