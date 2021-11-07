@@ -46,6 +46,7 @@
   border-style: none;
   outline: none;
   font-size: 18px;
+  height: 32px;
   width: 100%;
 }
 
@@ -56,8 +57,6 @@
 
 .pic-btn-container {
   display: flex;
-  flex: 0;
-  flex-direction: column;
   padding-left: 18px;
   padding-right: 18px;
 
@@ -66,11 +65,12 @@
 }
 
 .pic-backspace-icon {
-  font-size: 32px;
+  font-size: 24px;
   padding-left: 8px;
   padding-right: 8px;
   color: gray;
 }
+
 .pic-backspace-icon:hover {
   color: #1976d2;
 }
@@ -149,4 +149,11 @@
 .pic-btn-send:disabled {
   color: #cdcdcd;
   border: 2px solid #cdcdcd;
+}
+
+.pic-picto-lists-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  width: 100%;
 }
