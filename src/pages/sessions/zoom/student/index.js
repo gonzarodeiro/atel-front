@@ -96,7 +96,7 @@ const ZoomStudentSession = () => {
           </div>
         </div>
       </div>
-      {roomJitsi && student && (
+      {roomJitsi && student && !meeting.end && (
         <div id='index-jitsi' display='none'>
           <FloatingJitsi roomId={roomJitsi} name={student} />
         </div>

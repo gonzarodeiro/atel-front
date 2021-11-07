@@ -78,7 +78,7 @@ const ZoomProfessionalSession = (props) => {
           </div>
         </div>
       </div>
-      {props.location.state && showJitsi && (
+      {props.location.state && showJitsi && !meeting.end && (
         <div id='index-jitsi'>
           <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />
         </div>
