@@ -40,7 +40,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
     }
 
     if (obj.numerical) {
-      showToolHeader(doc, 'Herramienta numérica y lógica', 75, 106, obj.alphabetical.observation, 128);
+      showToolHeader(doc, 'Herramienta numérica', 75, 106, obj.alphabetical.observation, 128);
       if (Object.keys(obj.numerical.statistics.aritmetic).length > 0) showNumericalTool(doc, aritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 160);
       if (Object.keys(obj.numerical.statistics.matches).length > 0) showNumericalTool(doc, matchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 315);
     }
@@ -149,7 +149,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
           <Accordion className='pb-4'>
             <Card>
               <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-                Herramienta numérica y lógica
+                Herramienta numérica
               </Accordion.Toggle>
               <Accordion.Collapse eventKey='0'>
                 <Card.Body>

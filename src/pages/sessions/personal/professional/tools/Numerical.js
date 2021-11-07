@@ -72,7 +72,7 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
             </label>
           </div>
           <div id='numerical-jitsi' className='pb-3 mt-2 col-md-12' style={{ height: '200px' }}></div>
-          <div data-test='col' style={{ paddingTop: '58px' }}>
+          <div data-test='col' style={{ paddingTop: '10px' }}>
             <label className='mb-2' style={{ fontSize: '13px', fontWeight: 'bold' }}>
               Acciones
             </label>
@@ -96,7 +96,12 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
               </div>
               <div className='col-md-12 mt-2'>
                 <MDBBtn onClick={() => redirectTool(tools.alphabetical)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Herramienta Alfabética</span>
+                  <span>Unir con flechas</span>
+                </MDBBtn>
+              </div>
+              <div className='col-md-12 mt-2'>
+                <MDBBtn onClick={() => redirectTool(tools.boxes)} size='lg' className='py-2 blue darken-2 shadow-none text-white btnOption w-100 ml-0'>
+                  <span>Completar palabras</span>
                 </MDBBtn>
               </div>
             </div>

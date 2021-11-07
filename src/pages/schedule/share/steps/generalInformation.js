@@ -24,11 +24,11 @@ const GeneralInformation = ({ session, handleSubmit, showValidation, handleChang
             </Form.Group>
           </div>
           <div className='col-md-4 my-1'>
-            <label>Nombre del profesional</label>
+            <label>Nombre del destinatario</label>
             <input id='name' onChange={handleChange} value={session.name} type='text' className={'form-control ' + (!session.name && showValidation ? 'borderRed' : '')} />
           </div>
           <div className='col-md-4 my-1'>
-            <label>Contraseña del profesional</label>
+            <label>Contraseña del destinatario</label>
             <input id='password' onChange={handleChange} value={session.password} type='text' className={'form-control ' + (!session.password && showValidation ? 'borderRed' : '')} />
           </div>
         </div>

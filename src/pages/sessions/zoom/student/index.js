@@ -12,6 +12,7 @@ import FloatingJitsi from '../../../../components/FloatingJitsi';
 
 const ZoomStudentSession = () => {
   const [roomZoom, setRoomZoom] = useState();
+  const [sessionId, setSessionId] = useState();
   const [student, setStudent] = useState();
   const [meeting, showMeeting] = useState({ begin: false, end: false });
   const [showJitsi, setShowJitsi] = useState();
@@ -39,6 +40,7 @@ const ZoomStudentSession = () => {
     const fields = roomId.split('-');
     const room = fields[0] + '-' + fields[1] + '-' + fields[2];
     setRoomJitsi(fields[2] + '-' + fields[3]);
+    setSessionId(fields[3]);
     setStudent(fields[2]);
     checkSessionCreated(fields);
     setRoomZoom(room);
@@ -88,7 +90,7 @@ const ZoomStudentSession = () => {
                 <div className='row'>
                   <div className='pb-3 mt-2 col-md-12'>
                     {meeting.begin && roomJitsi && <Begin roomZoom={roomZoom} onJitsiLayout={handleJitsiLayout} roomJitsi={roomJitsi} />}
-                    {meeting.end && <End session={session} handleChange={handleChange} />}
+                    {meeting.end && <End session={session} handleChange={handleChange} sessionId={sessionId} />}
                   </div>
                 </div>
               </form>

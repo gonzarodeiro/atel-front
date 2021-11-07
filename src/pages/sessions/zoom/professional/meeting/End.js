@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Submit from '../../../../../components/html/button/Submit';
 import Dropdownlist from '../../../../../components/html/Dropdownlist';
@@ -9,8 +9,22 @@ import postResponseApi from '../../../../../utils/services/post/postResponseApi'
 import cleanObject from '../../../../../utils/commons/cleanObject';
 import { BASE_URL } from '../../../../../config/environment';
 
-const End = ({ handleChange, session, props }) => {
+const End = ({ handleChange, session, props, endTimeSession }) => {
+  const [duration, setDuration] = useState();
   let history = useHistory();
+
+  useEffect(() => {
+    getDuration();
+  }, []);
+
+  function getDuration() {
+    let result;
+    let difference = endTimeSession.getTime() - session.startSession.getTime();
+    const minutes = Math.round(difference / 60000);
+    if (minutes === 0 || minutes === 1) result = '1 minuto';
+    else result = minutes + ' minutos';
+    setDuration(result);
+  }
 
   async function handleSubmit() {
     const filters = createFilters();
@@ -24,8 +38,9 @@ const End = ({ handleChange, session, props }) => {
       id_session: props.location.state.sessionId,
       generalComments: session.generalComments,
       status: status.Finished,
-      attention: parseInt(session.attention),
-      evaluation: parseInt(session.evaluation)
+      attention: session.attention,
+      evaluation: session.evaluation,
+      duration: duration
     };
     cleanObject(values);
     return values;
@@ -38,7 +53,8 @@ const End = ({ handleChange, session, props }) => {
       </div>
       <div data-test='container' className='container-fluid section mb-3 border p-2'>
         <div className='text-center' style={{ marginTop: '2px', marginBottom: '-5px' }}>
-          <label>Duración: </label> 15 minutos
+          <label>Alumno: </label> {props.location.state.userName}
+          <label className='ml-2 mr-2'> - </label>Duración: {duration}
         </div>
       </div>
       <div className='row'>

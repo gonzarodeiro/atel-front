@@ -72,7 +72,7 @@ const Index = () => {
     return {
       id_professional: parseInt(sessionStorage.getItem('idProfessional')),
       status: params.status,
-      studentName: params.studentName,
+      studentName: params.studentName === 'Seleccione' ? '' : params.studentName,
       dateTo: convertDate(params.dateTo),
       dateFrom: convertDate(params.dateFrom)
     };
@@ -258,7 +258,7 @@ const Index = () => {
                 <div className='col-md-3 my-2'>
                   <Form.Group>
                     <Form.Label> Nombre del alumno </Form.Label>
-                    <Form.Control id='name' onChange={handleChange} className='form-control' value={params.name} style={{ cursor: 'pointer' }} as='select' disabled={false}>
+                    <Form.Control id='studentName' onChange={handleChange} className='form-control' value={params.studentName} style={{ cursor: 'pointer' }} as='select' disabled={false}>
                       {apis.dlStudents.map((file) => (
                         <option key={file.id} value={file.fullName}>
                           {file.fullName}
