@@ -7,6 +7,7 @@ import { connect } from '../../../../utils/socketManager';
 import Loading from '../../../../components/Loading';
 import StudentView from '../../../../components/StudentView';
 import FloatingJitsi from '../../../../components/FloatingJitsi';
+import { jitsiModes } from '../../../../components/Jitsi';
 
 const ZoomProfessionalSession = (props) => {
   const [meeting, showMeeting] = useState({ begin: true, end: false });
@@ -36,7 +37,8 @@ const ZoomProfessionalSession = (props) => {
   function copyClipboard() {
     const roomZoomSplit = props.location.state.roomZoom.split('-');
     const sharedLink = window.location.href.replace('zoom-session', 'student-zoom-session/' + roomZoomSplit[0] + '-' + roomZoomSplit[1] + '-' + props.location.state.userName + '-' + props.location.state.sessionId);
-    navigator.clipboard.writeText(sharedLink);
+    const encodedSharedLink = encodeURI(sharedLink);
+    navigator.clipboard.writeText(encodedSharedLink);
     showModal({ notification: true });
   }
 
@@ -81,7 +83,7 @@ const ZoomProfessionalSession = (props) => {
       </div>
       {props.location.state && showJitsi && !meeting.end && (
         <div id='index-jitsi'>
-          <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />
+          <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} mode={jitsiModes.PROFESSIONAL} />
         </div>
       )}
       <StudentView />

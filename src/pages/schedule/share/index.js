@@ -64,7 +64,8 @@ const Index = () => {
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(link);
+    const encodedSharedLink = encodeURI(link);
+    navigator.clipboard.writeText(encodedSharedLink);
     showModal({ notification: true });
   }
 

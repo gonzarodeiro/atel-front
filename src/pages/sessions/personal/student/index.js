@@ -18,6 +18,7 @@ import Stripe from '../../../../components/Activity/Pictograms/components/Stripe
 import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms/PictogramTool';
 import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
 import Boxes from './tools/Boxes';
+import { jitsiModes } from '../../../../components/Jitsi';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
@@ -229,7 +230,7 @@ const StudentSession = () => {
           </div>
         </div>
       </div>
-      {showJitsi && <FloatingJitsi roomId={roomId} name={student.name} />}
+      {showJitsi && <FloatingJitsi roomId={roomId} name={student.name} mode={jitsiModes.STUDENT} />}
       {actions && <PictoFab onClick={() => showPictograms(true)} />}
       {actions && <Celebration type={celebrationType.RECEIVER} />}
       {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
