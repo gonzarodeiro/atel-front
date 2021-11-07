@@ -1,4 +1,3 @@
-import { Button } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
 import PictoList from '../components/PictoList';
 import Stripe from '../components/Stripe';
@@ -9,6 +8,8 @@ import './styles.css';
 import postApi from '../../../../utils/services/post/postApi';
 import { clientEvents, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import deleteResponseApi from '../../../../utils/services/delete/deleteResponseApi';
+import Search from '../../../html/button/Search';
+import Cancel from '../../../html/button/Cancel';
 
 const MAX_STRIPE_LENGTH = 5;
 const SEARCH_PH = 'No hay resultados';
@@ -55,11 +56,8 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
     deletePictoFromStudentTemplate(picto);
   }
 
-  function handleKeyPress(event) {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-      getPictosFromSearch();
-    }, 3000);
+  function handleSearchClick() {
+    getPictosFromSearch();
   }
 
   function handleClearClick() {
@@ -147,22 +145,24 @@ const Pictograms = ({ show, idStudent, idProfessional, mode, onClose }) => {
           <div className='pic-input-container'>
             {mode === pictogramModes.PROFESSIONAL ? (
               <>
-                <input class='pic-input-text' type='text' autoFocus placeholder='Escribe para buscar pictogramas' ref={inputRef} onKeyPress={handleKeyPress} />
-                <i className='fas fa-times pic-backspace-icon' onClick={handleBackspaceClick}></i>
+                <input class='pic-input-text' type='text' autoFocus placeholder='Escribe para buscar pictogramas' ref={inputRef} />
+                <i className='fas fa-minus-circle pic-backspace-icon' onClick={handleBackspaceClick}></i>
               </>
             ) : (
               <p class='pic-title'>Tus pictogramas</p>
             )}
           </div>
           <div className='pic-btn-container'>
-            <Button className='pic-btn mt-2' variant='primary' onClick={() => onClose(modalResults.CANCEL)}>
-              VOLVER
-            </Button>
+            {mode === pictogramModes.PROFESSIONAL && <Search onClick={handleSearchClick} />}
+            <Cancel onClick={() => onClose(modalResults.CANCEL)} title='Cerrar' />
           </div>
         </div>
         {/* listas de pictogramas */}
-        {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={searchPictos} onItemClick={handlePictogramClick} onItemClickAdd={handlePictogramClickAdd} labelText={'Búsqueda'} placeholderText={SEARCH_PH} loading={loadingSearch} addItemVisible />}
-        {mode === pictogramModes.PROFESSIONAL ? <PictoList pictos={templatePictos} onItemClick={handlePictogramClick} onItemClickRemove={handlePictogramClickRemove} labelText={'Plantilla'} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} removeItemVisible /> : <PictoList pictos={templatePictos} onItemClick={handlePictogramClick} labelText={'Plantilla'} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} />}
+        <div className='pic-picto-lists-container'>
+          {mode === pictogramModes.PROFESSIONAL && <PictoList pictos={searchPictos} onItemClick={handlePictogramClick} onItemClickAdd={handlePictogramClickAdd} labelText={'Búsqueda'} placeholderText={SEARCH_PH} loading={loadingSearch} addItemVisible />}
+          {mode === pictogramModes.PROFESSIONAL && <div className='pic-list-separator' />}
+          {mode === pictogramModes.PROFESSIONAL ? <PictoList pictos={templatePictos} onItemClick={handlePictogramClick} onItemClickRemove={handlePictogramClickRemove} labelText={'Plantilla'} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} removeItemVisible /> : <PictoList pictos={templatePictos} onItemClick={handlePictogramClick} labelText={'Plantilla'} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} />}
+        </div>
       </div>
     )
   );

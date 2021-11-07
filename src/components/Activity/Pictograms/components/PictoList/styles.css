@@ -14,6 +14,10 @@
   overflow: scroll;
 }
 
+.pic-drawer-container {
+  flex: 1;
+}
+
 .pic-drawer-grip-container {
   height: 48px;
   display: flex;

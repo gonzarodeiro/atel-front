@@ -98,8 +98,6 @@ const PictogramTemplateEditor = ({ idProfessional, idStudent, studentName, onCan
 
   return (
     <>
-      <div className='pic-editor-input-label'>Plantilla de {studentName || 'alumno'}</div>
-      <PictoBasicList className='pic-basic-list pic-basic-list-mb' pictos={templatePictos} onItemClickRemove={handlePictogramClickRemove} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} removeItemVisible />
       <label className='pic-editor-input-label'>Buscar en</label>
       <img src={logoArasaac} width={125} alt='arasaac logo' />
       <div className='pic-editor-input-group'>
@@ -108,11 +106,19 @@ const PictogramTemplateEditor = ({ idProfessional, idStudent, studentName, onCan
         </div>
         <div className='pic-editor-input-btn-search'>
           <Search onClick={handleKeyPress} />
+          <Cancel onClick={onCancel} title='Volver' />
         </div>
       </div>
-      <PictoBasicList className={'pic-basic-list'} pictos={searchPictos} onItemClickAdd={handlePictogramClickAdd} placeholderText={SEARCH_PH} loading={loadingSearch} addItemVisible />
-      <div className='pic-editor-btn-cancel'>
-        <Cancel onClick={onCancel} title='Volver' />
+      <div className='pic-editor-picto-lists-container'>
+        <div style={{ flex: 1 }}>
+          <div className='pic-editor-input-label'>Resultados de busqueda</div>
+          <PictoBasicList className={'pic-basic-list'} pictos={searchPictos} onItemClickAdd={handlePictogramClickAdd} placeholderText={SEARCH_PH} loading={loadingSearch} addItemVisible />
+        </div>
+        <div className='pic-list-separator' />
+        <div style={{ flex: 1 }}>
+          <div className='pic-editor-input-label'>Plantilla de {studentName || 'alumno'}</div>
+          <PictoBasicList className='pic-basic-list pic-basic-list-mb' pictos={templatePictos} onItemClickRemove={handlePictogramClickRemove} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} removeItemVisible />
+        </div>
       </div>
     </>
   );

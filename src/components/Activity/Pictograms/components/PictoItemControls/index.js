@@ -5,7 +5,7 @@ import './styles.css';
 
 const PictoItemControls = ({ className, arrowsVisible, plusVisible, removeVisible, onClickLeft, onClickRight, onClickAdd, onClickRemove }) => {
   return (
-    <div className={`pic-picto-item-controls ${!arrowsVisible && 'pic-controls-zero-height '} ${className}`}>
+    <div className={`pic-picto-item-controls ${className}`}>
       {arrowsVisible && <i className='fas fa-chevron-left pic-picto-btn-up' onClick={onClickLeft} />}
       {plusVisible && (
         <div>
