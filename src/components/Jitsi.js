@@ -1,7 +1,15 @@
 import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Jitsi = forwardRef((props, ref) => {  
+export const jitsiModes = {
+  PROFESSIONAL: 0,
+  STUDENT: 1
+};
+
+const professionalToolbarButtons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'invite', 'select-background', 'sharedvideo', 'mute-everyone', 'mute-video-everyone'];
+const studentToolbarButtons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'select-background'];
+
+const Jitsi = forwardRef((props, ref) => {
   let api = {};
   const domain = 'meet.jit.si';
   let history = useHistory();
@@ -11,9 +19,10 @@ const Jitsi = forwardRef((props, ref) => {
   }, []);
 
   const startMeet = () => {
+    const toolbarButtons = props.mode === jitsiModes.PROFESSIONAL ? professionalToolbarButtons : studentToolbarButtons;
     const options = {
       roomName: props.roomId,
-      configOverwrite: { prejoinPageEnabled: false, disableDeepLinking: true, defaultLanguage: 'es', toolbarButtons: ['microphone', 'camera', 'desktop', 'hangup', 'profile', 'settings', 'invite', 'select-background', 'download', 'mute-everyone', 'mute-video-everyone'] },
+      configOverwrite: { prejoinPageEnabled: false, disableDeepLinking: true, defaultLanguage: 'es', toolbarButtons: toolbarButtons },
       parentNode: document.querySelector('#jitsi-iframe'),
       userInfo: { displayName: props.userName }
     };

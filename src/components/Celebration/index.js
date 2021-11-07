@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { clientEvents, registerEvent, sendMessage } from '../../utils/socketManager';
 
-import p1 from './personaje1.gif';
-import p2 from './personaje2.gif';
-import p3 from './personaje3.gif';
+import p1 from './gifs/g001.gif';
+import p2 from './gifs/g002.gif';
+import p3 from './gifs/g003.gif';
+import p4 from './gifs/g011.gif';
+import p5 from './gifs/g012.gif';
+import p6 from './gifs/g013.gif';
+import p7 from './gifs/g021.gif';
+import p8 from './gifs/g022.gif';
+import p9 from './gifs/g023.gif';
+import p10 from './gifs/g031.gif';
+import p11 from './gifs/g032.gif';
+import p12 from './gifs/g033.gif';
 
 import './index.css';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const items = [p1, p2, p3];
+const items = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12];
 
 export const celebrationType = {
   SENDER: 0,
@@ -82,7 +91,7 @@ const Celebration = ({ type }) => {
           {showList && items && items.length && (
             <div className='clb-list'>
               {items.map((image, index) => (
-                <img key={`item-${index}`} className='clb-img' src={image} onClick={() => handleItemClick(image)} alt='miniatura' />
+                <img key={`item-${index}`} className='clb-img' src={image} onClick={() => handleItemClick(image)} alt='miniatura' frame />
               ))}
             </div>
           )}

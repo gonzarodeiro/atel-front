@@ -17,6 +17,7 @@ import Stripe from '../../../../components/Activity/Pictograms/components/Stripe
 import { Row } from 'react-bootstrap';
 import { MDBBtn } from 'mdbreact';
 import PictoFab from '../../../../components/Activity/Pictograms/components/PictoFab';
+import { jitsiModes } from '../../../../components/Jitsi';
 
 const wizardTitle = 'Esperando al alumno';
 const wizardMessage = 'Por favor, espera a que el alumno inicie la actividad!\nPresiona continuar para iniciar de todas formas.';
@@ -69,7 +70,8 @@ const ProfessionalSession = (props) => {
 
   function copyClipboard() {
     const sharedLink = window.location.href.replace('professionalSession', 'studentSession/' + props.location.state.userName + '-' + props.location.state.sessionId);
-    navigator.clipboard.writeText(sharedLink);
+    const encodedSharedLink = encodeURI(sharedLink);
+    navigator.clipboard.writeText(encodedSharedLink);
     showModal({ notification: true });
   }
 
@@ -167,7 +169,7 @@ const ProfessionalSession = (props) => {
           </div>
         </div>
       </div>
-      <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} />}</div>
+      <div id='index-jitsi'>{props.location.state && showJitsi && <FloatingJitsi roomId={props.location.state.roomId + '-' + props.location.state.sessionId} name={sessionStorage.getItem('name')} mode={jitsiModes.PROFESSIONAL} />}</div>
       {celebrationVisible && localStripe && localStripe.length > 0 && (
         <div className='card shadow-sm container px-0 mb-4 pt-4' style={{ border: '1px solid #cecbcb' }}>
           <Row style={{ justifyContent: 'center' }}>
