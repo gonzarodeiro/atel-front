@@ -97,7 +97,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     if (currentActivityMetrics) metrics.metricActivity.push({ ...currentActivityMetrics, finishTime: dateNow, diffTime: dateNow - currentActivityMetrics.initialDTime });
     currentActivityMetrics = addNewMetrics(data.elements);
 
-    sendMessage(clientEvents.setConfiguration, { elementsLeft, elementsRigth, color });
+    sendMessage(clientEvents.setAlphabeticConfiguration, { elementsLeft, elementsRigth, color });
   }
 
   function handleLeftItem(element) {

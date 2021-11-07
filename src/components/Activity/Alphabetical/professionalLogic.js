@@ -51,13 +51,13 @@ const Alphabetical = () => {
   }
 
   function setConfiguration() {
-    registerEvent((obj) => {
+    registerEvent((obj) => {      
       setItemGroupLeft(obj.elementsLeft);
       setItemGroupRight(obj.elementsRigth);
       setColor(obj.color);
       setArrowEnable(false);
       setArrowPoints([]);
-    }, clientEvents.setConfiguration);
+    }, clientEvents.setAlphabeticConfiguration);
   }
 
   function registerEvents() {
