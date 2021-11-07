@@ -3,7 +3,7 @@ import { MDBBtn } from 'mdbreact';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
-import Settings, { modalResults, initialSettings } from '../../../../../components/Activity/Logical/components/Settings';
+import Settings, { modalResults, initialSettings,operationConst } from '../../../../../components/Activity/Logical/components/Settings';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 import handleJitsiResize from '../../../handleJitsiResize';
@@ -32,6 +32,7 @@ const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrati
   }
 
   function restart() {
+    initialSettings.operation = operationConst;
     const initialData = getDataFromSettings(initialSettings);
     sendMessage(clientEvents.setConfiguration, initialData);
   }
