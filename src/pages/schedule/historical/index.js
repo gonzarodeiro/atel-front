@@ -19,6 +19,7 @@ import getParametry from '../../../utils/services/get/getByFilters/index';
 import getResponseById from '../../../utils/services/get/getById/index';
 import getByFilters from '../../../utils/services/get/getByFilters/index';
 import { Form } from 'react-bootstrap';
+import Area from '../../../components/Charts/Area'
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -235,6 +236,7 @@ const Index = () => {
   return (
     <Layout>
       <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
+        <Area/>
         <div className='container'>
           {loading && (
             <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
