@@ -8,6 +8,7 @@ const clientEvents = {
   finishSession: 'finishSession',
   onMouseMove: 'onMouseMove',
   setConfiguration: 'setConfiguration',
+  setAlphabeticConfiguration: 'setAlphabeticConfiguration',
   onLeftItemClick: 'onLeftItemClick',
   targetMatch: 'targetMatch',
   playAudio: 'playAudio',

@@ -6,7 +6,7 @@ import Table from '../../../../components/html/Table';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime, alphabeticalMatchesTable, avgAlphabeticalTime, alphabeticalAritmeticTable }) => {
+const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmeticTable, matchesTable, avgTime, alphabeticalMatchesTable, avgAlphabeticalTime, alphabeticalAritmeticTable, historicalDetails }) => {
   async function exportPDF() {
     const doc = new jsPDF('p', 'pt', 'A4', true);
     const title = `Detalles de la sesión con: ${obj.fullName}`;
@@ -15,7 +15,11 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
     const textWidth = doc.getTextWidth(title);
     doc.line(40, 45, 40 + textWidth, 45);
     createHeader(doc, obj);
-    showInfoTools(doc);
+    if (historicalDetails.type === 'Sesión individual') showInfoTools(doc);
+    if (historicalDetails.narrative) {
+      doc.addPage();
+      familyComments(doc);
+    }
     doc.save(obj.fullName + '.pdf');
   }
 
@@ -27,22 +31,26 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
     doc.text(obj.evaluation ? obj.evaluation : '-', 330, 75);
     doc.text('Atención:', 440, 75);
     doc.text(obj.attention ? obj.attention : '-', 495, 75);
-    doc.text('Observaciones generales:', 40, 110);
-    doc.text(40, 130, obj.observation ? obj.observation : '-', { maxWidth: 520, align: 'justify' });
+    doc.text('Tipo de sesión:', 40, 110);
+    doc.text(historicalDetails.type, 128, 110);
+    doc.text('Duración de la llamada:', 260, 110);
+    doc.text(obj.duration, 390, 110);
+    doc.text('Observaciones generales:', 40, 145);
+    doc.text(40, 165, obj.observation ? obj.observation : '-', { maxWidth: 520 });
   }
 
   function showInfoTools(doc) {
     if (obj.alphabetical) {
-      showToolHeader(doc, 'Herramienta alfabética', 180, 204, obj.alphabetical.observation, 225);
-      if (Object.keys(obj.alphabetical.statistics.typeMatches).length > 0) showNumericalTool(doc, alphabeticalAritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 250);
-      if (Object.keys(obj.alphabetical.statistics.specificMatches).length > 0) showNumericalTool(doc, alphabeticalMatchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 350);
+      showToolHeader(doc, 'Herramienta alfabética', 230, 255, obj.alphabetical.observation, 270);
+      if (Object.keys(obj.alphabetical.statistics.typeMatches).length > 0) showNumericalTool(doc, alphabeticalAritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 320);
+      if (Object.keys(obj.alphabetical.statistics.specificMatches).length > 0) showNumericalTool(doc, alphabeticalMatchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 400);
       doc.addPage();
     }
 
     if (obj.numerical) {
-      showToolHeader(doc, 'Herramienta numérica', 75, 106, obj.alphabetical.observation, 128);
-      if (Object.keys(obj.numerical.statistics.aritmetic).length > 0) showNumericalTool(doc, aritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 160);
-      if (Object.keys(obj.numerical.statistics.matches).length > 0) showNumericalTool(doc, matchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 315);
+      showToolHeader(doc, 'Herramienta numérica', 75, 106, obj.numerical.observation, 128);
+      if (Object.keys(obj.numerical.statistics.aritmetic).length > 0) showNumericalTool(doc, aritmeticTable, [['Operación', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 200);
+      if (Object.keys(obj.numerical.statistics.matches).length > 0) showNumericalTool(doc, matchesTable, [['Elemento', 'Intentos', 'Aciertos', 'Errores', 'Efectividad']], 360);
     }
   }
 
@@ -53,7 +61,7 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
     doc.line(40, startY + 5, 40 + textWidth, startY + 5);
     doc.setFontSize(12);
     doc.text('Observaciones:', 40, observationLabel); // axis x, axis y
-    doc.text(observationObj ? observationObj : '-', 40, observationText);
+    doc.text(observationObj ? observationObj : '-', 40, observationText, { maxWidth: 520 });
   }
 
   function showNumericalTool(doc, data, head, startY) {
@@ -79,6 +87,10 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
     doc.autoTable(content);
   }
 
+  function familyComments(doc) {
+    showToolHeader(doc, 'Comentarios de la familia', 75, 106, historicalDetails.narrative, 128);
+  }
+
   return (
     <Modal show={showModal.details} onHide={handleClose} size='lg' aria-labelledby='contained-modal-title-vcenter'>
       <Modal.Header closeButton style={{ background: '#1565c0', padding: '8px 18px', color: 'white' }}>
@@ -88,27 +100,37 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
         <Accordion className='pb-4 mt-2'>
           <Card>
             <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
-              Información del alumno: {obj.fullName}
+              Información del alumno
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
               <Card.Body>
                 <div className='row pb-2'>
-                  <div className='col-md-3 my-2'>
+                  <div className='col-md-4 my-2'>
+                    <label style={{ fontWeight: 'bold' }}>Alumno: </label> <br />
+                    {obj.fullName}
+                  </div>
+                  <div className='col-md-4 my-2'>
                     <label style={{ fontWeight: 'bold' }}>Fecha de la sesión: </label> <br />
                     {date}
                   </div>
-                  <div className='col-md-3 my-2'>
+                  <div className='col-md-4 my-2'>
+                    <label style={{ fontWeight: 'bold' }}>Tipo de sesión: </label> <br />
+                    {historicalDetails.type}
+                  </div>
+                </div>
+                <div className='row pb-2'>
+                  <div className='col-md-4 my-2'>
                     <label style={{ fontWeight: 'bold' }}>Duración: </label> <br />
                     {obj.duration}
                   </div>
                   {obj.evaluation && (
-                    <div className='col-md-3 my-2'>
+                    <div className='col-md-4 my-2'>
                       <label style={{ fontWeight: 'bold' }}>Evaluación: </label> <br />
                       {obj.evaluation}
                     </div>
                   )}
                   {obj.attention && (
-                    <div className='col-md-3 my-2'>
+                    <div className='col-md-4 my-2'>
                       <label style={{ fontWeight: 'bold' }}>Atención: </label> <br />
                       {obj.attention}
                     </div>
@@ -180,6 +202,31 @@ const HistoricalSessionDetails = ({ showModal, handleClose, obj, date, aritmetic
               </Accordion.Toggle>
               <Accordion.Collapse eventKey='0'>
                 <Card.Body>{obj.observation}</Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        )}
+        {historicalDetails.narrative && (
+          <Accordion className='pb-4'>
+            <Card>
+              <Accordion.Toggle as={Card.Header} eventKey='0' style={{ textAlign: 'center', cursor: 'pointer', color: '#6c757d', fontWeight: 'bold', fontSize: '15px' }}>
+                Comentarios de la familia
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey='0'>
+                <Card.Body>
+                  <div className='row pb-2'>
+                    {historicalDetails.session_evaluation && (
+                      <div className='col-md-4 my-2'>
+                        <label style={{ fontWeight: 'bold' }}>Evaluación del alumno: </label> <br />
+                        {historicalDetails.session_evaluation}
+                      </div>
+                    )}
+                    <div className='col-md-8 my-2 text-justify'>
+                      <label style={{ fontWeight: 'bold' }}>Observaciones: </label> <br />
+                      {historicalDetails.narrative}
+                    </div>
+                  </div>
+                </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>

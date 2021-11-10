@@ -13,6 +13,7 @@ export const modalResults = {
 
 const defaultContainerCount = 2;
 const fixedContainerCountForArithmethics = 2;
+let operationConst = operationTypes.NONE;
 const initialSettings = {
   operation: operationTypes.NONE,
   containers: {
@@ -34,7 +35,7 @@ const initialSettings = {
   }
 };
 
-function newContainersArray(count) {
+function newContainersArray(count) {  
   const containers = initialSettings.containers;
   const containerToRepeat = containers.items[0];
   const newContainers = [];
@@ -64,15 +65,16 @@ const Settings = ({ show, onClose }) => {
     const newSettings = { ...settings };
 
     // mutate the copy
+    
     if (operation !== operationTypes.NONE) {
       const count = fixedContainerCountForArithmethics;
+      operationConst = operation;
       newSettings.operation = operation;
       newSettings.containers.count = count;
       newSettings.containers.items = newContainersArray(count);
     } else {
       newSettings.operation = operation;
-    }
-
+    }    
     // set the copy as the new state
     setSettings(newSettings);
   };
@@ -90,7 +92,7 @@ const Settings = ({ show, onClose }) => {
     newSettings.containers.count = count;
     newSettings.containers.items = newContainersArray(count);
 
-    // set the copy as the new state
+    // set the copy as the new state    
     setSettings(newSettings);
   };
 
@@ -124,12 +126,12 @@ const Settings = ({ show, onClose }) => {
         container.subType = animals.NONE;
     }
 
-    // set the copy as the new state
+    // set the copy as the new state    
     setSettings(newSettings);
   };
 
   const handleContainerSubtypeChange = (e, index) => {
-    // exit when getting invalid envents
+    // exit when getting invalid envents    
     if (!e || !e.target) return;
 
     const subType = e.target.value;
@@ -145,7 +147,7 @@ const Settings = ({ show, onClose }) => {
     const container = newSettings.containers.items[index];
     container.subType = subType;
 
-    // set the copy as the new state
+    // set the copy as the new state    
     setSettings(newSettings);
   };
 
@@ -166,7 +168,7 @@ const Settings = ({ show, onClose }) => {
     const container = newSettings.containers.items[index];
     container.capacity = parseInt(capacity);
 
-    // set the copy as the new state
+    // set the copy as the new state    
     setSettings(newSettings);
   };
 
@@ -176,7 +178,7 @@ const Settings = ({ show, onClose }) => {
         <Modal.Title>Configurar actividad</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Dropdownlist title='Operación aritmética' id='operation' handleChange={handleOperationsChange} value={settings.operation} dropdownlist={dlOperations} disabledValue={false} className={'form-control'} />
+      {settings && settings.operation && <Dropdownlist title='Operación aritmética' id='operation' handleChange={handleOperationsChange} value={settings.operation} dropdownlist={dlOperations} disabledValue={false} className={'form-control'} />}
         <Dropdownlist title='Numero de contenedores' id='containers' handleChange={handleContainerCountChange} value={settings.containers.count} dropdownlist={dlContainerCount} disabledValue={settings.operation !== operationTypes.NONE} className={'form-control'} />
         {settings &&
           settings.containers &&
@@ -214,4 +216,4 @@ const Settings = ({ show, onClose }) => {
 };
 
 export default Settings;
-export {initialSettings};
+export {initialSettings, operationConst};

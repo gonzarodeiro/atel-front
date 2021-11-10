@@ -64,7 +64,8 @@ const Index = () => {
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(link);
+    const encodedSharedLink = encodeURI(link);
+    navigator.clipboard.writeText(encodedSharedLink);
     showModal({ notification: true });
   }
 
@@ -79,7 +80,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>
+      <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           <div className='card-body pb-3'>
             <div className='card-title pb-3 border-bottom h5 text-muted' style={{ fontSize: '16px', fontWeight: 'bold' }}>

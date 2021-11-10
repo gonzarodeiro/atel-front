@@ -9,6 +9,7 @@ import { clientEvents, registerEvent } from '../../../../utils/socketManager';
 import { BASE_URL } from '../../../../config/environment';
 import Loading from '../../../../components/Loading';
 import FloatingJitsi from '../../../../components/FloatingJitsi';
+import { jitsiModes } from '../../../../components/Jitsi';
 
 const ZoomStudentSession = () => {
   const [roomZoom, setRoomZoom] = useState();
@@ -98,9 +99,9 @@ const ZoomStudentSession = () => {
           </div>
         </div>
       </div>
-      {roomJitsi && student && (
+      {roomJitsi && student && !meeting.end && (
         <div id='index-jitsi' display='none'>
-          <FloatingJitsi roomId={roomJitsi} name={student} />
+          <FloatingJitsi roomId={roomJitsi} name={student} mode={jitsiModes.STUDENT} />
         </div>
       )}
     </>

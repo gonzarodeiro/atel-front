@@ -30,6 +30,7 @@ const Index = () => {
   const [numericalMatchesTable, setNumericalMatchesTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [alphabeticalAritmeticTable, setAlphabeticalAritmeticTable] = useState({ columns: [], rows: [], actions: [], show: false });
   const [alphabeticalMatchesTable, setAlphabeticalTable] = useState({ columns: [], rows: [], actions: [], show: false });
+  const [historicalDetails, setHistoricalDetails] = useState();
   const [error, setErrors] = useState({ show: false, message: '' });
   const [sessionDetails, setSessionDetails] = useState();
   const [avgTime, setAvgTime] = useState();
@@ -111,6 +112,7 @@ const Index = () => {
   }
 
   async function handleDetails(response) {
+    setHistoricalDetails(response);
     let result = await getResponseById(`${BASE_URL}/session/details`, response.id);
     setSessionDetails(result[0]);
 
@@ -251,7 +253,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className='card shadow-sm container px-0' style={{ border: '1px solid #cecbcb' }}>        
+      <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
         <div className='container'>
           {loading && (
             <div className={'w-100 h-100 position-absolute d-flex bg-white align-items-center justify-content-center animated'} style={{ left: 0, top: 0, zIndex: 3 }}>
@@ -303,7 +305,9 @@ const Index = () => {
                   </Collapse>
                 </div>
                 )}
-              {showModal.details && <HistoricalSessionDetails showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} alphabeticalMatchesTable={alphabeticalMatchesTable} avgAlphabeticalTime={avgAlphabeticalTime} alphabeticalAritmeticTable={alphabeticalAritmeticTable} />}
+
+              {showModal.details && <HistoricalSessionDetails historicalDetails={historicalDetails} showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} alphabeticalMatchesTable={alphabeticalMatchesTable} avgAlphabeticalTime={avgAlphabeticalTime} alphabeticalAritmeticTable={alphabeticalAritmeticTable} />}
+
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>

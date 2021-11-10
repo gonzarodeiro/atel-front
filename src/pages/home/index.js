@@ -4,10 +4,9 @@ import Card from './menu/route';
 import { BASE_URL } from '../../config/environment';
 import getResponseById from '../../utils/services/get/getById/index';
 import showAlert from '../../utils/commons/showAlert';
-import convertDate from '../../utils/commons/convertDate';
 import convertDateTime from '../../utils/commons/convertDateTime';
 import patchApi from '../../utils/services/patch/patchResponseApi';
-import status from '../../utils/enums/sessionStatus';
+import convertDate from '../../utils/commons/convertDate';
 
 const Index = () => {
   const [nextSession, setNextSession] = useState();
@@ -29,10 +28,12 @@ const Index = () => {
   }
 
   async function loadSession() {
-    if (session.allowEnterRoom) {
-      await patchApi(`${BASE_URL}/session/status`, session.id);
-      redirectPages();
-    } else showAlert('Error', 'La sesión aún no ha comenzado', 'error');
+    if (nextSession !== 'No hay próximas sesiones') {
+      if (session.allowEnterRoom) {
+        await patchApi(`${BASE_URL}/session/status`, session.id);
+        redirectPages();
+      } else showAlert('Error', 'La sesión aún no ha comenzado', 'error');
+    }
   }
 
   function redirectPages() {
@@ -40,18 +41,23 @@ const Index = () => {
     if (session.type === 'Sesión de inclusión') {
       history.push({
         pathname: 'zoom-session',
-        state: { roomId: session.roomName, userName: session.roomName, date: date, sessionId: session.id, roomZoom: session.zoom + '-' + session.password + '-' + sessionStorage.getItem('name') }
+        state: {
+          roomId: session.idStudent,
+          userName: session.roomName,
+          date: date,
+          sessionId: session.id,
+          roomZoom: session.zoom + '-' + session.password
+        }
       });
     } else {
       history.push({
         pathname: 'professionalSession',
         state: {
-          id_student: session.idStudent,
-          id_professional: session.idProfessional,
-          status: status.Created,
-          start_datetime: date,
-          room_name: session.roomName,
-          type: session.type
+          roomId: session.roomName,
+          userName: session.roomName,
+          idStudent: session.idStudent,
+          date: date,
+          sessionId: session.id
         }
       });
     }
