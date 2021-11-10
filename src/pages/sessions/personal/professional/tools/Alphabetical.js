@@ -61,7 +61,7 @@ const Alphabetical = ({ handleChange, session, showTools, showMeeting, modal, sh
             <div className='row'>
               <div className='col-md-12'>
                 <MDBBtn onClick={() => restart()} size='lg' className='py-2 green darken-2 shadow-none text-white btnOption w-100 ml-0'>
-                  <span>Reiniciar actividad</span>
+                  <span>Reiniciar</span>
                 </MDBBtn>
               </div>
               <div className='col-md-12 mt-2'>
