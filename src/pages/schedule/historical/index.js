@@ -20,7 +20,7 @@ import getResponseById from '../../../utils/services/get/getById/index';
 import getByFilters from '../../../utils/services/get/getByFilters/index';
 import { Form, Collapse } from 'react-bootstrap';
 import { MDBBtn } from 'mdbreact';
-import Area from '../../../components/Charts/Area'
+import Area from '../../../components/Charts/Area';
 registerLocale('es', datepicker);
 
 const Index = () => {
@@ -39,7 +39,7 @@ const Index = () => {
   const [showModal, setShowModal] = useState({ details: false });
   const [loading, setLoading] = useState(false);
   const [apis, setApis] = useState({ dlStudents: [] });
-  const [dataSetChart,setDataSetChart] = useState();
+  const [dataSetChart, setDataSetChart] = useState();
   const [chartIsOpen, setChartIsOpen] = useState(true);
   let history = useHistory();
 
@@ -72,18 +72,15 @@ const Index = () => {
     const result = await getParametry(`${BASE_URL}/session`, values);
     createActions(result);
     fillTable(result);
-
   }
 
   async function getChart() {
     const values = getParameters();
-    if(values.studentName){
+    if (values.studentName) {
       cleanObject(values);
       const result = await getParametry(`${BASE_URL}/statistics`, values);
       setDataSetChart(result);
-    }else{
-      setDataSetChart();
-    }
+    } else setDataSetChart();
   }
 
   function getParameters() {
@@ -290,24 +287,20 @@ const Index = () => {
                   <Dropdownlist title='Estado de la sesión' id='status' handleChange={handleChange} value={params.status} dropdownlist={dlStatus} disabledValue={false} className='form-control' />
                 </div>
               </div>
-              
               <Footer error={error} onClickPrev={() => history.push(`/home`)} onClickSearch={handleSubmit} />
-              {dataSetChart && dataSetChart.length > 0 &&  (
-                <div className= "container">
-                  <MDBBtn style={{width:"100%"}}className='py-2 blue lighten-2 d-block mr-0 shadow-none text-white btnOption' onClick={() => setChartIsOpen(!chartIsOpen)}>                
-                    { chartIsOpen ? <i class="fas fa-arrow-up"></i> : <i class="fas fa-arrow-down"></i> }
+              {dataSetChart && dataSetChart.length > 0 && (
+                <div className='mb-4'>
+                  <MDBBtn style={{ width: '100%' }} className='py-2 red lighten-1 d-block mr-0 shadow-none text-white btnOption' onClick={() => setChartIsOpen(!chartIsOpen)}>
+                    <span style={{ fontSize: '14px', fontWeight: '600', marginRight: '5px' }}>Reportes</span> {chartIsOpen ? <i class='fas fa-times'></i> : <i class='fas fa-arrow-down'></i>}
                   </MDBBtn>
-
                   <Collapse in={chartIsOpen}>
-                      <div>
-                          <Area dataSet={dataSetChart}/>
-                      </div>
+                    <div>
+                      <Area dataSet={dataSetChart} />
+                    </div>
                   </Collapse>
                 </div>
-                )}
-
+              )}
               {showModal.details && <HistoricalSessionDetails historicalDetails={historicalDetails} showModal={showModal} handleClose={handleCloseDetails} obj={sessionDetails} date={dateDetails} aritmeticTable={numericalAritmeticTable} matchesTable={numericalMatchesTable} avgTime={avgTime} alphabeticalMatchesTable={alphabeticalMatchesTable} avgAlphabeticalTime={avgAlphabeticalTime} alphabeticalAritmeticTable={alphabeticalAritmeticTable} />}
-
               {table.show && (
                 <div className='animated fadeInUp faster mb-1' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
                   <span>
