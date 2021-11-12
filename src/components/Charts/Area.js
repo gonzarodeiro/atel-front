@@ -39,15 +39,27 @@ const Chart = (dataSet) => {
           fill: false
         },
         {
-          type: 'bar',
-          label: 'Tiempo de sesion',
-          backgroundColor: 'rgb(54, 162, 235)',
-          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          borderWidth: 1,
-          yAxisID: 'y',
-          data: data.map((x) => x.duration),
-          fill: false
-        }
+          type: 'line',
+          label:"Retroalimentacion alumno",
+          backgroundColor: '#3b3355',
+          borderWidth: 5,
+          pointBorderWidth : 10,
+          borderColor:'#5d5d81',
+          pointBorderColor: '#3b3355',            
+          yAxisID: 'y1',
+          data: data.map((x)=>x.session_evaluation),
+          fill: false,
+      },
+        {
+            type: 'bar',
+            label:"Tiempo de sesion",
+            backgroundColor: 'rgb(54, 162, 235)',
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            borderWidth: 1,
+            yAxisID: 'y',
+            data: data.map((x)=>x.duration),
+            fill: false,
+        },
       ]
     };
     return barData;
