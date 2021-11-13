@@ -136,9 +136,8 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
       setShowConfites(true);
       updateMatch();
       playAudio(itemLeftSelected.voice, setPlaying, audioRef);
-      if (!checkFinishActivity()) {
-        sendMessage(clientEvents.targetMatch, { itemGroupRight });
-      }
+      checkFinishActivity();
+      sendMessage(clientEvents.targetMatch, { itemGroupRight });
       sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
     }
 
