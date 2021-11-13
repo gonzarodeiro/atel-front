@@ -38,15 +38,16 @@ const Index = () => {
 
   function redirectPages() {
     const date = convertDate(new Date());
+
     if (session.type === 'Sesión de inclusión') {
       history.push({
         pathname: 'zoom-session',
         state: {
-          roomId: session.idStudent,
+          roomId: session.roomName,
           userName: session.roomName,
           date: date,
           sessionId: session.id,
-          roomZoom: session.zoom + '-' + session.password
+          roomZoom: session.roomZoomName + '-' + sessionStorage.getItem('name')
         }
       });
     } else {
