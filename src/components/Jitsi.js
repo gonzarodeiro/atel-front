@@ -6,7 +6,7 @@ export const jitsiModes = {
   STUDENT: 1
 };
 
-const professionalToolbarButtons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'invite', 'select-background', 'sharedvideo', 'mute-everyone', 'mute-video-everyone'];
+const professionalToolbarButtons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'select-background', 'sharedvideo', 'mute-everyone', 'mute-video-everyone', 'participants-pane'];
 const studentToolbarButtons = ['microphone', 'camera', 'desktop', 'profile', 'settings', 'select-background'];
 
 const Jitsi = forwardRef((props, ref) => {

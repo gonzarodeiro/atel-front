@@ -6,10 +6,11 @@ import Activity from '../../../../../components/Activity/Boxes/professionalLogic
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Boxes = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
+const Boxes = ({ handleChange, session, showTools, showMeeting, showWizard, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
   useLayoutEffect(() => {
     handleJitsiResize('#boxes-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#boxes-jitsi', onJitsiLayout));
+    showWizard(true);
     return () => window.removeEventListener('resize', listener);
   }, []);
 

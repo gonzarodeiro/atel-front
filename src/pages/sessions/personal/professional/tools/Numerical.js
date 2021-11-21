@@ -3,18 +3,19 @@ import { MDBBtn } from 'mdbreact';
 import finishSession from '../finishSession';
 import tools from '../../../../../utils/enums/tools';
 import Activity from '../../../../../components/Activity/Logical/professionalLogic';
-import Settings, { modalResults, initialSettings,operationConst } from '../../../../../components/Activity/Logical/components/Settings';
+import Settings, { modalResults, initialSettings, operationConst } from '../../../../../components/Activity/Logical/components/Settings';
 import { clientEvents, sendMessage } from '../../../../../utils/socketManager';
 import { getDataFromSettings } from '../../../../../components/Activity/Logical/commons/data';
 import handleJitsiResize from '../../../handleJitsiResize';
 
-const Numerical = ({ handleChange, session, showTools, showMeeting, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
+const Numerical = ({ handleChange, session, showTools, showMeeting, showWizard, setCelebrationVisible, onJitsiLayout, setEndTimeSession }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [validate, setValidate] = useState(false);
 
   useLayoutEffect(() => {
     handleJitsiResize('#numerical-jitsi', onJitsiLayout);
     const listener = window.addEventListener('resize', () => handleJitsiResize('#numerical-jitsi', onJitsiLayout));
+    showWizard(true);
     return () => window.removeEventListener('resize', listener);
   }, []);
 

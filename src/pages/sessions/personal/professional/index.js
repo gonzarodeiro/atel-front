@@ -9,7 +9,9 @@ import Boxes from './tools/Boxes';
 import Pictograms, { modalResults, pictogramModes } from '../../../../components/Activity/Pictograms/PictogramTool';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
-import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
+import wizardAlphabeticalVideo from '../../../../components/Activity/Alphabetical/video/wizard_alphabetical_480_1MB.mp4';
+import wizardBoxesVideo from '../../../../components/Activity/Alphabetical/video/wizard_boxes_480_1MB.mp4';
+import wizardNumericalVideo from '../../../../components/Activity/Alphabetical/video/wizard_numerical_480_1MB.mp4';
 import Celebration, { celebrationType } from '../../../../components/Celebration';
 import Loading from '../../../../components/Loading';
 import FloatingJitsi from '../../../../components/FloatingJitsi';
@@ -142,6 +144,20 @@ const ProfessionalSession = (props) => {
     setIsLocalStripeInForeground(visible);
     sendMessage(clientEvents.showPictogramStripe, { stripe: localStripe, visible, sender });
   }
+
+  function getWizardByTool(tools) {
+    let src;
+    if (tools.alphabetical) {
+      src = wizardAlphabeticalVideo;
+    } else if (tools.numerical) {
+      src = wizardNumericalVideo;
+    } else if (tools.boxes) {
+      src = wizardBoxesVideo;
+    }
+
+    return <ActivityWizard src={src} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />;
+  }
+
   return (
     <Layout>
       <div className='card shadow-sm container px-0 mb-4' style={{ border: '1px solid #cecbcb' }}>
@@ -162,8 +178,8 @@ const ProfessionalSession = (props) => {
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               {meeting.begin && <Begin props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
               {tools.alphabetical && <Alphabetical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} copyClipboard={copyClipboard} showModal={showModal} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
-              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
-              {tools.boxes && <Boxes props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {tools.numerical && <Numerical props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
+              {tools.boxes && <Boxes props={props} handleChange={handleChange} modal={modal} session={session} showTools={showTools} showMeeting={showMeeting} showWizard={showWizard} setCelebrationVisible={setCelebrationVisible} showPictograms={showPictograms} onJitsiLayout={handleJitsiLayout} setEndTimeSession={setEndTimeSession} />}
               {meeting.end && <End handleChange={handleChange} session={session} props={props} endTimeSession={endTimeSession} />}
             </form>
           </div>
@@ -187,7 +203,7 @@ const ProfessionalSession = (props) => {
       )}
       {celebrationVisible && <PictoFab style={{ bottom: 96 }} onClick={() => showPictograms(true)} />}
       {celebrationVisible && <Celebration type={celebrationType.SENDER} />}
-      {wizardVisible && <ActivityWizard src={wizardVideo} title={wizardTitle} message={wizardMessage} onCloseClick={handleCloseWizardClick} closeButtonText={wizardButtonText} />}
+      {wizardVisible && getWizardByTool(tools)}
       {remoteStripeVisible && (
         <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={handleDiscardRemotePictogramsClick} />

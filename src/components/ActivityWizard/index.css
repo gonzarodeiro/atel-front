@@ -13,7 +13,7 @@
 
 .w-dialog {
   width: 640px;
-  height: 480px;
+  /* height: 520px; */
   background-color: white;
   border: 1px solid white;
   border-radius: 8px;
@@ -47,7 +47,7 @@
   width: 500px;
   height: 200px;
   border-radius: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .w-video {
@@ -56,6 +56,8 @@
   position: absolute;
   top: 0;
   left: 0;
+  margin-top: -24px;
+  display: block;
 }
 
 .w-step-container {
@@ -63,15 +65,15 @@
   direction: row;
   align-self: stretch;
   justify-content: space-evenly;
-  margin-bottom: 24px;
+  align-items: baseline;
+  margin-bottom: 42px;
 }
 
 .w-step-item {
   height: 50px;
-  width: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   text-align: center;
   margin: 16px 40px;
@@ -86,8 +88,7 @@
 
 .w-step-text {
   font-weight: normal;
-  font-size: 20px;
-  white-space: nowrap;
+  font-size: 16px;
 }
 
 .w-title {
