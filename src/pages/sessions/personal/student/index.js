@@ -8,7 +8,9 @@ import Numerical from './tools/Numerical';
 import Alphabetical from './tools/Alphabetical';
 import { clientEvents, connect, registerEvent, sendMessage } from '../../../../utils/socketManager';
 import ActivityWizard from '../../../../components/ActivityWizard';
-import wizardVideo from '../../../../components/Activity/Alphabetical/video/wizard_480_1MB.mp4';
+import wizardAlphabeticalVideo from '../../../../components/Activity/Alphabetical/video/wizard_alphabetical_480_1MB.mp4';
+import wizardBoxesVideo from '../../../../components/Activity/Alphabetical/video/wizard_boxes_480_1MB.mp4';
+import wizardNumericalVideo from '../../../../components/Activity/Alphabetical/video/wizard_numerical_480_1MB.mp4';
 import Celebration, { celebrationType } from '../../../../components/Celebration';
 import { BASE_URL } from '../../../../config/environment';
 import Loading from '../../../../components/Loading';
@@ -22,7 +24,9 @@ import { jitsiModes } from '../../../../components/Jitsi';
 
 const wizardTitle = 'Bienvenido';
 const wizardButtonText = 'COMENZAR';
-const wizardSteps = ['Clickeá', 'Mové', 'Volvé a clickear'];
+const wizardAlphabethicalSteps = ['Clickeá una figura', 'Mové', 'Clickeá la palabra correcta'];
+const wizardNuméricalSteps = ['Arrastrá una figura', 'Dejala en el contenedor correspondiente', 'Contá las cantidades'];
+const wizardBoxesSteps = ['Mirá la figura a la izquierda', 'Clickeá en un casillero', 'Completá la palabra que indique la figura'];
 
 const StudentSession = () => {
   const [student, setStudent] = useState({ id: '', name: '' });
@@ -201,6 +205,27 @@ const StudentSession = () => {
     sendMessage(clientEvents.showPictogramStripe, { stripe: localStripe, visible, sender });
   }
 
+  function getWizardByTool(tools) {
+    let src;
+    let title;
+    let steps;
+    if (tools.alphabetical) {
+      src = wizardAlphabeticalVideo;
+      title = wizardTitle;
+      steps = wizardAlphabethicalSteps;
+    } else if (tools.numerical) {
+      src = wizardNumericalVideo;
+      title = wizardTitle;
+      steps = wizardNuméricalSteps;
+    } else if (tools.boxes) {
+      src = wizardBoxesVideo;
+      title = wizardTitle;
+      steps = wizardBoxesSteps;
+    }
+
+    return <ActivityWizard src={src} title={title} steps={steps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />;
+  }
+
   return (
     <>
       <div className='card shadow-sm container px-0 mb-4 overflow-hidden' style={{ border: '1px solid #cecbcb', marginTop: '20px' }}>
@@ -233,7 +258,7 @@ const StudentSession = () => {
       {showJitsi && <FloatingJitsi roomId={roomId} name={student.name} mode={jitsiModes.STUDENT} />}
       {actions && <PictoFab onClick={() => showPictograms(true)} />}
       {actions && <Celebration type={celebrationType.RECEIVER} />}
-      {wizardVisible && tools.alphabetical && <ActivityWizard src={wizardVideo} title={wizardTitle} steps={wizardSteps} onCloseClick={handleWizardClick} closeButtonText={wizardButtonText} />}
+      {wizardVisible && getWizardByTool(tools)}
       {remoteStripeVisible && (
         <div className='fade-in' style={{ position: 'fixed', top: 0, left: 0, right: 0, background: 'rgba(0,0,0, 0.5)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <i className='fas fa-times' style={{ position: 'absolute', top: 16, right: 24, fontSize: 32, color: 'white' }} onClick={handleDiscardRemotePictogramsClick} />
