@@ -98,8 +98,10 @@ const PictogramTemplateEditor = ({ idProfessional, idStudent, studentName, onCan
 
   return (
     <>
-      <label className='pic-editor-input-label'>Buscar en</label>
-      <img src={logoArasaac} width={125} alt='arasaac logo' />
+      <label className='pic-editor-input-label' style={{ marginRight: '2px' }}>
+        Buscar en
+      </label>
+      <img src={logoArasaac} width={120} alt='arasaac logo' />
       <div className='pic-editor-input-group'>
         <div className='pic-editor-input-text-search'>
           <input id='zoom' ref={inputRef} type='text' className={'form-control'} placeholder='Escribe para buscar pictogramas' />
@@ -111,12 +113,12 @@ const PictogramTemplateEditor = ({ idProfessional, idStudent, studentName, onCan
       </div>
       <div className='pic-editor-picto-lists-container'>
         <div style={{ flex: 1 }}>
-          <div className='pic-editor-input-label'>Resultados de busqueda</div>
+          <div className='pic-editor-input-label mt-3'>Resultados de busqueda</div>
           <PictoBasicList className={'pic-basic-list'} pictos={searchPictos} onItemClickAdd={handlePictogramClickAdd} placeholderText={SEARCH_PH} loading={loadingSearch} addItemVisible />
         </div>
         <div className='pic-list-separator' />
         <div style={{ flex: 1 }}>
-          <div className='pic-editor-input-label'>Plantilla de {studentName || 'alumno'}</div>
+          <div className='pic-editor-input-label mt-3'>Plantilla de {studentName || 'alumno'}</div>
           <PictoBasicList className='pic-basic-list pic-basic-list-mb' pictos={templatePictos} onItemClickRemove={handlePictogramClickRemove} placeholderText={TEMAPLATE_PH} loading={loadingTemplate} removeItemVisible />
         </div>
       </div>

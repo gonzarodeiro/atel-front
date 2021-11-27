@@ -49,7 +49,7 @@ const Index = () => {
             </div>
             <form action='' id='form-inputs' style={{ fontSize: '13px', fontWeight: 'bold', color: '#66696b' }}>
               <div className='row pb-1'>
-                <div className='col-md-12 my-2'>
+                <div className='col-md-12 my-1'>
                   <Form.Group>
                     <Form.Label> Nombre del alumno </Form.Label>
                     <Form.Control id='studentName' onChange={handleChange} className='form-control' value={params.studentName} style={{ cursor: 'pointer' }} as='select' disabled={false}>

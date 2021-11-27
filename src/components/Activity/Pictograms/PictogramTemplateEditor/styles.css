@@ -2,14 +2,14 @@
   font-size: 13px;
   font-weight: bold;
   color: #66696b;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .pic-editor-input-group {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .pic-basic-list {
