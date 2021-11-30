@@ -135,7 +135,7 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
       match = true;
       setShowConfites(true);
       updateMatch();
-      playAudio(itemLeftSelected.voice, setPlaying, audioRef);
+      //playAudio(itemLeftSelected.voice, setPlaying, audioRef);
       checkFinishActivity();
       sendMessage(clientEvents.targetMatch, { itemGroupRight });
       sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
@@ -204,9 +204,9 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
       </Stage>
-      <audio controls={false} ref={audioRef}>
+      {/* <audio controls={false} ref={audioRef}>
         <source src={playing} />
-      </audio>
+      </audio> */}
     </div>
   );
 };
