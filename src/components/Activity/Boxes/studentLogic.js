@@ -30,7 +30,11 @@ const Boxes = () => {
     elements.forEach((element) => {
       if (!element.isCorrect) celebrate = false;
     });
-    if (celebrate) setShowConfites(true);
+    if (celebrate) {
+      setShowConfites(true);
+      sendMessage(clientEvents.showConfitesBoxes);
+    }
+
   }, [elements]);
 
   function registerEvents() {

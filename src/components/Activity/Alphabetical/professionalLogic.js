@@ -84,6 +84,10 @@ const Alphabetical = () => {
     registerEvent((obj) => {
       setStudentPointerPosition(obj);
     }, clientEvents.studentPointer);
+
+    registerEvent((obj) => {
+      setShowConfites(true);
+    }, clientEvents.showConfitesAlphabeticals);
   }
 
   return (

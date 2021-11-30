@@ -26,7 +26,9 @@ const clientEvents = {
   inclusionLayout: 'inclusionLayout',
   setLetter: 'setLetter',
   clickLetter: 'clickLetter',
-  clearIntervals: 'clearIntervals'
+  clearIntervals: 'clearIntervals',
+  showConfitesAlphabeticals: "showConfitesAlphabeticals",
+  showConfitesBoxes: "showConfitesBoxes"
 };
 
 const serverEvents = {

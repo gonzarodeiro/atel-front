@@ -28,7 +28,11 @@ const Boxes = () => {
     elements.forEach((element) => {
       if (!element.isCorrect) celebrate = false;
     });
-    if (celebrate) setShowConfites(true);
+    if (celebrate) {
+      setShowConfites(true);
+    }else{
+      setShowConfites(false);
+    }
   }, [elements]);
 
   function registerEvents() {
@@ -36,6 +40,10 @@ const Boxes = () => {
     registerEvent((obj) => {
       setStudentPointerPosition(obj);
     }, clientEvents.studentPointer);
+
+    registerEvent((obj) => {
+      setShowConfites(true);
+    }, clientEvents.showConfitesBoxes);
   }
 
   function setConfiguration() {

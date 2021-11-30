@@ -133,12 +133,12 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     let match = false;
     if (element && itemLeftSelected.name === element.attrs.text) {
       match = true;
-      setShowConfites(true);
+      //setShowConfites(true);
       updateMatch();
       //playAudio(itemLeftSelected.voice, setPlaying, audioRef);
       checkFinishActivity();
       sendMessage(clientEvents.targetMatch, { itemGroupRight });
-      sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
+      //sendMessage(clientEvents.playAudio, { voice: itemLeftSelected.voice });
     }
 
     currentActivityMetrics.metricMatch.map((metric) => {
@@ -172,8 +172,10 @@ const Alphabetical = ({ data, restartActivity, sessionId }) => {
     }
     if (finish) {
       currentActivityMetrics.activitySuccess = true;
+      sendMessage(clientEvents.showConfitesAlphabeticals);
+      setShowConfites(true);
       //restartActivity();
-      reset();
+      //reset();
     }
     return finish;
   }
