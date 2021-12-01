@@ -24,7 +24,8 @@ const Chart = (dataSet) => {
           pointBorderWidth: 10,
           pointBorderColor: '#E74C3C',
           data: data.map((x) => x.evaluation),
-          fill: false
+          fill: false,
+          hidden: true
         },
         {
           type: 'line',
@@ -36,7 +37,7 @@ const Chart = (dataSet) => {
           pointBorderColor: '#20c997',
           yAxisID: 'y1',
           data: data.map((x) => x.attention),
-          fill: false
+          fill: false,          
         },
         {
           type: 'line',
@@ -49,6 +50,7 @@ const Chart = (dataSet) => {
           yAxisID: 'y1',
           data: data.map((x)=>x.session_evaluation),
           fill: false,
+          hidden: true
       },
         {
             type: 'bar',
