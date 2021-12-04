@@ -360,7 +360,7 @@ const Logical = ({ sessionId }) => {
     if (checkFinish(trays)) {
       saveMathTry(true);
       sendMessage(clientEvents.showCelebration);
-      playAudio(celebrateMp3, setPlaying, audioRef);
+      //playAudio(celebrateMp3, setPlaying, audioRef);
       setShowConfites(true);
     } else {
       saveMathTry(false);
@@ -405,9 +405,9 @@ const Logical = ({ sessionId }) => {
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
       </Stage>
-      <audio controls={false} ref={audioRef}>
+      {/* <audio controls={false} ref={audioRef}>
         <source src={playing} />
-      </audio>
+      </audio> */}
     </div>
   );
 };

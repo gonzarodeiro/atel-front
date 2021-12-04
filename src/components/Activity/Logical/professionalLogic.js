@@ -82,7 +82,7 @@ const Logical = ({ validate }) => {
     }, clientEvents.setFilter);
 
     registerEvent(() => {
-      playAudio(celebrateMp3, setPlaying, audioRef);
+      //playAudio(celebrateMp3, setPlaying, audioRef);
       setShowConfites(true);
     }, clientEvents.showCelebration);
   }
@@ -128,9 +128,9 @@ const Logical = ({ validate }) => {
         </Layer>
         {showConfites && <Confites stageRef={stageRef} />}
       </Stage>
-      <audio controls={false} ref={audioRef}>
+      {/* <audio controls={false} ref={audioRef}>
         <source src={playing} />
-      </audio>
+      </audio> */}
     </div>
   );
 };
